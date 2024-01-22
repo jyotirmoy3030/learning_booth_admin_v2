@@ -49,20 +49,15 @@ const JobRoleMaster = () => {
       key: 'title',
     },
     {
-      title: 'Compentency',
-      dataIndex: 'compentency',
-      key: 'compentency',
-    },
-    {
-      title: 'Capabilities',
-      dataIndex: 'capabilities',
-      key: 'capabilities',
-      render: (_, { capabilities }) => (
+      title: 'Compentencies',
+      dataIndex: 'compentencies',
+      key: 'compentencies',
+      render: (_, { compentencies }) => (
         <>
-          {capabilities.map((capability) => {
+          {compentencies.map((capability) => {
             return (
               <Tag color={'geekblue'} key={capability}>
-                {capability.name.toUpperCase()}
+                {capability.title.toUpperCase()}
               </Tag>
             );
           })}
@@ -75,20 +70,10 @@ const JobRoleMaster = () => {
       key: 'actions',
       render: (_, data) => (
         <Box display="flex" alignItems="center" justifyContent="start">
-          {/* <span
-            style={{
-              cursor: 'pointer',
-              fontSize: '20px',
-              margin: '0px 10px',
-              color: 'yellow',
-            }}
-          >
-            <EditOutlined />
-          </span> */}
           <span
             style={{ cursor: 'pointer', fontSize: '20px', color: 'red' }}
-            onClick={() => {
-              deleteJobRole(data._id);
+            onClick={async () => {
+              await deleteJobRole(data._id);
               toast.success('Job role deleted.');
               get();
             }}
@@ -131,13 +116,11 @@ const JobRoleMaster = () => {
           { setErrors, setStatus, setSubmitting, resetForm }
         ) => {
           try {
-            console.log(values);
             await createJobRole(values);
             get();
             toast.success('Job Role Added!');
             setStatus({ success: true });
             setSubmitting(false);
-            resetForm();
           } catch (err) {
             setStatus({ success: false });
             toast.error('ERROR: Cannot add Job Role.');

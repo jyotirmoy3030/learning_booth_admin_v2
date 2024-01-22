@@ -26,15 +26,14 @@ import {
   deleteQuestion,
   getAllTestQuestions,
   getTestById,
-  uploadExcelFile,
 } from 'services/Master/Tests';
 import { toast } from 'react-toastify';
 import { TimePicker } from 'antd';
-import * as XLSX from 'xlsx';
 import { appAxios } from 'services/axiosConfig';
 
 const AddQuestion = () => {
   const [questions, setQuestions] = useState([]);
+  const [compentency, setCompentency] = useState({});
   const [test, setTest] = useState({});
   const { id } = useParams();
   const getAllQuestions = async () => {
@@ -250,7 +249,7 @@ const AddQuestion = () => {
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            await addQuestionToTest(id, values);
+            await addQuestionToTest(id, { ...values, compentency });
             getAllQuestions();
             setStatus({ success: true });
             toast.success('Question added.');
@@ -301,32 +300,46 @@ const AddQuestion = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="skill">Capability</InputLabel>
+                  <InputLabel htmlFor="compentency">Compentency</InputLabel>
                   <Select
-                    labelId="skill"
-                    id="skill"
-                    value={values.skill}
-                    onChange={handleChange}
-                    name="skill"
+                    labelId="compentency"
+                    id="compentency"
+                    value={compentency}
+                    onChange={(e) => setCompentency(e.target.value)}
+                    name="compentency"
                   >
-                    {test?.jobRole?.capabilities?.map((s, idx) => {
+                    {test?.jobRole?.compentencies?.map((s, idx) => {
                       return (
-                        <MenuItem value={s.name} key={idx}>
-                          {s.name}
+                        <MenuItem value={s} key={idx}>
+                          {s.title}
                         </MenuItem>
                       );
                     })}
-                    {touched.skill && errors.skill && (
-                      <FormHelperText
-                        error
-                        id="standard-weight-helper-text-title"
-                      >
-                        {errors.skill}
-                      </FormHelperText>
-                    )}
                   </Select>
                 </Stack>
               </Grid>
+              {compentency?.capabilities && (
+                <Grid item xs={12}>
+                  <Stack spacing={1}>
+                    <InputLabel htmlFor="skill">Capability</InputLabel>
+                    <Select
+                      labelId="skill"
+                      id="skill"
+                      value={values.skill}
+                      onChange={handleChange}
+                      name="skill"
+                    >
+                      {compentency?.capabilities?.map((s, idx) => {
+                        return (
+                          <MenuItem value={s.name} key={idx}>
+                            {s.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </Stack>
+                </Grid>
+              )}
               {values.answers.map((_, idx) => (
                 <Grid item xs={12} key={idx}>
                   <Grid container>

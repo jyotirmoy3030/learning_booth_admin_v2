@@ -75,8 +75,8 @@ const EditCourse = () => {
   React.useEffect(() => {
     if (Object.keys(jobRole).length > 0) {
       setNewMarkedSkills(
-        jobRole?.skills?.map((skill) => ({
-          title: skill,
+        jobRole?.compentencies?.map((skill) => ({
+          title: skill.title,
           leastCutoffPercentage: 0,
         }))
       );
@@ -95,10 +95,7 @@ const EditCourse = () => {
         }}
         enableReinitialize
         validationSchema={Yup.object().shape({
-          title: Yup.string()
-            .min(10, 'Title should be minimum 10 character.')
-            .max(255)
-            .required('Title is required'),
+          title: Yup.string().max(255).required('Title is required'),
           description: Yup.string()
             .min(10, 'Job details should be minimum 50 character.')
             .max(500)

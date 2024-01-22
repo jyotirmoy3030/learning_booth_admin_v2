@@ -114,8 +114,8 @@ const CoursesMaster = () => {
   React.useEffect(() => {
     if (Object.keys(jobRole).length > 0) {
       setMarkedSkills(
-        jobRole?.skills?.map((skill) => ({
-          title: skill,
+        jobRole?.compentencies?.map((skill) => ({
+          title: skill.title,
           leastCutoffPercentage: 0,
         }))
       );
@@ -126,7 +126,6 @@ const CoursesMaster = () => {
     _ms[idx].leastCutoffPercentage = value;
     setMarkedSkills(_ms);
   };
-  console.log(markedSkills);
 
   return (
     <div>
@@ -294,15 +293,17 @@ const CoursesMaster = () => {
                 </Stack>
               </Grid>
               {jobRole &&
-                jobRole.skills?.map((skill, idx) => (
+                jobRole.compentencies?.map((skill, idx) => (
                   <Grid item xs={12} key={idx}>
                     <Grid container>
                       <Grid xs={10.5} sx={{ mr: 1 }}>
                         <Stack spacing={1}>
-                          <InputLabel htmlFor="duration">Skill</InputLabel>
+                          <InputLabel htmlFor="duration">
+                            Compentency
+                          </InputLabel>
                           <OutlinedInput
                             type="text"
-                            value={skill}
+                            value={skill.title}
                             disabled
                             placeholder="Enter answer text."
                             fullWidth

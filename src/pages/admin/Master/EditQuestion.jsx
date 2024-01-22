@@ -24,6 +24,7 @@ import { toast } from 'react-toastify';
 
 const EditQuestion = () => {
   const [question, setQuestion] = useState([]);
+  const [compentency, setCompentency] = useState({});
   const [test, setTest] = useState({});
   const { testId, questionId } = useParams();
   const getQuestion = async () => {
@@ -49,7 +50,13 @@ const EditQuestion = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testId]);
 
-  console.log(question);
+  React.useEffect(() => {
+    if (question?.compentency) {
+      setCompentency(question?.compentency);
+    }
+  }, [question]);
+
+  console.log(compentency);
   return (
     <div>
       <Typography variant="h1">Edit Question - {question.title}</Typography>
@@ -71,7 +78,7 @@ const EditQuestion = () => {
         enableReinitialize
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            await updateQuestion(questionId, values);
+            await updateQuestion(questionId, { ...values, compentency });
             navigate(-1);
             setStatus({ success: true });
             setSubmitting(false);
@@ -120,7 +127,29 @@ const EditQuestion = () => {
                   )}
                 </Stack>
               </Grid>
-              {values.skill && (
+              <Grid item xs={12}>
+                <Stack spacing={1}>
+                  <InputLabel htmlFor="compentency">
+                    Compentency ({compentency?.title})
+                  </InputLabel>
+                  <Select
+                    labelId="compentency"
+                    id="compentency"
+                    value={compentency}
+                    onChange={(e) => setCompentency(e.target.value)}
+                    name="compentency"
+                  >
+                    {test?.jobRole?.compentencies?.map((s, idx) => {
+                      return (
+                        <MenuItem value={s} key={idx}>
+                          {s.title}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </Stack>
+              </Grid>
+              {compentency?.capabilities && (
                 <Grid item xs={12}>
                   <Stack spacing={1}>
                     <InputLabel htmlFor="skill">Capability</InputLabel>
@@ -131,7 +160,7 @@ const EditQuestion = () => {
                       onChange={handleChange}
                       name="skill"
                     >
-                      {test?.jobRole?.capabilities?.map((s, idx) => {
+                      {compentency?.capabilities?.map((s, idx) => {
                         return (
                           <MenuItem value={s.name} key={idx}>
                             {s.name}
@@ -139,14 +168,6 @@ const EditQuestion = () => {
                         );
                       })}
                     </Select>
-                    {touched.skill && errors.skill && (
-                      <FormHelperText
-                        error
-                        id="standard-weight-helper-text-title"
-                      >
-                        {errors.skill}
-                      </FormHelperText>
-                    )}
                   </Stack>
                 </Grid>
               )}
