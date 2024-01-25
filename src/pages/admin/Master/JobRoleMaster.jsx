@@ -64,25 +64,44 @@ const JobRoleMaster = () => {
         </>
       ),
     },
-    {
-      title: 'Actions',
-      dataIndex: 'actions',
-      key: 'actions',
-      render: (_, data) => (
-        <Box display="flex" alignItems="center" justifyContent="start">
-          <span
-            style={{ cursor: 'pointer', fontSize: '20px', color: 'red' }}
-            onClick={async () => {
-              await deleteJobRole(data._id);
-              toast.success('Job role deleted.');
-              get();
-            }}
-          >
-            <DeleteOutlined />
-          </span>
-        </Box>
-      ),
-    },
+    // {
+    //   title: 'Actions',
+    //   dataIndex: 'actions',
+    //   key: 'actions',
+    //   render: (_, data) => (
+    //     <Box display="flex" alignItems="center" justifyContent="start">
+    //       <span
+    //         style={{ cursor: 'pointer', fontSize: '20px', color: 'red' }}
+    //         onClick={async () => {
+    //           await deleteJobRole(data._id);
+    //           toast.success('Job role deleted.');
+    //           get();
+    //         }}
+    //       >
+    //         <DeleteOutlined />
+    //       </span>
+    //     </Box>
+    //   ),
+    // },
+    // {
+    //   title: 'Actions',
+    //   dataIndex: 'actions',
+    //   key: 'actions',
+    //   render: (_, data) => (
+    //     <Box display="flex" alignItems="center" justifyContent="start">
+    //       <span
+    //         style={{ cursor: 'pointer', fontSize: '20px', color: 'red' }}
+    //         onClick={async () => {
+    //           await deleteJobRole(data._id);
+    //           toast.success('Job role deleted.');
+    //           get();
+    //         }}
+    //       >
+    //         <DeleteOutlined />
+    //       </span>
+    //     </Box>
+    //   ),
+    // },
   ];
 
   React.useEffect(() => {

@@ -52,7 +52,7 @@ const ResultsMaster = () => {
           justifyContent="start"
           flexDirection="column"
         >
-          {data?.scores?.map((score) => (
+          {/* {data?.scores?.map((score) => (
             <Box
               sx={{
                 display: 'flex',
@@ -74,7 +74,7 @@ const ResultsMaster = () => {
                 {score?.percentage?.toFixed(2)} %
               </p>
             </Box>
-          ))}
+          ))} */}
         </Box>
       ),
     },
