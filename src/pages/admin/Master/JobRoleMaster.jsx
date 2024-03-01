@@ -7,7 +7,6 @@ import {
   Stack,
   InputLabel,
   Typography,
-  Box,
   Autocomplete,
   TextField,
 } from '@mui/material';
@@ -16,13 +15,9 @@ import { Formik } from 'formik';
 
 import AnimateButton from 'components/@extended/AnimateButton';
 import { Table, Tag } from 'antd';
-import {
-  createJobRole,
-  deleteJobRole,
-  getAllJobsRoles,
-} from 'services/Master/JobRoles';
-// EditOutlined,
-import { DeleteOutlined } from '@ant-design/icons';
+import { createJobRole, getAllJobsRoles } from 'services/Master/JobRoles';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import '../styles/admin.css';
 import { toast } from 'react-toastify';
 import { getAllCapabilites } from 'services/Master/Capabilities';
@@ -30,6 +25,8 @@ import { getAllCapabilites } from 'services/Master/Capabilities';
 const JobRoleMaster = () => {
   const [jobRoles, setJobRoles] = useState([]);
   const [capabilities, setCapabilities] = useState([]);
+  const [bestPractices, setBestPractices] = useState('');
+
   const get = async () => {
     const roles = await getAllJobsRoles();
     if (roles) {
@@ -108,6 +105,8 @@ const JobRoleMaster = () => {
     get();
     getCapabilities();
   }, []);
+
+  console.log(bestPractices);
   return (
     <div>
       <Typography variant="h1">Job Roles</Typography>
@@ -125,17 +124,16 @@ const JobRoleMaster = () => {
           title: '',
           compentency: '',
           capabilities: [],
+          description: '',
         }}
         validationSchema={Yup.object().shape({
           title: Yup.string().max(255).required('Title is required'),
           compentency: Yup.string().required('Skills are required'),
+          description: Yup.string().required('Description is required'),
         })}
-        onSubmit={async (
-          values,
-          { setErrors, setStatus, setSubmitting, resetForm }
-        ) => {
+        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            await createJobRole(values);
+            await createJobRole({ ...values, bestPractices });
             get();
             toast.success('Job Role Added!');
             setStatus({ success: true });
@@ -209,6 +207,46 @@ const JobRoleMaster = () => {
                 </Stack>
               </Grid>
               <Grid item xs={12}>
+                <Stack spacing={1}>
+                  <InputLabel htmlFor="description">
+                    Compentency Description
+                  </InputLabel>
+                  <OutlinedInput
+                    id="description"
+                    type="text"
+                    value={values.description}
+                    name="description"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    placeholder="Enter description."
+                    fullWidth
+                    error={Boolean(touched.description && errors.description)}
+                  />
+                  {touched.description && errors.description && (
+                    <FormHelperText
+                      error
+                      id="standard-weight-helper-text-description"
+                    >
+                      {errors.description}
+                    </FormHelperText>
+                  )}
+                </Stack>
+              </Grid>
+              <Grid item xs={12}>
+                <Stack spacing={1}>
+                  <InputLabel htmlFor="bestPractices">
+                    Best Practices
+                  </InputLabel>
+                  <ReactQuill
+                    theme={'snow'}
+                    value={bestPractices}
+                    onChange={setBestPractices}
+                    style={{ height: '200px' }}
+                    id="bestPractices"
+                  />
+                </Stack>
+              </Grid>
+              <Grid item xs={12} sx={{ mt: 6 }}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="capabilities">
                     Select Capabilities

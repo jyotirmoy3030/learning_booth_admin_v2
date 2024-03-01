@@ -95,6 +95,14 @@ const dashboard = {
       icon: icons.FileDoneOutlined,
       breadcrumbs: false,
     },
+    {
+      id: 'demos',
+      title: 'Demo Requests',
+      type: 'item',
+      url: '/dashboard/demo-requests',
+      icon: icons.FileDoneOutlined,
+      breadcrumbs: false,
+    },
   ],
 };
 

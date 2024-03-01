@@ -38,7 +38,12 @@ const CapabilitiesMaster = () => {
       dataIndex: 'name',
       key: 'name',
     },
-
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+      render: (desc) => <>{desc?.slice(0, 15)}...</>,
+    },
     {
       title: 'Actions',
       dataIndex: 'actions',
@@ -78,9 +83,11 @@ const CapabilitiesMaster = () => {
       <Formik
         initialValues={{
           name: '',
+          description: '',
         }}
         validationSchema={Yup.object().shape({
           name: Yup.string().max(255).required('Name is required'),
+          description: Yup.string().required('Description is required'),
         })}
         onSubmit={async (
           values,
@@ -133,7 +140,32 @@ const CapabilitiesMaster = () => {
                   )}
                 </Stack>
               </Grid>
-
+              <Grid item xs={12}>
+                <Stack spacing={1}>
+                  <InputLabel htmlFor="description">
+                    Capability Description
+                  </InputLabel>
+                  <OutlinedInput
+                    id="description"
+                    type="text"
+                    value={values.description}
+                    name="description"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    placeholder="Enter description."
+                    fullWidth
+                    error={Boolean(touched.description && errors.description)}
+                  />
+                  {touched.description && errors.description && (
+                    <FormHelperText
+                      error
+                      id="standard-weight-helper-text-description"
+                    >
+                      {errors.description}
+                    </FormHelperText>
+                  )}
+                </Stack>
+              </Grid>
               <Grid item xs={12}>
                 <AnimateButton>
                   <Button

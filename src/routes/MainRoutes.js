@@ -44,7 +44,9 @@ const NewUsers = Loadable(lazy(() => import('pages/admin/Master/NewUsers')));
 const WebsiteContent = Loadable(
   lazy(() => import('pages/admin/Master/WebsiteContent'))
 );
-
+const DemoRequests = Loadable(
+  lazy(() => import('pages/admin/Master/DemoRequests'))
+);
 const MainRoutes = {
   path: '/dashboard',
   element: <MainLayout />,
@@ -108,6 +110,10 @@ const MainRoutes = {
     {
       path: 'websiteContent',
       element: <WebsiteContent />,
+    },
+    {
+      path: 'demo-requests',
+      element: <DemoRequests />,
     },
   ],
 };
