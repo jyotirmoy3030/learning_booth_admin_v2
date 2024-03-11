@@ -8,6 +8,8 @@ import {
   InputLabel,
   Typography,
   Box,
+  Autocomplete,
+  TextField,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -28,6 +30,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Slide from '@mui/material/Slide';
+import { getAllTestsApi } from 'services/Master/Tests';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -36,7 +39,13 @@ const UsersMaster = () => {
   const [users, setUsers] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [activeUser, setActiveUser] = useState({});
-
+  const [tests, setTests] = useState([]);
+  const getAllTests = async () => {
+    const js = await getAllTestsApi();
+    if (js) {
+      setTests(js.data);
+    }
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -47,7 +56,7 @@ const UsersMaster = () => {
   };
   const getUsers = async () => {
     const js = await getAllUsers();
-    const reversedData=js.data.reverse();
+    const reversedData = js.data.reverse();
     // console.log(reversedData);
     if (js) {
       setUsers(reversedData);
@@ -111,6 +120,7 @@ const UsersMaster = () => {
 
   React.useEffect(() => {
     getUsers();
+    getAllTests();
   }, []);
 
   return (
@@ -185,6 +195,7 @@ const UsersMaster = () => {
           email: '',
           phoneNumber: '',
           password: '',
+          priviligedAssessments: [],
         }}
         validationSchema={Yup.object().shape({
           name: Yup.string().max(255).required('name is required'),
@@ -199,6 +210,7 @@ const UsersMaster = () => {
           { setErrors, setStatus, setSubmitting, resetForm }
         ) => {
           try {
+            console.log(values, 'values');
             await createUser(values);
             resetForm();
             getUsers();
@@ -221,6 +233,7 @@ const UsersMaster = () => {
           isSubmitting,
           touched,
           values,
+          setFieldValue,
         }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={3}>
@@ -315,6 +328,39 @@ const UsersMaster = () => {
                       {errors.password}
                     </FormHelperText>
                   )}
+                </Stack>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Stack spacing={1}>
+                  <InputLabel htmlFor="priviligedAssessments">
+                    Select Assessments
+                  </InputLabel>
+                  <Autocomplete
+                    multiple
+                    id="priviligedAssessments"
+                    options={tests}
+                    getOptionLabel={(option) => option.title}
+                    onChange={(event, newValue) => {
+                      setFieldValue(
+                        'priviligedAssessments',
+                        newValue.map((val) => val._id)
+                      );
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        error={
+                          touched.priviligedAssessments &&
+                          Boolean(errors.priviligedAssessments)
+                        }
+                        helperText={
+                          touched.priviligedAssessments &&
+                          errors.priviligedAssessments
+                        }
+                      />
+                    )}
+                  />
                 </Stack>
               </Grid>
 
