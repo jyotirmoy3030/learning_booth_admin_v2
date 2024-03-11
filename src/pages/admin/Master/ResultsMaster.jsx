@@ -42,41 +42,9 @@ const ResultsMaster = () => {
       ),
     },
     {
-      title: 'Category Scores',
-      dataIndex: 'scores',
-      key: 'scores',
-      render: (_, data) => (
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="start"
-          flexDirection="column"
-        >
-          {/* {data?.scores?.map((score) => (
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <h5 style={{ textDecoration: 'underline' }}>
-                {score?.category}:
-              </h5>
-              <p
-                style={{
-                  fontSize: '13px',
-                  background: '#f5f5f5',
-                  borderRadius: '8px',
-                  padding: '4px',
-                }}
-              >
-                {score?.percentage?.toFixed(2)} %
-              </p>
-            </Box>
-          ))} */}
-        </Box>
-      ),
+      title: 'User Location',
+      dataIndex: 'userLocation',
+      key: 'userLocation',
     },
     {
       title: 'Recommended Jobs',
