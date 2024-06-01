@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 //import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
@@ -16,20 +16,20 @@ import {
   OutlinedInput,
   Stack,
   //Typography
-} from '@mui/material';
+} from "@mui/material";
 
 // third party
-import * as Yup from 'yup';
-import { Formik } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import * as Yup from "yup";
+import { Formik } from "formik";
+import { useNavigate } from "react-router-dom";
 // project import
 //import FirebaseSocial from './FirebaseSocial';
-import AnimateButton from 'components/@extended/AnimateButton';
+import AnimateButton from "components/@extended/AnimateButton";
 
 // assets
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-import { adminLogin } from 'services/Auth/Login';
-import { toast } from 'react-toastify';
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+import { adminLogin } from "services/Auth/Login";
+import { toast } from "react-toastify";
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const AuthLogin = () => {
@@ -49,28 +49,29 @@ const AuthLogin = () => {
     <>
       <Formik
         initialValues={{
-          email: '',
-          password: '',
+          email: "",
+          password: "",
         }}
         validationSchema={Yup.object().shape({
           email: Yup.string()
-            .email('Must be a valid email')
+            .email("Must be a valid email")
             .max(255)
-            .required('Email is required'),
-          password: Yup.string().max(255).required('Password is required'),
+            .required("Email is required"),
+          password: Yup.string().max(255).required("Password is required"),
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
             const response = await adminLogin(values);
+            localStorage.setItem("token", response?.data?.accessToken);
             if ([200, 201].includes(response.status)) {
-              navigate('/dashboard');
+              navigate("/dashboard");
             }
-            toast.success('Logged In Successfully!');
+            toast.success("Logged In Successfully!");
             setStatus({ success: false });
             setSubmitting(false);
           } catch (err) {
             setStatus({ success: false });
-            toast.error('ERROR: Cannot login.');
+            toast.error("ERROR: Cannot login.");
             setErrors({ submit: err.message });
             setSubmitting(false);
           }
@@ -89,22 +90,22 @@ const AuthLogin = () => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="email-login">Email Address</InputLabel>
+                  <InputLabel htmlFor='email-login'>Email Address</InputLabel>
                   <OutlinedInput
-                    id="email-login"
-                    type="email"
+                    id='email-login'
+                    type='email'
                     value={values.email}
-                    name="email"
+                    name='email'
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Enter email address"
+                    placeholder='Enter email address'
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
                   />
                   {touched.email && errors.email && (
                     <FormHelperText
                       error
-                      id="standard-weight-helper-text-email-login"
+                      id='standard-weight-helper-text-email-login'
                     >
                       {errors.email}
                     </FormHelperText>
@@ -113,24 +114,24 @@ const AuthLogin = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-login">Password</InputLabel>
+                  <InputLabel htmlFor='password-login'>Password</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
-                    id="-password-login"
-                    type={showPassword ? 'text' : 'password'}
+                    id='-password-login'
+                    type={showPassword ? "text" : "password"}
                     value={values.password}
-                    name="password"
+                    name='password'
                     onBlur={handleBlur}
                     onChange={handleChange}
                     endAdornment={
-                      <InputAdornment position="end">
+                      <InputAdornment position='end'>
                         <IconButton
-                          aria-label="toggle password visibility"
+                          aria-label='toggle password visibility'
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                          size="large"
+                          edge='end'
+                          size='large'
                         >
                           {showPassword ? (
                             <EyeOutlined />
@@ -140,12 +141,12 @@ const AuthLogin = () => {
                         </IconButton>
                       </InputAdornment>
                     }
-                    placeholder="Enter password"
+                    placeholder='Enter password'
                   />
                   {touched.password && errors.password && (
                     <FormHelperText
                       error
-                      id="standard-weight-helper-text-password-login"
+                      id='standard-weight-helper-text-password-login'
                     >
                       {errors.password}
                     </FormHelperText>
@@ -177,10 +178,10 @@ const AuthLogin = () => {
                     disableElevation
                     disabled={isSubmitting}
                     fullWidth
-                    size="large"
-                    type="submit"
-                    variant="contained"
-                    color="primary"
+                    size='large'
+                    type='submit'
+                    variant='contained'
+                    color='primary'
                   >
                     Login
                   </Button>
