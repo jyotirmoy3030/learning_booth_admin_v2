@@ -301,7 +301,7 @@ const DashboardDefault = () => {
                     },
                   ]}
                   type="area"
-                  // width="500"
+                // width="500"
                 />
               </div>
             </div>
@@ -369,38 +369,29 @@ const DashboardDefault = () => {
           </div>
           <div className="pt-9 w-full">
             <div className="flex flex-row items-center justify-start gap-[19.64px] mb-[31px]">
-              <button className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px]">
-                <span className="text-[#1F222E] font-medium text-base">
-                  Select Jobs
-                </span>
-                <div className="w-3 h-2">
-                  <img src={angleDown} alt="" className="w-full h-full" />
-                </div>
-              </button>
-              <button className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px]">
-                <span className="text-[#1F222E] font-medium text-base">
-                  Location
-                </span>
-                <div className="w-3 h-2">
-                  <img src={angleDown} alt="" className="w-full h-full" />
-                </div>
-              </button>
-              <button className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px]">
-                <span className="text-[#1F222E] font-medium text-base">
-                  Experience Level
-                </span>
-                <div className="w-3 h-2">
-                  <img src={angleDown} alt="" className="w-full h-full" />
-                </div>
-              </button>
-              <button className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px]">
-                <span className="text-[#1F222E] font-medium text-base">
-                  Candidate Profile
-                </span>
-                <div className="w-3 h-2">
-                  <img src={angleDown} alt="" className="w-full h-full" />
-                </div>
-              </button>
+              
+              <select className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
+                <option className="text-[#1F222E] font-medium text-base" value="someOption">Select Jobs</option>
+                <option className="text-[#1F222E] font-medium text-base" value="otherOption">Other option</option>
+              </select>
+
+              <select className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
+                <option className="text-[#1F222E] font-medium text-base" value="someOption">Location</option>
+                <option className="text-[#1F222E] font-medium text-base" value="otherOption">Other option</option>
+              </select>
+
+              <select className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
+                <option className="text-[#1F222E] font-medium text-base" value="someOption"> Experience Level</option>
+                <option className="text-[#1F222E] font-medium text-base" value="otherOption">Other option</option>
+              </select>
+
+
+              <select className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
+                <option className="text-[#1F222E] font-medium text-base" value="someOption">Candidate Profile</option>
+                <option className="text-[#1F222E] font-medium text-base" value="otherOption">Other option</option>
+              </select>
+
+
               <button className="bg-white border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px]">
                 <div className="w-5 h-5 bg-[#DCEAFF] flex flex-row items-center justify-center rounded">
                   <svg
@@ -2003,44 +1994,44 @@ const DashboardDefault = () => {
           <AnalyticEcommerce
             title="Total Jobs"
             count={stats.jobs}
-            // percentage={59.3}
-            // extra="35,000"
+          // percentage={59.3}
+          // extra="35,000"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={2}>
           <AnalyticEcommerce
             title="Total Courses"
             count={stats.courses}
-            // percentage={59.3}
-            // extra="35,000"
+          // percentage={59.3}
+          // extra="35,000"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={2}>
           <AnalyticEcommerce
             title="Total Users"
             count={stats.users}
-            // percentage={70.5}
-            // extra="8,900"
+          // percentage={70.5}
+          // extra="8,900"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={3}>
           <AnalyticEcommerce
             title="Total Assessments"
             count={stats.assessments}
-            // percentage={27.4}
-            // isLoss
-            // color="warning"
-            // extra="1,943"
+          // percentage={27.4}
+          // isLoss
+          // color="warning"
+          // extra="1,943"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={2}>
           <AnalyticEcommerce
             title="Total Skills"
             count={stats.skills}
-            // percentage={27.4}
-            // isLoss
-            // color="warning"
-            // extra="$20,395"
+          // percentage={27.4}
+          // isLoss
+          // color="warning"
+          // extra="$20,395"
           />
         </Grid>
 
