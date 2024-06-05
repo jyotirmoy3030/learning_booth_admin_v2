@@ -1,0 +1,18 @@
+.buttonshadow {
+    box-shadow: 0px 1.68px 4.19px 0px #26334D08;
+}
+
+.notify-icon {
+    box-shadow: 0px 2px 5px 0px #26334D08;
+    background: #3A558A33;
+}
+
+ul.sideNav  li {
+    background-color: #fff;
+    box-shadow: 0px 1.68px 4.19px 0px #26334D08;
+}
+
+ul.sideNav  li.active {
+    border: 0.5px solid #9198BC !important;
+    background-color: #E4EDFA !important;
+}
