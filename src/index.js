@@ -12,6 +12,8 @@ import { Provider as ReduxProvider } from 'react-redux';
 import 'assets/third-party/apex-chart.css';
 
 // project import
+import "./index.css";
+import "./App.css"
 import App from './App';
 import { store } from 'store';
 import reportWebVitals from './reportWebVitals';
