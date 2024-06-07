@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { Scatter } from 'react-chartjs-2';
+
 // material-ui
 import {
   Avatar,
@@ -48,6 +50,19 @@ import filter from "../../assets/new-dashboard-img/Filter.svg";
 import sort from "../../assets/new-dashboard-img/Sort.svg";
 import Sidebar from "components/SideNav/Sidebar";
 import Chart from "react-apexcharts";
+
+
+import {
+  Chart as ChartJS,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import ReactApexChart from "react-apexcharts";
+
+ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 // avatar style
 const avatarSX = {
@@ -135,7 +150,107 @@ const DashboardDefault = () => {
     },
   ];
 
-  const options = {};
+  const series = [
+    {
+      name: "SAMPLE A",
+      data: [
+        [16.4, 5.4], [21.7, 2], [25.4, 3], [19, 2], [10.9, 1], [13.6, 3.2], [10.9, 7.4], [10.9, 0], [10.9, 8.2], [16.4, 0], [16.4, 1.8], [13.6, 0.3], [13.6, 0], [29.9, 0]]
+    }];
+
+  const options = {
+    chart: {
+      background: '#1E2027',
+      height: 400,
+      type: 'scatter',
+      zoom: {
+        type: 'xy'
+      },
+      sparkline: {
+        enabled: false,
+      }
+    },
+    dataLabels: {
+      enabled: false,
+      style: {
+        colors: ['#FFFFFF99']
+      }
+    },
+    grid: {
+      xaxis: {
+        lines: {
+          show: true
+        }
+      },
+      yaxis: {
+        lines: {
+          show: true
+        }
+      },
+    },
+    // annotations: {
+    //   yaxis: [{
+    //     y: 0,
+    //     y2: null,
+    //     strokeDashArray: 1,
+    //     borderColor: '#FFFFFF99',
+    //     fillColor: '#FFFFFF99',
+    //     opacity: 0.3,
+    //     offsetX: 0,
+    //     offsetY: -3,
+    //     width: '100%',
+    //     yAxisIndex: 0,
+    //     label: {
+    //       borderColor: '#c2c2c2',
+    //       borderWidth: 1,
+    //       borderRadius: 2,
+    //       text: 'Role Alignment',
+    //       textAnchor: 'center',
+    //       // position: 'right',
+    //       offsetX: 0,
+    //       offsetY: 0,
+         
+    //       style: {
+    //         // background: '#fff',
+    //         color: '#FFFFFF99',
+    //         fontSize: '12px',
+    //         fontWeight: 400,
+            
+    //         // cssClass: 'apexcharts-yaxis-annotation-label',
+            
+    //       },
+    //     },
+    //   }],
+    //   xaxis: [{
+    //     x: 0,
+    //     x2: null,
+    //     strokeDashArray: 1,
+    //     borderColor: '#c2c2c2',
+    //     fillColor: '#c2c2c2',
+    //     opacity: 0.3,
+    //     offsetX: 0,
+    //     offsetY: 0,
+    //     label: {
+    //       borderColor: '#FFFFFF99',
+    //       borderWidth: 1,
+    //       borderRadius: 2,
+    //       text: 'Cultural Fitment',
+    //       textAnchor: 'middle',
+    //       position: 'top',
+    //       orientation: 'vertical',
+    //       offsetX: 0,
+    //       offsetY: 0,
+    //       style: {
+    //         // background: '#fff',
+    //         color: '#FFFFFF99',
+    //         fontSize: '12px',
+    //         fontWeight: 600,
+    //         cssClass: 'apexcharts-xaxis-annotation-label',
+    //       },
+    //     },
+    //   }],
+
+    // }
+  };
 
   const internalData = [
     {
@@ -305,71 +420,26 @@ const DashboardDefault = () => {
                 />
               </div>
             </div>
-            {/*   <div className='bg-[#1E2027] w-2/5 h-[375px] p-5 rounded-md overflow-hidden'>
-                        <Scatter
-                            options={{
-                                plugins: {
-                                    title: {
-                                        display: true,
-                                        text: 'Custom Chart Title'
-                                    }
-                                },
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        labels: ['10', '20', '30', '40', '60', '70', '80', '90', '100'],
-                                        border: {
-                                            color: '#838383'
-                                        }
-                                    },
-                                    x: {
-                                        // type: 'category',
-                                        labels: ['10', '20', '30', '40', '60', '70', '80', '90', '100'],
-                                        border: {
-                                            color: '#838383'
-                                        },
-                                        grid: {
-                                            color: '#1E2027',
-                                            tickColor: '#1E2027'
-                                        }
-                                    }
-                                },
-                            }}
-                            redraw={true}
-                            data={
-                                {
-                                    datasets: [
-                                        {
-                                            label: 'A dataset',
-                                            data: [
-                                                {
-                                                    x: 10, y: 20
-                                                }, {
-                                                    x: 20, y: 65
-                                                }, {
-                                                    x: 30, y: 55
-                                                }, {
-                                                    x: 40, y: 45
-                                                }, {
-                                                    x: 5, y: 25
-                                                }, {
-                                                    x: 35, y: 16
-                                                }, {
-                                                    x: 15, y: 23
-                                                }
-                                            ],
-                                            borderColor: '#fff',
-                                            backgroundColor: '#3b9c68',
-
-                                        },
-                                    ],
-                                }
-                            } />
-                    </div>*/}
+            <div className='bg-[#1E2027] w-2/5 h-[503px] p-5 rounded-md overflow-hidden'>
+              <div className="flex-row flex items-center justify-between w-full pb-1.5 border-b border-[#B9B9B933] ">
+                <div className="text-sm text-white font-bold">Candidate Profiling</div>
+                <div className="flex flex-row items-center justify-end gap-2.5">
+                  <button className="border border-[#585C6C] rounded h-6 flex flex-row items-center justify-center px-2.5">
+                    <span className="text-[#FFFFFF] font-medium text-[10px]">
+                      Show List
+                    </span>
+                  </button>
+                  <select className="bg-[#585C6C] h-6  px-[9.02px] flex flex-row items-center rounded text-white font-medium text-xs  focus-within:outline-none focus-visible:outline-none ">
+                    <option className="text-white font-medium text-xs" value="someOption">Ideal Champs</option>
+                  </select>
+                </div>
+              </div>
+              <ReactApexChart options={options} series={series} type="scatter" height={350} />
+            </div>
           </div>
           <div className="pt-9 w-full">
             <div className="flex flex-row items-center justify-start gap-[19.64px] mb-[31px]">
-              
+
               <select className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
                 <option className="text-[#1F222E] font-medium text-base" value="someOption">Select Jobs</option>
                 <option className="text-[#1F222E] font-medium text-base" value="otherOption">Other option</option>
