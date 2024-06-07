@@ -108,16 +108,47 @@ const ResultsMaster = () => {
       key: 'actions',
       render: (_, data) => (
         <Box display="flex" alignItems="center" justifyContent="start">
-          <span
-            style={{ cursor: 'pointer', fontSize: '20px', color: 'red' }}
+          <div className="flex flex-row items-center justify-center gap-[7.12px]">
+            <a href={`http://localhost:3000/assessments/result?resultId=${data._id}`} target="_blank" className="bg-white border-[#0057FC] border  w-[35px] h-[35px]  rounded-lg flex flex-row items-center justify-center">
+              <svg
+                width="19"
+                height="18"
+                viewBox="0 0 19 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M13.54 11.5135V5.2832H7.3097M13.3567 5.46645L5.84375 12.9794"
+                  stroke="#0057FC"
+                  stroke-width="1.31935"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+            <button className="bg-white border-[#CED4DA] border rounded-lg  w-[35px] h-[35px] flex flex-row items-center justify-center" 
             onClick={async () => {
               await deleteResult(data._id);
               toast.success('Result deleted.');
               getResults();
-            }}
-          >
-            <DeleteOutlined />
-          </span>
+            }}>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5.28271 6.01533L5.89925 13.1056C5.96512 13.8631 6.59929 14.4445 7.35968 14.4445H10.902C11.6624 14.4445 12.2965 13.8631 12.3624 13.1056L12.9789 6.01533M7.48163 5.83209V5.28236C7.48163 4.47273 8.13793 3.81641 8.94758 3.81641H9.31406C10.1237 3.81641 10.78 4.47273 10.78 5.28236V5.83209M4 6.01533H14.2616"
+                  stroke="#212529"
+                  stroke-width="1.31935"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
         </Box>
       ),
     },
