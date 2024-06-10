@@ -19,6 +19,7 @@ import { Table, Tag } from 'antd';
 import { Typography, Box } from '@mui/material';
 import { DeleteOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
+import staticImageGraph from '../../assets/new-dashboard-img/Screenshot from 2024-06-07 19-46-56.png'
 
 // avatar style
 const avatarSX = {
@@ -432,7 +433,7 @@ const DashboardDefault = () => {
                     </span>
                   </button>
                 </div>
-              </div>
+              </div> 
               <div className="mixed-chart border border-slate-300 rounded overflow-hidden">
                 <Chart
                   options={{
@@ -485,67 +486,9 @@ const DashboardDefault = () => {
                 />
               </div>
             </div>
-            {/*   <div className='bg-[#1E2027] w-2/5 h-[375px] p-5 rounded-md overflow-hidden'>
-                        <Scatter
-                            options={{
-                                plugins: {
-                                    title: {
-                                        display: true,
-                                        text: 'Custom Chart Title'
-                                    }
-                                },
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        labels: ['10', '20', '30', '40', '60', '70', '80', '90', '100'],
-                                        border: {
-                                            color: '#838383'
-                                        }
-                                    },
-                                    x: {
-                                        // type: 'category',
-                                        labels: ['10', '20', '30', '40', '60', '70', '80', '90', '100'],
-                                        border: {
-                                            color: '#838383'
-                                        },
-                                        grid: {
-                                            color: '#1E2027',
-                                            tickColor: '#1E2027'
-                                        }
-                                    }
-                                },
-                            }}
-                            redraw={true}
-                            data={
-                                {
-                                    datasets: [
-                                        {
-                                            label: 'A dataset',
-                                            data: [
-                                                {
-                                                    x: 10, y: 20
-                                                }, {
-                                                    x: 20, y: 65
-                                                }, {
-                                                    x: 30, y: 55
-                                                }, {
-                                                    x: 40, y: 45
-                                                }, {
-                                                    x: 5, y: 25
-                                                }, {
-                                                    x: 35, y: 16
-                                                }, {
-                                                    x: 15, y: 23
-                                                }
-                                            ],
-                                            borderColor: '#fff',
-                                            backgroundColor: '#3b9c68',
-
-                                        },
-                                    ],
-                                }
-                            } />
-                    </div>*/}
+              <div className='bg-[#1E2027] w-2/5 h-[375px] p-5 rounded-md overflow-hidden'>
+              <img src={staticImageGraph} className='w-full h-full' alt="" />
+                </div>
           </div>
           <div className="pt-9 w-full">
             <div className="flex flex-row items-center justify-start gap-[19.64px] mb-[31px]">
