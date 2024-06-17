@@ -246,6 +246,7 @@ const AddQuestion = () => {
             .max(255)
             .required('Title is required'),
           answers: Yup.array().min(2, 'Must provide two answers.'),
+          compentencyType: Yup.string().required('Type is required'),
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
@@ -294,6 +295,29 @@ const AddQuestion = () => {
                       id="standard-weight-helper-text-title"
                     >
                       {errors.title}
+                    </FormHelperText>
+                  )}
+                </Stack>
+              </Grid>
+              <Grid item xs={12}>
+                <Stack spacing={1}>
+                  <InputLabel htmlFor="compentencyType">Type</InputLabel>
+                  <select
+                    id="compentencyType"
+                    name="compentencyType"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.compentencyType}
+                    className="MuiInputBase-input MuiOutlinedInput-input"
+                  >
+                    <option value="" label="Select Type" />
+                    <option value="functional" label="Functional" />
+                    <option value="behavioral" label="Behavioral" />
+                    <option value="cultural" label="Cultural" />
+                  </select>
+                  {touched.compentencyType && errors.compentencyType && (
+                    <FormHelperText error id="standard-weight-helper-text-compentencyType">
+                      {errors.compentencyType}
                     </FormHelperText>
                   )}
                 </Stack>

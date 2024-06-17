@@ -11,15 +11,15 @@ import filter from "../../assets/new-dashboard-img/Filter.svg";
 import sort from "../../assets/new-dashboard-img/Sort.svg";
 import Sidebar from "components/SideNav/Sidebar";
 import Chart from "react-apexcharts";
-import { Link } from 'react-router-dom';
-import { getAllJobs } from 'services/Master/Job';
-import { getAllUsers } from 'services/Master/Users';
-import { deleteResult, getAllResults } from 'services/Master/Results';
-import { Table, Tag } from 'antd';
-import { Typography, Box } from '@mui/material';
-import { DeleteOutlined } from '@ant-design/icons';
-import { toast } from 'react-toastify';
-import staticImageGraph from '../../assets/new-dashboard-img/Screenshot from 2024-06-07 19-46-56.png'
+import { Link } from "react-router-dom";
+import { getAllJobs } from "services/Master/Job";
+import { getAllUsers } from "services/Master/Users";
+import { deleteResult, getAllResults } from "services/Master/Results";
+import { Table, Tag } from "antd";
+import { Typography, Box } from "@mui/material";
+import { DeleteOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
+import staticImageGraph from "../../assets/new-dashboard-img/Screenshot from 2024-06-07 19-46-56.png";
 
 // avatar style
 const avatarSX = {
@@ -62,10 +62,11 @@ const DashboardDefault = () => {
   const [jobs, setJobs] = useState([]);
   const [users, setUsers] = useState([]);
   const [results, setResults] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState('');
-  const [selectedProfile, setSelectedProfile] = useState('');
-  const [selectedJob, setselectedJob] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [ResultType, setselectedResultType] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedProfile, setSelectedProfile] = useState("");
+  const [selectedJob, setselectedJob] = useState("");
 
   const [stats, setStats] = useState({
     jobs: 0,
@@ -91,7 +92,6 @@ const DashboardDefault = () => {
     getJobs();
   }, []);
 
-
   const getUsers = async () => {
     const js = await getAllUsers();
     const reversedData = js.data.reverse();
@@ -103,7 +103,6 @@ const DashboardDefault = () => {
   React.useEffect(() => {
     getUsers();
   }, []);
-
 
   const getResults = async () => {
     const js = await getAllResults();
@@ -117,36 +116,35 @@ const DashboardDefault = () => {
     getResults();
   }, []);
 
-
   const externalData = [
     {
       id: 1,
       title: "Total Jobs",
-      value: (stats && stats.jobs) ? stats.jobs:0,
+      value: stats && stats.jobs ? stats.jobs : 0,
       time: null,
     },
     {
       id: 2,
       title: "Total Courses",
-      value: (stats && stats.courses) ? stats.courses:0,
+      value: stats && stats.courses ? stats.courses : 0,
       time: null,
     },
     {
       id: 3,
       title: "Total Users",
-      value: (stats && stats.users) ? stats.users:0,
+      value: stats && stats.users ? stats.users : 0,
       time: null,
     },
     {
       id: 4,
       title: "Total Assessments",
-      value: (stats && stats.assessments) ? stats.assessments:0,
+      value: stats && stats.assessments ? stats.assessments : 0,
       time: null,
     },
     {
       id: 5,
       title: "Total Skills",
-      value: (stats && stats.skills) ? stats.skills:0,
+      value: stats && stats.skills ? stats.skills : 0,
       time: "Days",
     },
   ];
@@ -154,18 +152,18 @@ const DashboardDefault = () => {
   const internalData = [
     {
       title: "Total Assessment",
-      value: (stats && stats.assessments) ? stats.assessments:0,
-      url: '/dashboard/assessments',
+      value: stats && stats.assessments ? stats.assessments : 0,
+      url: "/dashboard/assessments",
     },
     {
       title: "Total Employees",
       value: 1265,
-      url: '/dashboard',
+      url: "/dashboard",
     },
     {
       title: "Total Skilled Employees",
       value: 254,
-      url: '/dashboard',
+      url: "/dashboard",
     },
   ];
 
@@ -182,19 +180,57 @@ const DashboardDefault = () => {
     setselectedJob(e.target.value);
   };
 
+  const handleResultTypeChange = (e) => {
+    setselectedResultType(e.target.value);
+  };
   const filteredResults = results.filter((result) => {
-    const matchesSearchTerm = result.user.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesLocation = selectedLocation ? result.userLocation === selectedLocation : true;
-    const matchesProfile = selectedProfile ? result.userId === selectedProfile : true;
-    const matchesJob = selectedJob ? result?.assessments?.job?._id === selectedJob : true;
-    return matchesSearchTerm && matchesLocation && matchesProfile && matchesJob;
+    const matchesSearchTerm = result.user.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesLocation = selectedLocation
+      ? result.userLocation === selectedLocation
+      : true;
+    const matchesProfile = selectedProfile
+      ? result.userId === selectedProfile
+      : true;
+    const matchesJob = selectedJob
+      ? result?.assessments?.job?._id === selectedJob
+      : true;
+    const rangeValue = ResultType;
+    let rangeMatch = true;
+    switch (rangeValue) {
+      case "30":
+        rangeMatch = result.totalPercentage <= 50;
+        break;
+      case "65":
+        rangeMatch =
+          result.totalPercentage > 50 && result.totalPercentage <= 65;
+        break;
+      case "85":
+        rangeMatch =
+          result.totalPercentage > 65 && result.totalPercentage <= 85;
+        break;
+      case "100":
+        rangeMatch =
+          result.totalPercentage > 85 && result.totalPercentage <= 100;
+        break;
+      default:
+        rangeMatch = true;
+        break;
+    }
+    return (
+      matchesSearchTerm &&
+      matchesLocation &&
+      matchesProfile &&
+      matchesJob &&
+      rangeMatch
+    );
   });
-
   const columns = [
     {
-      title: 'Full Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Full Name",
+      dataIndex: "name",
+      key: "name",
       render: (_, data) => (
         <Box display="flex" alignItems="center" justifyContent="start">
           {data?.user?.name}
@@ -203,9 +239,9 @@ const DashboardDefault = () => {
       sorter: (a, b) => a.user.name.localeCompare(b.user.name),
     },
     {
-      title: 'Courses',
-      dataIndex: 'totalCourses',
-      key: 'totalCourses',
+      title: "Courses",
+      dataIndex: "totalCourses",
+      key: "totalCourses",
       render: (_, data) => (
         <Box display="flex" alignItems="center" justifyContent="start">
           1
@@ -214,19 +250,47 @@ const DashboardDefault = () => {
       sorter: (a, b) => a.totalPercentage - b.totalPercentage,
     },
     {
-      title: 'Score/ 100',
-      dataIndex: 'totalPercentage',
-      key: 'totalPercentage',
+      title: "Score/ 100 %",
+      dataIndex: "totalPercentage",
+      key: "totalPercentage",
       render: (_, data) => (
         <Box display="flex" alignItems="center" justifyContent="start">
           <div className="flex flex-row items-center justify-start gap-2">
             <span className="text-[#343A40] text-xs font-normal ">
-              {data?.totalPercentage?.toFixed(2)}
+              {data?.totalPercentage?.toFixed(2)} %
             </span>
             <div className="w-min px-2.5 flex flex-row items-center justify-center h-5 rounded-full border  bg-[#29CC390D] ">
-              <span className="text-[8px] text-[#29CC39] font-black text-center">
+              <span className={`text-[8px] 
+                ${
+                  data?.totalPercentage?.toFixed(2) > 80
+                  ? 'text-[#29CC39]'
+                  : data?.totalPercentage?.toFixed(2) > 70
+                  ? 'text-[#29CC39]'
+                  : data?.totalPercentage?.toFixed(2) > 60
+                  ? 'text-[#29CC39]'
+                  : data?.totalPercentage?.toFixed(2) > 50
+                  ? 'text-[#29CC39]'
+                  : data?.totalPercentage?.toFixed(2) > 40
+                  ? 'text-[#29CC39]'
+                  : data?.totalPercentage?.toFixed(2) > 30
+                  ? 'text-[#cc294a]'
+                  : 'text-[#cc294a]'
+                }
+                font-black text-center`}>
                 {" "}
-                Good
+                {data?.totalPercentage?.toFixed(2) > 80
+                  ? "Excellent"
+                  : data?.totalPercentage?.toFixed(2) > 70
+                  ? "Best"
+                  : data?.totalPercentage?.toFixed(2) > 60
+                  ? "Better"
+                  : data?.totalPercentage?.toFixed(2) > 50
+                  ? "Good"
+                  : data?.totalPercentage?.toFixed(2) > 40
+                  ? "Average"
+                  : data?.totalPercentage?.toFixed(2) > 30
+                  ? "Below Average"
+                  : "Below Average"}
               </span>
             </div>
           </div>
@@ -235,45 +299,54 @@ const DashboardDefault = () => {
       sorter: (a, b) => a.totalPercentage - b.totalPercentage,
     },
     {
-      title: 'Relevant Skills',
-      dataIndex: 'recommendedJobs',
-      key: 'recommendedJobs',
-      render: (_, data) => (
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="start"
-          flexDirection="column"
-        >
-          <div className="flex flex-row items-center justify-start gap-2">
-            <div className="w-min px-2.5 flex flex-row items-center justify-center h-5 rounded-full border  bg-[#0047FF0D] ">
-              <span className="text-[8px] text-[#6A7B8B] font-black text-medium">
-                {" "}
-                Good
-              </span>
+      title: "Top Skill (High To Low)",
+      dataIndex: "recommendedJobs",
+      key: "recommendedJobs",
+      render: (_, { scores }) => (
+        <>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="start"
+            flexDirection="column"
+          >
+            <div className="flex flex-row items-center justify-start gap-2">
+              {Object.keys(
+                Object.fromEntries(
+                  Object.keys(scores)
+                    .map((key) => [key, scores[key]])
+                    .sort(
+                      (a, b) => b[1].total_percentage - a[1].total_percentage
+                    )
+                    .slice(0, 4)
+                )
+              ).map((key) => {
+                return (
+                  <div className="w-min px-2.5 flex flex-row items-center justify-center h-5 rounded-full border  bg-[#0047FF0D] ">
+                    <span className="text-[8px] text-[#6A7B8B] font-black text-medium">
+                      {" "}
+                      {key}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
-            <div className="w-min px-2.5 flex flex-row items-center justify-center h-5 rounded-full border  bg-[#0047FF0D] ">
-              <span className="text-[8px] text-[#6A7B8B] font-black text-medium">
-                DS
-              </span>
-            </div>
-            <div className="w-min px-2.5 flex flex-row items-center justify-center h-5 rounded-full border  bg-[#0047FF0D] ">
-              <span className="text-[8px] text-[#6A7B8B] font-black text-medium">
-                Flutter
-              </span>
-            </div>
-          </div>
-        </Box>
+          </Box>
+        </>
       ),
     },
     {
-      title: 'Actions',
-      dataIndex: 'actions',
-      key: 'actions',
+      title: "Actions",
+      dataIndex: "actions",
+      key: "actions",
       render: (_, data) => (
         <Box display="flex" alignItems="center" justifyContent="start">
           <div className="flex flex-row items-center justify-center gap-[7.12px]">
-            <a href={`http://localhost:3000/assessments/result?resultId=${data._id}`} target="_blank" className="bg-white border-[#0057FC] border  w-[35px] h-[35px]  rounded-lg flex flex-row items-center justify-center">
+            <a
+              href={`http://localhost:3000/assessments/result?resultId=${data._id}`}
+              target="_blank"
+              className="bg-white border-[#0057FC] border  w-[35px] h-[35px]  rounded-lg flex flex-row items-center justify-center"
+            >
               <svg
                 width="19"
                 height="18"
@@ -305,12 +378,14 @@ const DashboardDefault = () => {
                 />
               </svg>
             </button>
-            <button className="bg-white border-[#CED4DA] border rounded-lg  w-[35px] h-[35px] flex flex-row items-center justify-center" 
-            onClick={async () => {
-              await deleteResult(data._id);
-              toast.success('Result deleted.');
-              getResults();
-            }}>
+            <button
+              className="bg-white border-[#CED4DA] border rounded-lg  w-[35px] h-[35px] flex flex-row items-center justify-center"
+              onClick={async () => {
+                await deleteResult(data._id);
+                toast.success("Result deleted.");
+                getResults();
+              }}
+            >
               <svg
                 width="18"
                 height="18"
@@ -389,7 +464,7 @@ const DashboardDefault = () => {
             <div
               className="flex gap-3 flex-wrap flex-row items-center justify-start"
               id={"ExternalData"}
-            > 
+            >
               {internalData.map((items, idx) => {
                 return (
                   <div className="bg-white rounded-md border-[#e9e9e9] border-[0.83px] w-1/4 overflow-hidden min-h-[149px] min-w-[228px]max-w-[230px] ">
@@ -433,7 +508,7 @@ const DashboardDefault = () => {
                     </span>
                   </button>
                 </div>
-              </div> 
+              </div>
               <div className="mixed-chart border border-slate-300 rounded overflow-hidden">
                 <Chart
                   options={{
@@ -482,51 +557,132 @@ const DashboardDefault = () => {
                     },
                   ]}
                   type="area"
-                // width="500"
+                  // width="500"
                 />
               </div>
             </div>
-              <div className='bg-[#1E2027] w-2/5 h-[375px] p-5 rounded-md overflow-hidden'>
-              <img src={staticImageGraph} className='w-full h-full' alt="" />
-                </div>
+            <div className="bg-[#1E2027] w-2/5 h-[375px] p-5 rounded-md overflow-hidden">
+              <img src={staticImageGraph} className="w-full h-full" alt="" />
+            </div>
           </div>
           <div className="pt-9 w-full">
             <div className="flex flex-row items-center justify-start gap-[19.64px] mb-[31px]">
-              
-              <select onChange={handleJobChange} className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
-                <option className="text-[#1F222E] font-medium text-base" value="">Select Jobs</option>
+              <select
+                onChange={handleJobChange}
+                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
+              >
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value=""
+                >
+                  Select Jobs
+                </option>
                 {jobs.map((job, idx) => {
-                  return(
-                    <option className="text-[#1F222E] font-medium text-base" value={job._id}>{job.title}</option>
-                  )
+                  return (
+                    <option
+                      className="text-[#1F222E] font-medium text-base"
+                      value={job._id}
+                    >
+                      {job.title}
+                    </option>
+                  );
                 })}
               </select>
 
-              <select onChange={handleLocationChange} className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
-                <option className="text-[#1F222E] font-medium text-base" value="">Location</option>
+              <select
+                onChange={handleLocationChange}
+                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
+              >
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value=""
+                >
+                  Location
+                </option>
                 {results.map((result, idx) => {
-                  return(
-                    <option className="text-[#1F222E] font-medium text-base" value={result.userLocation}>{result.userLocation}</option>
-                  )
+                  return (
+                    <option
+                      className="text-[#1F222E] font-medium text-base"
+                      value={result.userLocation}
+                    >
+                      {result.userLocation}
+                    </option>
+                  );
                 })}
               </select>
 
               <select className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
-                <option className="text-[#1F222E] font-medium text-base" value="someOption"> Experience Level</option>
-                <option className="text-[#1F222E] font-medium text-base" value="otherOption">Other option</option>
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="someOption"
+                >
+                  {" "}
+                  Experience Level
+                </option>
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="otherOption"
+                >
+                  Other option
+                </option>
               </select>
 
-
-              <select onChange={handleProfileChange} className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
-                <option className="text-[#1F222E] font-medium text-base" value="someOption">Candidate Profile</option>
+              <select
+                onChange={handleProfileChange}
+                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
+              >
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value=""
+                >
+                  Candidate Profile
+                </option>
                 {users.map((user, idx) => {
-                  return(
-                    <option className="text-[#1F222E] font-medium text-base" value={user._id}>{user.name}</option>
-                  )
+                  return (
+                    <option
+                      className="text-[#1F222E] font-medium text-base"
+                      value={user._id}
+                    >
+                      {user.name}
+                    </option>
+                  );
                 })}
               </select>
-
-
+              <select
+                onChange={handleResultTypeChange}
+                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
+              >
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value=""
+                >
+                  Range
+                </option>
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="30"
+                >
+                  Below Average (30 - 50)
+                </option>
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="65"
+                >
+                  Average (50 - 65)
+                </option>
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="85"
+                >
+                  Good (65 - 85)
+                </option>
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="100"
+                >
+                  Excellent (85 - 100)
+                </option>
+              </select>
               <button className="bg-white border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px]">
                 <div className="w-5 h-5 bg-[#DCEAFF] flex flex-row items-center justify-center rounded">
                   <svg
