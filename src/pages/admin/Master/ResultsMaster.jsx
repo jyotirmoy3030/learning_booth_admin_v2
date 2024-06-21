@@ -109,7 +109,7 @@ const ResultsMaster = () => {
       render: (_, data) => (
         <Box display="flex" alignItems="center" justifyContent="start">
           <div className="flex flex-row items-center justify-center gap-[7.12px]">
-            <a href={`http://localhost:3000/assessments/result?resultId=${data._id}`} target="_blank" className="bg-white border-[#0057FC] border  w-[35px] h-[35px]  rounded-lg flex flex-row items-center justify-center">
+            <a href={`https://www.thirdbracket.in/assessments/result?resultId=${data._id}`} target="_blank" className="bg-white border-[#0057FC] border  w-[35px] h-[35px]  rounded-lg flex flex-row items-center justify-center">
               <svg
                 width="19"
                 height="18"
