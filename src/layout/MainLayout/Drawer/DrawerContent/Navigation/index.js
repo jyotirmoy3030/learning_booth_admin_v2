@@ -75,18 +75,20 @@ const Navigation = () => {
             breadcrumbs: false,
           }
         );
-      } else if (data === 'Courses') {
-        masterMenuChild.push(
-          {
-            id: 'courses',
-            title: 'Courses',
-            type: 'item',
-            url: '/dashboard/courses',
-            icon: icons.SnippetsOutlined,
-            breadcrumbs: false,
-          }
-        );
-      } else if (data === 'Assessments') {
+      } 
+      // else if (data === 'Courses') {
+      //   masterMenuChild.push(
+      //     {
+      //       id: 'courses',
+      //       title: 'Courses',
+      //       type: 'item',
+      //       url: '/dashboard/courses',
+      //       icon: icons.SnippetsOutlined,
+      //       breadcrumbs: false,
+      //     }
+      //   );
+      // } 
+      else if (data === 'Assessments') {
         masterMenuChild.push(
           {
             id: 'assessments',
@@ -154,6 +156,16 @@ const Navigation = () => {
         );
       }
   });
+  masterMenuChild.push(
+    {
+      id: 'Application',
+      title: 'Job Application',
+      type: 'item',
+      url: '/dashboard/jobs-application',
+      icon: icons.SnippetsOutlined,
+      breadcrumbs: false,
+    }
+  );
 
   let masterMenu = {
     id: 'group-master',
@@ -178,7 +190,7 @@ const Navigation = () => {
   };
   let totalMenuItem = {
     items: [dashboardMenu, masterMenu ],
-  };
+  }; 
   const navGroups = totalMenuItem.items.map((item) => {
     switch (item.type) {
       case 'group':

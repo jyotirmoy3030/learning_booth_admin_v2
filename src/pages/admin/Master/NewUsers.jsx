@@ -245,7 +245,7 @@ const NewUsers = () => {
                     </FormHelperText>
                   )}
                 </Stack>
-                </Grid>
+              </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="usersAllowed">Number of Users Allowed</InputLabel>
@@ -271,35 +271,35 @@ const NewUsers = () => {
                 </Stack>
               </Grid>
               <Grid item xs={12}>
-              <Stack spacing={1}>
-                <InputLabel>Permissions</InputLabel>
-                <div>
-                  {['Users', 'Job Roles', 'Jobs', 'Courses', 'Assessments','Results'].map((permission) => (
-                    <div key={permission}>
-                      <input
-                        type="checkbox"
-                        id={`permission-${permission}`}
-                        name="permissions"
-                        value={permission}
-                        onChange={() => {
-                          const updatedPermissions = values.permissions.includes(permission)
-                            ? values.permissions.filter((p) => p !== permission)
-                            : [...values.permissions, permission];
-                          setFieldValue('permissions', updatedPermissions);
-                        }}
-                        checked={values.permissions.includes(permission)}
-                      />
-                      <label htmlFor={`permission-${permission}`}>{permission}</label>
-                    </div>
-                  ))}
-                </div>
-                {touched.permissions && errors.permissions && (
-                  <FormHelperText error id="standard-weight-helper-text-permissions">
-                    {errors.permissions}
-                  </FormHelperText>
-                )}
-              </Stack>
-            </Grid>
+                <Stack spacing={1}>
+                  <InputLabel>Permissions</InputLabel>
+                  <div>
+                    {['Users', 'Job Roles', 'Jobs', 'Courses', 'Assessments','Results'].map((permission) => (
+                      <div key={permission}>
+                        <input
+                          type="checkbox"
+                          id={`permission-${permission}`}
+                          name="permissions"
+                          value={permission}
+                          onChange={() => {
+                            const updatedPermissions = values.permissions.includes(permission)
+                              ? values.permissions.filter((p) => p !== permission)
+                              : [...values.permissions, permission];
+                            setFieldValue('permissions', updatedPermissions);
+                          }}
+                          checked={values.permissions.includes(permission)}
+                        />
+                        <label htmlFor={`permission-${permission}`}>{permission}</label>
+                      </div>
+                    ))}
+                  </div>
+                  {touched.permissions && errors.permissions && (
+                    <FormHelperText error id="standard-weight-helper-text-permissions">
+                      {errors.permissions}
+                    </FormHelperText>
+                  )}
+                </Stack>
+              </Grid>
               <Grid item xs={12}>
                 <Button
                   disableElevation

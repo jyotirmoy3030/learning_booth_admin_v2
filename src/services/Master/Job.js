@@ -9,6 +9,15 @@ export const getAllJobs = async () => {
   }
 };
 
+export const getAllJobsApplication = async () => {
+  try {
+    const response = await appAxios.get('/job/apply-job');
+    return response;
+  } catch (error) {
+    console.log('Error getting all jobs.', error);
+  }
+};
+
 export const createJob = async (data) => {
   try {
     const response = await appAxios.post('/job', data);
