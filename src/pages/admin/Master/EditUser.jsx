@@ -39,6 +39,7 @@ const EditUser = () => {
           email: user.email,
           phoneNumber: user.phoneNumber,
           password: '',
+          permissions: user.permissions || [],
         }}
         validationSchema={Yup.object().shape({
           name: Yup.string().max(255).required('name is required'),
@@ -47,6 +48,7 @@ const EditUser = () => {
             .required('email are required'),
           phoneNumber: Yup.string().required('phoneNumber are required'),
           password: Yup.string(),
+          permissions: Yup.array().required('Select at least one permission'),
         })}
         enableReinitialize={true}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
@@ -72,6 +74,7 @@ const EditUser = () => {
           isSubmitting,
           touched,
           values,
+          setFieldValue,
         }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={3}>
@@ -164,6 +167,36 @@ const EditUser = () => {
                       id="standard-weight-helper-text-password"
                     >
                       {errors.password}
+                    </FormHelperText>
+                  )}
+                </Stack>
+              </Grid>
+              <Grid item xs={12}>
+                <Stack spacing={1}>
+                  <InputLabel>Permissions</InputLabel>
+                  <div>
+                    {['Assessments', 'Courses', 'Jobs'].map((permission) => (
+                      <div key={permission}>
+                        <input
+                          type="checkbox"
+                          id={`permission-${permission}`}
+                          name="permissions"
+                          value={permission}
+                          onChange={() => {
+                            const updatedPermissions = values.permissions.includes(permission)
+                              ? values.permissions.filter((p) => p !== permission)
+                              : [...values.permissions, permission];
+                            setFieldValue('permissions', updatedPermissions);
+                          }}
+                          checked={values.permissions.includes(permission)}
+                        />
+                        <label htmlFor={`permission-${permission}`}>{permission}</label>
+                      </div>
+                    ))}
+                  </div>
+                  {touched.permissions && errors.permissions && (
+                    <FormHelperText error id="standard-weight-helper-text-permissions">
+                      {errors.permissions}
                     </FormHelperText>
                   )}
                 </Stack>

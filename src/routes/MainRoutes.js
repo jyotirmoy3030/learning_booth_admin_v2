@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
-
+ 
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
 const JobRoleMaster = Loadable(
@@ -9,6 +9,9 @@ const JobRoleMaster = Loadable(
 );
 const JobsMaster = Loadable(
   lazy(() => import('pages/admin/Master/JobsMaster'))
+);
+const JobsApplicationMaster = Loadable(
+  lazy(() => import('pages/admin/Master/JobsApplication'))
 );
 const EditJobMaster = Loadable(
   lazy(() => import('pages/admin/Master/EditJob'))
@@ -62,6 +65,10 @@ const MainRoutes = {
     {
       path: 'jobs',
       element: <JobsMaster />,
+    },
+    {
+      path: 'jobs-application',
+      element: <JobsApplicationMaster />,
     },
     {
       path: 'jobs/:id/edit',
