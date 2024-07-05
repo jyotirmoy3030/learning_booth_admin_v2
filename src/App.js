@@ -12,8 +12,8 @@ const App = () => (
   <ThemeCustomization>
     <ToastContainer />
     <ScrollTop>
-      <Routes />
-      {/* <AssessmentReport /> */}
+      {/* <Routes /> */}
+      <AssessmentReport />
     </ScrollTop>
   </ThemeCustomization>
 );
