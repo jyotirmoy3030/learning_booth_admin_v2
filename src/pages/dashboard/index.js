@@ -184,14 +184,14 @@ const DashboardDefault = () => {
     setselectedResultType(e.target.value);
   };
   const filteredResults = results.filter((result) => {
-    const matchesSearchTerm = result.user.name
+    const matchesSearchTerm = result?.user?.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
     const matchesLocation = selectedLocation
-      ? result.userLocation === selectedLocation
+      ? result?.userLocation === selectedLocation
       : true;
     const matchesProfile = selectedProfile
-      ? result.userId === selectedProfile
+      ? result?.userId === selectedProfile
       : true;
     const matchesJob = selectedJob
       ? result?.assessments?.job?._id === selectedJob
@@ -357,9 +357,9 @@ const DashboardDefault = () => {
                 <path
                   d="M13.54 11.5135V5.2832H7.3097M13.3567 5.46645L5.84375 12.9794"
                   stroke="#0057FC"
-                  stroke-width="1.31935"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.31935"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </a>
@@ -396,9 +396,9 @@ const DashboardDefault = () => {
                 <path
                   d="M5.28271 6.01533L5.89925 13.1056C5.96512 13.8631 6.59929 14.4445 7.35968 14.4445H10.902C11.6624 14.4445 12.2965 13.8631 12.3624 13.1056L12.9789 6.01533M7.48163 5.83209V5.28236C7.48163 4.47273 8.13793 3.81641 8.94758 3.81641H9.31406C10.1237 3.81641 10.78 4.47273 10.78 5.28236V5.83209M4 6.01533H14.2616"
                   stroke="#212529"
-                  stroke-width="1.31935"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.31935"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </button>
@@ -467,7 +467,7 @@ const DashboardDefault = () => {
             >
               {internalData.map((items, idx) => {
                 return (
-                  <div className="bg-white rounded-md border-[#e9e9e9] border-[0.83px] w-1/4 overflow-hidden min-h-[149px] min-w-[228px]max-w-[230px] ">
+                  <div className="bg-white rounded-md border-[#e9e9e9] border-[0.83px] w-1/4 overflow-hidden min-h-[149px] min-w-[228px]max-w-[230px] " key={idx}>
                     <div className="internalDataCard my-1 ml-[21.56px]">
                       <div className="ml-0.5 mt-5">
                         <h3 className="font-bold text-[#3d4668] text-[11.11px] line-clamp-1">
@@ -581,7 +581,7 @@ const DashboardDefault = () => {
                   return (
                     <option
                       className="text-[#1F222E] font-medium text-base"
-                      value={job._id}
+                      value={job._id} key={idx}
                     >
                       {job.title}
                     </option>
@@ -603,7 +603,7 @@ const DashboardDefault = () => {
                   return (
                     <option
                       className="text-[#1F222E] font-medium text-base"
-                      value={result.userLocation}
+                      value={result.userLocation} key={idx}
                     >
                       {result.userLocation}
                     </option>
@@ -641,7 +641,7 @@ const DashboardDefault = () => {
                   return (
                     <option
                       className="text-[#1F222E] font-medium text-base"
-                      value={user._id}
+                      value={user._id} key={idx}
                     >
                       {user.name}
                     </option>
@@ -695,9 +695,9 @@ const DashboardDefault = () => {
                     <path
                       d="M10.5844 0.994141H0.759766L3.85061 4.85772C4.04284 5.09798 4.14756 5.39651 4.14756 5.70426V10.1412C4.14756 10.5154 4.4509 10.8187 4.82512 10.8187H6.51902C6.89323 10.8187 7.19657 10.5154 7.19657 10.1412V5.70426C7.19657 5.39651 7.30132 5.09798 7.49355 4.85772L10.5844 0.994141Z"
                       stroke="#6C757D"
-                      stroke-width="1.01634"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.01634"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </div>

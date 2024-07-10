@@ -109,30 +109,15 @@ const AddQuestion = () => {
   };
 
   const handleFileUpload = async (acceptedFiles) => {
-    // const formData = new FormData();
-    // formData.append('file', acceptedFiles[0]);
-    // console.log('File before upload:', formData);
     const formData = new FormData();
     formData.append('file', acceptedFiles[0]);
-
-    // Log the FormData and its entries
-    console.log('File before upload:', formData);
-
-    // Log details about the file
-    const file = acceptedFiles[0];
-    console.log('File details:', {
-      name: file.name,
-      size: file.size,
-      type: file.type,
-    });
-
     try {
-      // await uploadExcelFile(test?._id, formData)
-      const response = await appAxios.post(`/assessment/${id}`, acceptedFiles);
-      console.log(response);
+      const response = await appAxios.post(`/assessment/${id}`, formData);
       toast.success('Excel file uploaded and processed successfully.');
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     } catch (error) {
-      // console.error('Error uploading and processing Excel file:', error);
       toast.error('Error uploading and processing Excel file.');
     }
   };
@@ -376,7 +361,6 @@ const AddQuestion = () => {
                           onChange={(e) => {
                             const answersCopy = [...values.answers];
                             answersCopy[idx].title = e.target.value;
-                            console.log(answersCopy);
                             setFieldValue('answers', answersCopy);
                           }}
                           placeholder="Enter answer text."
