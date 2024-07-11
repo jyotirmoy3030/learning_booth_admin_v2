@@ -9,17 +9,7 @@ import filter from '../../assets/new-dashboard-img/Filter.svg'
 import sort from '../../assets/new-dashboard-img/Sort.svg'
 import Sidebar from 'components/SideNav/Sidebar';
 import Chart from "react-apexcharts";
-// import { Scatter } from 'react-chartjs-2';
-// import {
-//     Chart as ChartJS,
-//     LinearScale,
-//     PointElement,
-//     LineElement,
-//     Tooltip,
-//     Legend,
-// } from 'chart.js';
-// ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
-
+import ScatterChart from './ScatterChart';
 
 function AssessmentReport() {
 
@@ -115,7 +105,7 @@ function AssessmentReport() {
                     </div>
                     <div className='mt-3'>
                         <h3 className='text-lg font-bold text-black mb-3'>Internal Data</h3>
-                       
+
                         <div className='flex gap-3 flex-wrap flex-row items-center justify-start' id={'ExternalData'}>
                             {internalData.map((items, idx) => {
                                 return (
@@ -136,8 +126,8 @@ function AssessmentReport() {
                             })}
                         </div>
                     </div>
-                    <div className='chart-section flex flex-row items-center justify-between mt-8 mb-2.5'>
-                        <div className='bg-[#fafafb] rounded-md px-10 py-5 w-3/5'>
+                    <div className='chart-section flex flex-row items-center justify-between flex-wrap lg:flex-nowrap  mt-8 mb-2.5 gap-4'>
+                        <div className='bg-[#fafafb] rounded-md px-10 py-5 lg:w-3/5 w-full'>
                             <div className='flex-row flex justify-between w-full items-center'>
                                 <h3 className='text-black text-lg font-semibold mb-4'>Unique Visiter</h3>
                                 <div className='flex-row flex justify-end items-center gap-2'>
@@ -149,6 +139,7 @@ function AssessmentReport() {
                                     </button>
                                 </div>
                             </div>
+
                             <div className="mixed-chart border border-slate-300 rounded overflow-hidden">
                                 <Chart
                                     options={
@@ -196,67 +187,16 @@ function AssessmentReport() {
                                 />
                             </div>
                         </div>
-                        {/*   <div className='bg-[#1E2027] w-2/5 h-[375px] p-5 rounded-md overflow-hidden'>
-                        <Scatter
-                            options={{
-                                plugins: {
-                                    title: {
-                                        display: true,
-                                        text: 'Custom Chart Title'
-                                    }
-                                },
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        labels: ['10', '20', '30', '40', '60', '70', '80', '90', '100'],
-                                        border: {
-                                            color: '#838383'
-                                        }
-                                    },
-                                    x: {
-                                        // type: 'category',
-                                        labels: ['10', '20', '30', '40', '60', '70', '80', '90', '100'],
-                                        border: {
-                                            color: '#838383'
-                                        },
-                                        grid: {
-                                            color: '#1E2027',
-                                            tickColor: '#1E2027'
-                                        }
-                                    }
-                                },
-                            }}
-                            redraw={true}
-                            data={
-                                {
-                                    datasets: [
-                                        {
-                                            label: 'A dataset',
-                                            data: [
-                                                {
-                                                    x: 10, y: 20
-                                                }, {
-                                                    x: 20, y: 65
-                                                }, {
-                                                    x: 30, y: 55
-                                                }, {
-                                                    x: 40, y: 45
-                                                }, {
-                                                    x: 5, y: 25
-                                                }, {
-                                                    x: 35, y: 16
-                                                }, {
-                                                    x: 15, y: 23
-                                                }
-                                            ],
-                                            borderColor: '#fff',
-                                            backgroundColor: '#3b9c68',
+                        <div className='bg-[#1E2027] lg:w-2/5  py-5 rounded-md overflow-hidden w-full'>
+                            <div className='flex-row flex justify-between w-full items-center pb-3 border-b border-[#585c6c] px-5 mb-3'>
+                                <h3 className='text-white text-lg font-semibold'>Candidate Profiling</h3>
+                                <select name="" id="" className='bg-[#585c6c] h-7 border-none rounded-sm text-white px-1'>
+                                    <option value="Overall" className='text-white'>Overall</option>
+                                </select>
+                            </div>
+                            <ScatterChart />
+                        </div>
 
-                                        },
-                                    ],
-                                }
-                            } />
-                    </div>*/}
                     </div>
                     <div className='pt-9 w-full'>
                         <div className='flex flex-row items-center justify-start gap-[19.64px] mb-[31px]'>
