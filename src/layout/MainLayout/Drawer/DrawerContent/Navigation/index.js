@@ -41,7 +41,6 @@ const Navigation = () => {
    
   let masterMenuChild = [];
   dataArray.forEach(function(data) {
-      console.log(data);
       if(data === 'Capabilities') {
         masterMenuChild.push(
           {
