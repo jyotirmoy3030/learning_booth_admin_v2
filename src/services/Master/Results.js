@@ -8,6 +8,20 @@ export const getAllResults = async () => {
     console.log('Error getting all results.', error);
   }
 };
+
+export const getAllCandidateWithScore = async (assesmentId) => {
+  try {
+    const response = await appAxios.get('/assessment/all-candidate-with-score',{
+      params: {
+        assesmentId: assesmentId
+      }
+    });
+    return response;
+  } catch (error) {
+    console.log('Error getting all results.', error);
+  }
+};
+
 export const deleteResult = async (id) => {
   try {
     const response = await appAxios.delete(`/assessment/scores/${id}`);

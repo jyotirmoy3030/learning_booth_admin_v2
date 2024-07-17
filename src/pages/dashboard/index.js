@@ -14,12 +14,14 @@ import Chart from "react-apexcharts";
 import { Link } from "react-router-dom";
 import { getAllJobs } from "services/Master/Job";
 import { getAllUsers } from "services/Master/Users";
-import { deleteResult, getAllResults } from "services/Master/Results";
+import { deleteResult, getAllResults, getAllCandidateWithScore } from "services/Master/Results";
+import { getAllTestsApi } from 'services/Master/Tests';
 import { Table, Tag } from "antd";
 import { Typography, Box } from "@mui/material";
 import { DeleteOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import staticImageGraph from "../../assets/new-dashboard-img/Screenshot from 2024-06-07 19-46-56.png";
+import ScatterChart from './ScatterChart';
 
 // avatar style
 const avatarSX = {
@@ -57,8 +59,6 @@ const status = [
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
-  const [value, setValue] = useState("today");
-  const [slot, setSlot] = useState("week");
   const [jobs, setJobs] = useState([]);
   const [users, setUsers] = useState([]);
   const [results, setResults] = useState([]);
@@ -67,6 +67,10 @@ const DashboardDefault = () => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedProfile, setSelectedProfile] = useState("");
   const [selectedJob, setselectedJob] = useState("");
+  const [assesments, setAssesments] = useState([]);
+  const [selectedAssesment, setselectedAssesment] = useState('');
+  const [scatterChartData, setScatterChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [stats, setStats] = useState({
     jobs: 0,
@@ -88,6 +92,7 @@ const DashboardDefault = () => {
       setJobs(js.data);
     }
   };
+
   React.useEffect(() => {
     getJobs();
   }, []);
@@ -95,7 +100,6 @@ const DashboardDefault = () => {
   const getUsers = async () => {
     const js = await getAllUsers();
     const reversedData = js.data.reverse();
-    // console.log(reversedData);
     if (js) {
       setUsers(reversedData);
     }
@@ -115,6 +119,44 @@ const DashboardDefault = () => {
   React.useEffect(() => {
     getResults();
   }, []);
+
+
+  React.useEffect(() => {
+    getAllassignmentDetails();
+  }, []);
+
+  const getCandidateWithScore = async (assessmentId) => {
+    setLoading(true); // Set loading to true before the API call
+    try {
+      if (assessmentId) { // Check if assessmentId exists before making the API call
+        const js = await getAllCandidateWithScore(assessmentId);
+        if (js && js.data) {
+          updateScatterChartData(js.data);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching candidate data:', error);
+    } finally {
+      setLoading(false); // Set loading to false after the API call, regardless of success or failure
+    }
+  };
+  
+  React.useEffect(() => {
+    if (selectedAssesment) {
+      getCandidateWithScore(selectedAssesment);
+    }
+  }, [selectedAssesment]);
+  
+  const getAllassignmentDetails = async () => {
+    const js = await getAllTestsApi();
+    if (js && js.data) {
+      const reversedData = js.data.reverse();
+      if (typeof reversedData !== 'undefined' && reversedData.length > 0) {
+        setselectedAssesment(reversedData[0]._id);
+      }
+      setAssesments(reversedData);
+    }
+  };
 
   const externalData = [
     {
@@ -148,7 +190,7 @@ const DashboardDefault = () => {
       time: "Days",
     },
   ];
-  const options = {};
+
   const internalData = [
     {
       title: "Total Assessment",
@@ -178,6 +220,13 @@ const DashboardDefault = () => {
   };
   const handleJobChange = (e) => {
     setselectedJob(e.target.value);
+  };
+  
+  const handleAssesmentChange = (e) => {
+    const selectedId = e.target.value;
+    setselectedAssesment(selectedId);
+    // Call API to fetch data based on selectedId
+    getCandidateWithScore(selectedId);
   };
 
   const handleResultTypeChange = (e) => {
@@ -407,11 +456,29 @@ const DashboardDefault = () => {
       ),
     },
   ];
+
+  const updateScatterChartData = (data) => {
+    const updatedData = data.map((result) => {
+      return {
+        x: result?.scoresCopentencyType?.cultural?.total_percentage,
+        y: result?.scoresCopentencyType?.functional?.total_percentage,
+        tooltip: {
+          image: "https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?t=st=1720161068~exp=1720164668~hmac=fad320a8bedbb3ba7941a8ae5dddfffd47ead0fb38bf54dafd46a01b2d80585b&w=900",
+          name: (result.user) ? result.user.name : "No data found",
+          role: "Front End Dev",
+          roleAlignment: result?.scoresCopentencyType?.functional?.total_percentage,
+          culturalFitment: result?.scoresCopentencyType?.cultural?.total_percentage
+        }
+      };
+    });
+    setScatterChartData(updatedData);
+  };
+  
+
   return (
     <>
       <section className="flex-1 flex flex-row ">
         <div className="flex-1 bg-white pl-7 pr-[30px] pt-[14.83px]">
-          {/* { <Heading text={'External Data'} />} */}
           <h3 className="text-lg font-bold text-black mb-3">External Data</h3>
           <div
             className="flex gap-4 flex-wrap flex-row items-center justify-center"
@@ -490,24 +557,18 @@ const DashboardDefault = () => {
               })}
             </div>
           </div>
-          <div className="chart-section flex flex-row items-center justify-between mt-8 mb-2.5">
-            <div className="bg-[#fafafb] rounded-md px-10 py-5 w-3/5">
-              <div className="flex-row flex justify-between w-full items-center">
-                <h3 className="text-black text-lg font-semibold mb-4">
-                  Unique Visiter
-                </h3>
-                <div className="flex-row flex justify-end items-center gap-2">
-                  <button className="bg-transparent border-none">
-                    <span className="text-gray-500 text-base font-semibold">
-                      Month
-                    </span>
-                  </button>
-                  <button className="bg-transparent border h-8  px-2 flex flex-row items-center justify-center border-blue-500 rounded">
-                    <span className="text-blue-500 text-base font-semibold">
-                      Week
-                    </span>
-                  </button>
-                </div>
+          <div className='chart-section flex flex-row items-center justify-between flex-wrap lg:flex-nowrap  mt-8 mb-2.5 gap-4'>
+            <div className='bg-[#fafafb] rounded-md px-10 py-5 lg:w-3/5 w-full'>
+              <div className='flex-row flex justify-between w-full items-center'>
+                  <h3 className='text-black text-lg font-semibold mb-4'>Unique Visiter</h3>
+                  <div className='flex-row flex justify-end items-center gap-2'>
+                      <button className='bg-transparent border-none'>
+                          <span className='text-gray-500 text-base font-semibold'>Month</span>
+                      </button>
+                      <button className='bg-transparent border h-8  px-2 flex flex-row items-center justify-center border-blue-500 rounded'>
+                          <span className='text-blue-500 text-base font-semibold'>Week</span>
+                      </button>
+                  </div>
               </div>
               <div className="mixed-chart border border-slate-300 rounded overflow-hidden">
                 <Chart
@@ -561,8 +622,54 @@ const DashboardDefault = () => {
                 />
               </div>
             </div>
-            <div className="bg-[#1E2027] w-2/5 h-[375px] p-5 rounded-md overflow-hidden">
-              <img src={staticImageGraph} className="w-full h-full" alt="" />
+            <div className='bg-[#1E2027] lg:w-2/5  py-5 rounded-md overflow-hidden w-full'>
+                <div className='flex-row flex justify-between w-full items-center pb-3 border-b border-[#585c6c] px-5 mb-3'>
+                    <h3 className='text-white text-lg font-semibold'>Candidate Profiling</h3>
+                </div>
+                <div className='flex-row flex justify-between w-full items-center pb-3 border-b border-[#585c6c] px-5 mb-3'>
+                    <select 
+                      onChange={handleAssesmentChange}
+                      name="" id="" className='bg-[#585c6c] h-7 border-none rounded-sm text-white px-1'
+                    >
+                      {
+                        assesments.map((assessment, idx) => (
+                          <option
+                            className='text-white'
+                            value={assessment._id}
+                            key={idx}
+                            selected={selectedAssesment === assessment._id ? true : false}
+                          >
+                            {assessment.title}
+                          </option>
+                        ))
+                      }
+                    </select>
+                    {/* <select name="" id="" className='bg-[#585c6c] h-7 border-none rounded-sm text-white px-1'>
+                        <option value="Overall" className='text-white'>Overall</option>
+                    </select> */}
+                </div>
+                {loading ? (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60px' }}>
+                    <div style={{
+                      border: '8px solid #f3f3f3',
+                      borderRadius: '50%',
+                      borderTop: '8px solid #3498db',
+                      width: '60px',
+                      height: '60px',
+                      animation: 'spin 2s linear infinite'
+                    }}></div>
+                  </div>
+                ) : (
+                  <ScatterChart data={scatterChartData} />
+                )}
+                <style>
+                  {`
+                    @keyframes spin {
+                      0% { transform: rotate(0deg); }
+                      100% { transform: rotate(360deg); }
+                    }
+                  `}
+                </style>
             </div>
           </div>
           <div className="pt-9 w-full">
