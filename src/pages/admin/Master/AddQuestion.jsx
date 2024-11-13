@@ -228,7 +228,7 @@ const AddQuestion = () => {
         validationSchema={Yup.object().shape({
           title: Yup.string()
             .min(10, 'Title should be minimum 10 character.')
-            .max(255)
+            .max(500)
             .required('Title is required'),
           answers: Yup.array().min(2, 'Must provide two answers.'),
           compentencyType: Yup.string().required('Type is required'),
