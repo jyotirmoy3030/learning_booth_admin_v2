@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Button,
   FormHelperText,
@@ -10,31 +10,32 @@ import {
   Box,
   TextField,
   Autocomplete,
-} from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
-import { Formik } from 'formik';
-import AnimateButton from 'components/@extended/AnimateButton';
-import { Table } from 'antd';
+  Checkbox
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+import { Formik } from "formik";
+import AnimateButton from "components/@extended/AnimateButton";
+import { Table } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
   UploadOutlined,
   FileDoneOutlined,
-} from '@ant-design/icons';
-import '../styles/admin.css';
-import { TimePicker } from 'antd';
-import { createTest, deleteTest, getAllTestsApi } from 'services/Master/Tests';
-import { secondsToHms } from 'utils/time';
-import { getAllJobsRoles } from 'services/Master/JobRoles';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { toast } from 'react-toastify';
+} from "@ant-design/icons";
+import "../styles/admin.css";
+import { TimePicker } from "antd";
+import { createTest, deleteTest, getAllTestsApi } from "services/Master/Tests";
+import { secondsToHms } from "utils/time";
+import { getAllJobsRoles } from "services/Master/JobRoles";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { toast } from "react-toastify";
 
 const CreateTest = () => {
   const [tests, setTests] = useState([]);
   const [jobRoles, setJobRoles] = useState([]);
-  const [overview, setOverview] = useState('');
+  const [overview, setOverview] = useState("");
   const getJobRoles = async () => {
     const roles = await getAllJobsRoles();
     if (roles) {
@@ -49,19 +50,19 @@ const CreateTest = () => {
   };
   const columns = [
     {
-      title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
       render: (_, data) => (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
           <img
             src={data.thumbnail}
             alt=""
             style={{
-              width: '50px',
-              height: '50px',
-              borderRadius: '50%',
-              marginRight: '4px',
+              width: "50px",
+              height: "50px",
+              borderRadius: "50%",
+              marginRight: "4px",
             }}
           />
           <span> {data.title}</span>
@@ -69,33 +70,33 @@ const CreateTest = () => {
       ),
     },
     {
-      title: 'Duration',
-      dataIndex: 'duration',
-      key: 'duration',
+      title: "Duration",
+      dataIndex: "duration",
+      key: "duration",
       render: (_, { duration }) => <>{secondsToHms(duration)}</>,
     },
     {
-      title: 'Actions',
-      dataIndex: 'actions',
-      key: 'actions',
+      title: "Actions",
+      dataIndex: "actions",
+      key: "actions",
       render: (_, data) => (
         <Box display="flex" alignItems="center" justifyContent="start">
           <Link
             to={`/dashboard/tests/${data._id}/questions`}
             style={{
-              cursor: 'pointer',
-              fontSize: '20px',
-              margin: '0px 10px',
-              color: 'green',
+              cursor: "pointer",
+              fontSize: "20px",
+              margin: "0px 10px",
+              color: "green",
             }}
           >
             <EditOutlined />
           </Link>
           <span
-            style={{ cursor: 'pointer', fontSize: '20px', color: 'red' }}
+            style={{ cursor: "pointer", fontSize: "20px", color: "red" }}
             onClick={async () => {
               await deleteTest(data._id);
-              toast.success('Assessment deleted.');
+              toast.success("Assessment deleted.");
               getAllTests();
             }}
           >
@@ -126,14 +127,14 @@ const CreateTest = () => {
       </Typography>
       <Formik
         initialValues={{
-          title: '',
-          duration: '',
+          title: "",
+          duration: "",
           thumbnail: null,
           jobRole: null,
         }}
         validationSchema={Yup.object().shape({
-          title: Yup.string().max(255).required('Title is required'),
-          duration: Yup.string().required('Duration are required'),
+          title: Yup.string().max(255).required("Title is required"),
+          duration: Yup.string().required("Duration are required"),
         })}
         onSubmit={async (
           values,
@@ -146,21 +147,21 @@ const CreateTest = () => {
                 formData.append(key, values[key]);
               }
             });
-            formData.append('jobRole', JSON.stringify(values.jobRole));
-            formData.append('duration', values.duration);
-            formData.append('title', values.title);
-            formData.append('overview', overview);
+            formData.append("jobRole", JSON.stringify(values.jobRole));
+            formData.append("duration", values.duration);
+            formData.append("title", values.title);
+            formData.append("overview", overview);
             const response = await createTest(formData);
             getAllTests();
             navigate(`/dashboard/tests/${response.data._id}/questions`);
             resetForm();
-            toast.success('Assessment created.');
+            toast.success("Assessment created.");
             setStatus({ success: true });
             setSubmitting(false);
           } catch (err) {
             setStatus({ success: false });
             setErrors({ submit: err.message });
-            toast.error('ERROR: Assessment cannot be created.');
+            toast.error("ERROR: Assessment cannot be created.");
             setSubmitting(false);
           }
         }}
@@ -207,7 +208,7 @@ const CreateTest = () => {
                   <TimePicker
                     onChange={(e) => {
                       console.log(e);
-                      setFieldValue('duration', `${e.$H}:${e.$m}:${e.$s}`);
+                      setFieldValue("duration", `${e.$H}:${e.$m}:${e.$s}`);
                     }}
                     id="duration"
                     name="duration"
@@ -228,14 +229,14 @@ const CreateTest = () => {
                   <InputLabel
                     htmlFor="thumbnail"
                     sx={{
-                      fontSize: '18px',
-                      borderRadius: '2px',
-                      padding: '7px 10px',
-                      border: '1px solid #d9d9d9',
+                      fontSize: "18px",
+                      borderRadius: "2px",
+                      padding: "7px 10px",
+                      border: "1px solid #d9d9d9",
                     }}
                   >
                     {values.thumbnail ? (
-                      <FileDoneOutlined style={{ color: 'green' }} />
+                      <FileDoneOutlined style={{ color: "green" }} />
                     ) : (
                       <UploadOutlined />
                     )}
@@ -245,9 +246,9 @@ const CreateTest = () => {
                     name="thumbnail"
                     id="thumbnail"
                     onChange={(event) => {
-                      setFieldValue('thumbnail', event.currentTarget.files[0]);
+                      setFieldValue("thumbnail", event.currentTarget.files[0]);
                     }}
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                     accept="image/*"
                   />
                 </Stack>
@@ -256,10 +257,10 @@ const CreateTest = () => {
                 <Stack spacing={1}>
                   <InputLabel htmlFor="overview">Overview</InputLabel>
                   <ReactQuill
-                    theme={'snow'}
+                    theme={"snow"}
                     value={overview}
                     onChange={setOverview}
-                    style={{ height: '200px' }}
+                    style={{ height: "200px" }}
                     id="overview"
                   />
                 </Stack>
@@ -274,7 +275,7 @@ const CreateTest = () => {
                     getOptionLabel={(option) => option.title}
                     value={values.jobRole}
                     onChange={(event, newValue) => {
-                      setFieldValue('jobRole', newValue);
+                      setFieldValue("jobRole", newValue);
                     }}
                     renderInput={(params) => (
                       <TextField
@@ -284,6 +285,18 @@ const CreateTest = () => {
                       />
                     )}
                   />
+                </Stack>
+              </Grid>
+              <Grid item xs={12}>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Checkbox
+                    id="exampleCheckbox"
+                    name="exampleCheckbox"
+                    color="primary"
+                  />
+                  <InputLabel htmlFor="exampleCheckbox">
+                    Enable Cultural Pro
+                  </InputLabel>
                 </Stack>
               </Grid>
               <Grid item xs={12}>
