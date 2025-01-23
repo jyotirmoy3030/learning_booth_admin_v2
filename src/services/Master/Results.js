@@ -1,8 +1,14 @@
 import { appAxios } from 'services/axiosConfig';
 
-export const getAllResults = async () => {
+export const getAllResults = async (page = 1, limit = 10, jobRole = '') => {
   try {
-    const response = await appAxios.get('/assessment/all-scores');
+    const response = await appAxios.get('/assessment/all-scores', {
+      params: {
+        page,
+        limit,
+        jobRole, // Pass the jobRole parameter
+      },
+    });
     return response;
   } catch (error) {
     console.log('Error getting all results.', error);
