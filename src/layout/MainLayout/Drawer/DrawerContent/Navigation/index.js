@@ -165,6 +165,16 @@ const Navigation = () => {
       breadcrumbs: false,
     }
   );
+  masterMenuChild.push(
+    {
+      id: 'Application',
+      title: 'AI++',
+      type: 'item',
+      url: 'https://admin-frontend-self-iota.vercel.app/',
+      icon: icons.SnippetsOutlined,
+      breadcrumbs: false,
+    }
+  );
 
   let masterMenu = {
     id: 'group-master',
