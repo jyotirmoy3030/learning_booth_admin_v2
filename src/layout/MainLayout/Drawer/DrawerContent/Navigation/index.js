@@ -1,219 +1,145 @@
-// material-ui
-import { Box, Typography } from '@mui/material';
-
-// project import
-import NavGroup from './NavGroup';
-import menuItem from 'menu-items';
-import { checkAuth } from "services/Auth/Login";
-import React, { useEffect, useState } from 'react';
-import {
-  UserOutlined,
-  UserAddOutlined,
-  SnippetsOutlined,
-  FileDoneOutlined,
-} from '@ant-design/icons';
-const icons = {
-  UserOutlined,
-  UserAddOutlined,
-  SnippetsOutlined,
-  FileDoneOutlined,
-};
-
-// ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
+import React, { useState, useEffect } from "react";
+import { FaUserTie, FaUsers, FaClipboardCheck, FaUserPlus, FaCog, FaLifeRing, FaChevronDown, FaTachometerAlt } from "react-icons/fa";
+import { LuBrainCircuit } from "react-icons/lu";
+import "./nav.css"; // Make sure this CSS is included
+import logo from '../../../../../assets/images/icons/logo.png';
+// import logo from '/assets/images/icons/logo.png';
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
-  const [dataArray, setDataArray] = useState([]);
+  const [collapsed, setCollapsed] = useState(false);
+  const [hiringOpen, setHiringOpen] = useState(false);
+  const [talentOpen, setTalentOpen] = useState(false);
+  const [assessmentOpen, setAssessmentOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Make API call here
-        const response = await checkAuth();
-        const data = response.data.permissions;
-        setDataArray(data); // Assuming data is an array
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
 
-    fetchData();
-  }, []);
-   
-  let masterMenuChild = [];
-  dataArray.forEach(function(data) {
-      if(data === 'Capabilities') {
-        masterMenuChild.push(
-          {
-            id: 'capabilies',
-            title: 'Capabilities',
-            type: 'item',
-            url: '/dashboard/capabilities',
-            icon: icons.UserOutlined,
-            breadcrumbs: false,
-          }
-        );
-      } else if (data === 'Job Role') {
-        masterMenuChild.push(
-          {
-            id: 'jobRole',
-            title: 'Job Role',
-            type: 'item',
-            url: '/dashboard/job-roles',
-            icon: icons.UserOutlined,
-            breadcrumbs: false,
-          }
-        );
-      } else if (data === 'Jobs') {
-        masterMenuChild.push(
-          {
-            id: 'jobs',
-            title: 'Jobs',
-            type: 'item',
-            url: '/dashboard/jobs',
-            icon: icons.UserAddOutlined,
-            breadcrumbs: false,
-          }
-        );
-      } 
-      // else if (data === 'Courses') {
-      //   masterMenuChild.push(
-      //     {
-      //       id: 'courses',
-      //       title: 'Courses',
-      //       type: 'item',
-      //       url: '/dashboard/courses',
-      //       icon: icons.SnippetsOutlined,
-      //       breadcrumbs: false,
-      //     }
-      //   );
-      // } 
-      else if (data === 'Assessments') {
-        masterMenuChild.push(
-          {
-            id: 'assessments',
-            title: 'Assessments',
-            type: 'item',
-            url: '/dashboard/assessments',
-            icon: icons.FileDoneOutlined,
-            breadcrumbs: false,
-          }
-        );
-      } else if (data === 'Users') {
-        masterMenuChild.push(
-          {
-            id: 'users',
-            title: 'Users',
-            type: 'item',
-            url: '/dashboard/users',
-            icon: icons.UserOutlined,
-            breadcrumbs: false,
-          }
-        );
-      } else if (data === 'Results') {
-        masterMenuChild.push(
-          {
-            id: 'results',
-            title: 'Results',
-            type: 'item',
-            url: '/dashboard/results',
-            icon: icons.FileDoneOutlined,
-            breadcrumbs: false,
-          }
-        );
-      } else if (data === 'New Users') {
-        masterMenuChild.push(
-          {
-            id: 'newUsers',
-            title: 'New Users',
-            type: 'item',
-            url: '/dashboard/newUsers',
-            icon: icons.FileDoneOutlined,
-            breadcrumbs: false,
-          }
-        );
-      } else if (data === 'Website Content') {
-        masterMenuChild.push(
-          {
-            id: 'websiteContent',
-            title: 'Website Content',
-            type: 'item',
-            url: '/dashboard/websiteContent',
-            icon: icons.FileDoneOutlined,
-            breadcrumbs: false,
-          }
-        );
-      } else if (data === 'Demo Requests') {
-        masterMenuChild.push(
-          {
-            id: 'demos',
-            title: 'Demo Requests',
-            type: 'item',
-            url: '/dashboard/demo-requests',
-            icon: icons.FileDoneOutlined,
-            breadcrumbs: false,
-          }
-        );
-      }
-  });
-  masterMenuChild.push(
-    {
-      id: 'Application',
-      title: 'Job Application',
-      type: 'item',
-      url: '/dashboard/jobs-application',
-      icon: icons.SnippetsOutlined,
-      breadcrumbs: false,
-    }
+  return (
+    <nav className={`pc-sidebar ${collapsed ? "collapsed" : ""}`}>
+      <div className="navbar-wrapper">
+        {/* Sidebar Header with Logo */}
+        <div className="logo" style={{ display: 'flex', justifyContent: "center" }}>
+          <Link to="/dashboard">{<img src={logo} alt="logo" style={{ width: '90px' }} />}</Link>
+        </div>
+
+
+        {/* Sidebar Content */}
+        <div className="navbar-content">
+          <ul className="pc-navbar">
+            <li className="pc-item pc-caption">
+              <label>Main</label>
+            </li>
+            <li className="pc-item">
+              <Link to="/dashboard" className="pc-link">
+                <span className="pc-micon"><FaTachometerAlt /></span>
+                {!collapsed && <span className="pc-mtext">Dashboard</span>}
+              </Link>
+            </li>
+
+            {/* Hiring Management Dropdown */}
+            <li className="pc-item pc-dropdown">
+              <div className="pc-link dropdown-toggle" onClick={() => setHiringOpen(!hiringOpen)}>
+                <span className="pc-micon"><FaUserTie /></span>
+                {!collapsed && <span className="pc-mtext" style={{ cursor: "pointer" }}>Hiring Management</span>}
+                {!collapsed && <span className="pc-arrow"><FaChevronDown /></span>}
+              </div>
+              {hiringOpen && (
+                <ul className="pc-submenu">
+                  <li><Link to="/dashboard/jobs">Open Roles</Link></li>
+                  <li><Link to="/dashboard/new-jobs">New Role</Link></li>
+                  <li><Link to="/dashboard/job-roles">Existing Roles</Link></li>
+                  <li><Link to="/dashboard/new-job-roles">Role Competency</Link></li>
+                  <li><Link to="/dashboard/capabilities">Capabilities</Link></li>
+                  {/* <li><a href="#">Offers</a></li> */}
+                </ul>
+              )}
+            </li>
+
+            <li className="pc-item pc-dropdown">
+              <div className="pc-link dropdown-toggle" onClick={() => setTalentOpen(!talentOpen)}>
+                <span className="pc-micon"><FaUserTie /></span>
+                {!collapsed && <span className="pc-mtext" style={{ cursor: "pointer" }}>Talent Management</span>}
+                {!collapsed && <span className="pc-arrow"><FaChevronDown /></span>}
+              </div>
+              {talentOpen && (
+                <ul className="pc-submenu">
+                  <li><Link to="/dashboard/users">User List</Link></li>
+                  <li><Link to="/dashboard/new-users">New User</Link></li>
+                  <li><Link to="/dashboard/results">Results</Link></li>
+                  {/* <li><a href="#">Offers</a></li> */}
+                </ul>
+              )}
+            </li>
+
+            <li className="pc-item pc-dropdown">
+              <div className="pc-link dropdown-toggle" onClick={() => setAssessmentOpen(!assessmentOpen)}>
+                <span className="pc-micon"><FaUserTie /></span>
+                {!collapsed && <span className="pc-mtext" style={{ cursor: "pointer" }}>Assessment Management</span>}
+                {!collapsed && <span className="pc-arrow"><FaChevronDown /></span>}
+              </div>
+              {assessmentOpen && (
+                <ul className="pc-submenu">
+                  <li><Link to="/dashboard/assessments">Existing Assessment</Link></li>
+                  <li><Link to="/dashboard/new-assessments">New Assessment</Link></li>
+                  {/* <li><a href="#">Offers</a></li> */}
+                </ul>
+              )}
+            </li>
+
+
+
+            <li className="pc-item">
+              <a href="../dashboard/index.html" className="pc-link">
+                <span className="pc-micon"><FaUserPlus /></span>
+                {!collapsed && <span className="pc-mtext">Inbox</span>}
+              </a>
+            </li>
+
+            {/* <li className="pc-item">
+              <a href="../dashboard/index.html" className="pc-link">
+                <span className="pc-micon"><LuBrainCircuit /></span>
+                {!collapsed && <span className="pc-mtext"><Link to="https://admin-frontend-self-iota.vercel.app/">Ai++</Link></span>}
+              </a>
+            </li> */}
+
+            {/* Others Section */}
+            <li className="pc-item pc-caption">
+              <label>Others</label>
+            </li>
+            {/* <li className="pc-item">
+              <a href="../dashboard/index.html" className="pc-link">
+                <span className="pc-micon"><FaCog /></span>
+                {!collapsed && <span className="pc-mtext">Settings</span>}
+              </a>
+            </li> */}
+            <li className="pc-item">
+              <a href="../dashboard/index.html" className="pc-link">
+                <span className="pc-micon"><FaLifeRing /></span>
+                {!collapsed && <span className="pc-mtext">Support</span>}
+              </a>
+            </li>
+
+            {/* Book a Demo Button */}
+            <div className="card-nav text-center mb-[1rem]">
+              <a
+                href="https://admin-frontend-self-iota.vercel.app/"
+                target="_blank"
+                className="btn btn-secondary flex items-center justify-center gap-1 font-semibold"
+              >
+                <span className="pc-micon"><LuBrainCircuit /></span>
+                {!collapsed && <span>Ai++</span>}
+              </a>
+            </div>
+
+            <div className="card-nav text-center">
+              <a href="https://codedthemes.com/item/berry-bootstrap-5-admin-template/" target="_blank" className="btn btn-secondary">
+                {!collapsed && "Book a Demo"}
+              </a>
+            </div>
+          </ul>
+        </div>
+      </div>
+    </nav>
   );
-  masterMenuChild.push(
-    {
-      id: 'Application',
-      title: 'AI++',
-      type: 'item',
-      url: 'https://admin-frontend-self-iota.vercel.app/dashboard',
-      icon: icons.SnippetsOutlined,
-      breadcrumbs: false,
-    }
-  );
-
-  let masterMenu = {
-    id: 'group-master',
-    title: 'Master',
-    type: 'group',
-    children: masterMenuChild
-  };
-  let dashboardMenu = {
-    id: 'group-dashboard',
-    title: 'Navigation',
-    type: 'group',
-    children: [
-      {
-        id: 'dashboard',
-        title: 'Dashboard',
-        type: 'item',
-        url: '/dashboard',
-        icon: icons.DashboardOutlined,
-        breadcrumbs: false,
-      },
-    ],
-  };
-  let totalMenuItem = {
-    items: [dashboardMenu, masterMenu ],
-  }; 
-  const navGroups = totalMenuItem.items.map((item) => {
-    switch (item.type) {
-      case 'group':
-        return <NavGroup key={item.id} item={item} />;
-      default:
-        return (
-          <Typography key={item.id} variant="h6" color="error" align="center">
-            Fix - Navigation Group
-          </Typography>
-        );
-    }
-  });
-
-  return <Box sx={{ pt: 2 }}>{navGroups}</Box>;
 };
 
 export default Navigation;

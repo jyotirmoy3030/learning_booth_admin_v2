@@ -34,6 +34,8 @@ class ScatterChart extends Component {
       colorSet: "greenShades",
       height: 410,
       tickLength: 0,
+      creditText: "", // Removes the CanvasJS watermark
+      creditHref: "",
       axisX: {
         title: titleX || "Cultural Fitment",
         suffix: "",

@@ -15,7 +15,7 @@ import { Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { Input } from 'antd';
-import { getAllJobsRoles } from 'services/Master/JobRoles';
+import { getAllJobroles } from 'services/Master/JobRoles';
 import { UploadOutlined, FileDoneOutlined } from '@ant-design/icons';
 import '../styles/admin.css';
 import { useParams } from 'react-router-dom';
@@ -32,7 +32,7 @@ const EditCourse = () => {
 
   const [jobRole, setJobRole] = useState({});
   const getJobRoles = async () => {
-    const roles = await getAllJobsRoles();
+    const roles = await getAllJobroles();
     if (roles) {
       setJobRoles(roles.data);
     }

@@ -1,205 +1,176 @@
-import React from "react";
-//import { Link as RouterLink } from 'react-router-dom';
-
-// material-ui
-import {
-  Button,
-  //Checkbox,
-  // Divider,
-  // FormControlLabel,
-  FormHelperText,
-  Grid,
-  //Link,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  Stack,
-  //Typography
-} from "@mui/material";
-
-// third party
-import * as Yup from "yup";
-import { Formik } from "formik";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// project import
-//import FirebaseSocial from './FirebaseSocial';
-import AnimateButton from "components/@extended/AnimateButton";
-
-// assets
-import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+import { Formik } from "formik";
+import * as Yup from "yup";
 import { adminLogin } from "services/Auth/Login";
 import { toast } from "react-toastify";
-// ============================|| FIREBASE - LOGIN ||============================ //
+
+// Import images correctly
+import dr15_1 from "../../../assets/images/dr15_1.png";
+import dr15_2 from "../../../assets/images/dr15_2.png";
+import characterImg from "../../../assets/images/character-1.png";
+import googleImg from "../../../assets/images/image_24624.png";
+import logo from '../../../assets/images/icons/logo.png';
+
+// CSS Import
+import "./Authlogin.css"; // Ensure you have the required styles
+
+const styles = {
+  topBg: {
+    position: "absolute",
+    width: "100%",
+    height: "100vh",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "top center",
+    backgroundImage: `url(${dr15_1})`,
+    zIndex: -999,
+    top: "-50%",
+  },
+  bottomBg: {
+    position: "absolute",
+    width: "100%",
+    height: "100vh",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "bottom center",
+    backgroundImage: `url(${dr15_2})`,
+    zIndex: -1,
+    bottom: "-5%",
+  },
+};
 
 const AuthLogin = () => {
-  //const [checked, setChecked] = React.useState(false);
-
-  const [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
   const navigate = useNavigate();
+  const [checked, setChecked] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   return (
-    <>
-      <Formik
-        initialValues={{
-          email: "",
-          password: "",
-        }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string()
-            .email("Must be a valid email")
-            .max(255)
-            .required("Email is required"),
-          password: Yup.string().max(255).required("Password is required"),
-        })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          try {
-            const response = await adminLogin(values);
-            localStorage.setItem("token", response?.data?.accessToken);
-            if ([200, 201].includes(response.status)) {
-              navigate("/dashboard");
-            }
-            toast.success("Logged In Successfully!");
-            setStatus({ success: false });
-            setSubmitting(false);
-          } catch (err) {
-            setStatus({ success: false });
-            toast.error("ERROR: Cannot login.");
-            setErrors({ submit: err.message });
-            setSubmitting(false);
-          }
-        }}
-      >
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-          values,
-        }) => (
-          <form noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor='email-login'>Email Address</InputLabel>
-                  <OutlinedInput
-                    id='email-login'
-                    type='email'
-                    value={values.email}
-                    name='email'
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder='Enter email address'
-                    fullWidth
-                    error={Boolean(touched.email && errors.email)}
-                  />
-                  {touched.email && errors.email && (
-                    <FormHelperText
-                      error
-                      id='standard-weight-helper-text-email-login'
-                    >
-                      {errors.email}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor='password-login'>Password</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.password && errors.password)}
-                    id='-password-login'
+    <div>
+      {/* Background Images */}
+      <div className="top-bg" style={styles.topBg}></div>
+
+      <div className="container">
+        {/* Illustration */}
+        <div className="illustration">
+          <img src={characterImg} alt="Illustration" />
+        </div>
+
+        {/* Login Form with Formik */}
+        <div className="login-box">
+          <div className="logo-container">
+            <div className="login-logo">
+              <img src={logo} alt="Google" />
+            </div>
+          </div>
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+            }}
+            validationSchema={Yup.object().shape({
+              email: Yup.string()
+                .email("Must be a valid email")
+                .required("Email is required"),
+              password: Yup.string().required("Password is required"),
+            })}
+            onSubmit={async (values, { setErrors, setSubmitting }) => {
+              try {
+                // values.rememberMe = checked;
+                const response = await adminLogin(values);
+                localStorage.setItem("token", response?.data?.accessToken);
+                if ([200, 201].includes(response.status)) {
+                  navigate("/dashboard");
+                  window.location.reload();
+                }
+                toast.success(response?.data?.message || "Logged In Successfully!");
+              } catch (err) {
+                const errorMessage = err.response?.data?.message || "ERROR: Cannot login.";
+                toast.error(errorMessage);
+                setErrors({ submit: errorMessage });
+              }
+              setSubmitting(false);
+            }}
+          >
+            {({
+              errors,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              isSubmitting,
+              touched,
+              values,
+            }) => (
+              <form noValidate onSubmit={handleSubmit}>
+                {/* Email Input */}
+                <input
+                  type="email"
+                  name="email"
+                  value={values.email}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  placeholder="Enter email"
+                  className={touched.email && errors.email ? "error-input" : ""}
+                />
+                {touched.email && errors.email && (
+                  <p className="error-text">{errors.email}</p>
+                )}
+
+                {/* Password Input */}
+                <div className="password-container">
+                  <input
                     type={showPassword ? "text" : "password"}
+                    name="password"
                     value={values.password}
-                    name='password'
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    endAdornment={
-                      <InputAdornment position='end'>
-                        <IconButton
-                          aria-label='toggle password visibility'
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge='end'
-                          size='large'
-                        >
-                          {showPassword ? (
-                            <EyeOutlined />
-                          ) : (
-                            <EyeInvisibleOutlined />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    placeholder='Enter password'
+                    placeholder="Enter password"
+                    className={touched.password && errors.password ? "error-input" : ""}
                   />
-                  {touched.password && errors.password && (
-                    <FormHelperText
-                      error
-                      id='standard-weight-helper-text-password-login'
-                    >
-                      {errors.password}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-
-              {/* <Grid item xs={12} sx={{ mt: -1 }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={checked}
-                        onChange={(event) => setChecked(event.target.checked)}
-                        name="checked"
-                        color="primary"
-                        size="small"
-                      />
-                    }
-                    label={<Typography variant="h6">Keep me sign in</Typography>}
-                  />
-                 
-                </Stack>
-              </Grid> */}
-
-              <Grid item xs={12}>
-                <AnimateButton>
-                  <Button
-                    disableElevation
-                    disabled={isSubmitting}
-                    fullWidth
-                    size='large'
-                    type='submit'
-                    variant='contained'
-                    color='primary'
+                  <button
+                    type="button"
+                    className="toggle-password"
+                    onClick={handleClickShowPassword}
                   >
-                    Login
-                  </Button>
-                </AnimateButton>
-              </Grid>
-              {/* <Grid item xs={12}>
-                <Divider>
-                  <Typography variant="caption"> Login with</Typography>
-                </Divider>
-              </Grid>
-              <Grid item xs={12}>
-                <FirebaseSocial />
-              </Grid> */}
-            </Grid>
-          </form>
-        )}
-      </Formik>
-    </>
+                    {showPassword ? "🙈" : "👁️"}
+                  </button>
+                </div>
+                {touched.password && errors.password && (
+                  <p className="error-text">{errors.password}</p>
+                )}
+
+                {/* Remember Me Checkbox */}
+                <label className="remember-me">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(event) => setChecked(event.target.checked)}
+                  />
+                  Keep me signed in
+                </label>
+
+                {/* Submit Button */}
+                <button className="login-btn" type="submit" disabled={isSubmitting}>
+                  Login
+                </button>
+
+                {/* Google Login Button */}
+                {/* <div className="google-btn-container">
+                  <button className="google-btn" type="button">
+                    <img src={googleImg} alt="Google" /> Continue With Google
+                  </button>
+                </div> */}
+              </form>
+            )}
+          </Formik>
+        </div>
+      </div>
+
+      {/* Bottom Background */}
+      <div className="bottom-bg" style={styles.bottomBg}></div>
+    </div>
   );
 };
 

@@ -2,7 +2,6 @@
     background-color: #21b42f;
 }
 
-
 #ExternalData .externalBox:nth-child(2) {
     background-color: #8833ff;
 }
@@ -26,3 +25,8 @@
 
     background-position: center right;
 }
+
+html, body {
+    overflow-x: hidden;
+  }
+  

@@ -19,14 +19,21 @@ import {
   Typography,
   useMediaQuery
 } from '@mui/material';
-
 // project import
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
 
 // assets
 import { BellOutlined, CloseOutlined, GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
-
+const styles = {
+  notificationContainer: "relative",
+  notificationIcon: "flex justify-center items-center gap-1 p-3 rounded-full border border-solid border-[#dcdddf] relative",
+  badge: "absolute -top-1 -right-1 h-[18px] w-[18px] flex justify-center items-center bg-[#FFC727] p-1 rounded-full text-black text-xs font-bold", // Yellow Badge
+  dropdownContainer: "absolute right-0 mt-2 w-[280px] bg-white shadow-lg border border-[#dcdddf] rounded-lg",
+  dropdownHeader: "flex justify-between items-center px-4 py-3 border-b border-[#dcdddf]",
+  dropdownContent: "p-4 flex flex-col gap-3",
+  dropdownItem: "flex items-center gap-3 p-2 hover:bg-gray-100 cursor-pointer rounded-md",
+};
 // sx styles
 const avatarSX = {
   width: 36,
@@ -67,212 +74,27 @@ const Notification = () => {
   const iconBackColor = 'grey.100';
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 0.75 }}>
-      <IconButton
-        disableRipple
-        color="secondary"
-        sx={{ color: 'text.primary', bgcolor: open ? iconBackColorOpen : iconBackColor }}
-        aria-label="open profile"
-        ref={anchorRef}
-        aria-controls={open ? 'profile-grow' : undefined}
-        aria-haspopup="true"
-        onClick={handleToggle}
+    <div className="flex items-center gap-2 px-3 py-2 rounded-full border border-gray-300">
+      {/* Bell Icon */}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-5 h-5 text-black"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       >
-        <Badge badgeContent={4} color="primary">
-          <BellOutlined />
-        </Badge>
-      </IconButton>
-      <Popper
-        placement={matchesXs ? 'bottom' : 'bottom-end'}
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        transition
-        disablePortal
-        popperOptions={{
-          modifiers: [
-            {
-              name: 'offset',
-              options: {
-                offset: [matchesXs ? -5 : 0, 9]
-              }
-            }
-          ]
-        }}
-      >
-        {({ TransitionProps }) => (
-          <Transitions type="fade" in={open} {...TransitionProps}>
-            <Paper
-              sx={{
-                boxShadow: theme.customShadows.z1,
-                width: '100%',
-                minWidth: 285,
-                maxWidth: 420,
-                [theme.breakpoints.down('md')]: {
-                  maxWidth: 285
-                }
-              }}
-            >
-              <ClickAwayListener onClickAway={handleClose}>
-                <MainCard
-                  title="Notification"
-                  elevation={0}
-                  border={false}
-                  content={false}
-                  secondary={
-                    <IconButton size="small" onClick={handleToggle}>
-                      <CloseOutlined />
-                    </IconButton>
-                  }
-                >
-                  <List
-                    component="nav"
-                    sx={{
-                      p: 0,
-                      '& .MuiListItemButton-root': {
-                        py: 0.5,
-                        '& .MuiAvatar-root': avatarSX,
-                        '& .MuiListItemSecondaryAction-root': { ...actionSX, position: 'relative' }
-                      }
-                    }}
-                  >
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            color: 'success.main',
-                            bgcolor: 'success.lighter'
-                          }}
-                        >
-                          <GiftOutlined />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            It&apos;s{' '}
-                            <Typography component="span" variant="subtitle1">
-                              Cristina danny&apos;s
-                            </Typography>{' '}
-                            birthday today.
-                          </Typography>
-                        }
-                        secondary="2 min ago"
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          3:00 AM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    <Divider />
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            color: 'primary.main',
-                            bgcolor: 'primary.lighter'
-                          }}
-                        >
-                          <MessageOutlined />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            <Typography component="span" variant="subtitle1">
-                              Aida Burg
-                            </Typography>{' '}
-                            commented your post.
-                          </Typography>
-                        }
-                        secondary="5 August"
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          6:00 PM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    <Divider />
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            color: 'error.main',
-                            bgcolor: 'error.lighter'
-                          }}
-                        >
-                          <SettingOutlined />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            Your Profile is Complete &nbsp;
-                            <Typography component="span" variant="subtitle1">
-                              60%
-                            </Typography>{' '}
-                          </Typography>
-                        }
-                        secondary="7 hours ago"
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          2:45 PM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    <Divider />
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            color: 'primary.main',
-                            bgcolor: 'primary.lighter'
-                          }}
-                        >
-                          C
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            <Typography component="span" variant="subtitle1">
-                              Cristina Danny
-                            </Typography>{' '}
-                            invited to join{' '}
-                            <Typography component="span" variant="subtitle1">
-                              Meeting.
-                            </Typography>
-                          </Typography>
-                        }
-                        secondary="Daily scrum meeting time"
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          9:10 PM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    <Divider />
-                    <ListItemButton sx={{ textAlign: 'center', py: `${12}px !important` }}>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6" color="primary">
-                            View All
-                          </Typography>
-                        }
-                      />
-                    </ListItemButton>
-                  </List>
-                </MainCard>
-              </ClickAwayListener>
-            </Paper>
-          </Transitions>
-        )}
-      </Popper>
-    </Box>
+        <path d="M12 22s4-2 4-4H8c0 2 4 4 4 4Z" />
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9Z" />
+      </svg>
+
+      {/* Red Badge */}
+      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500">
+        <span className="text-white text-xs font-bold">4</span>
+      </div>
+    </div>
   );
 };
 

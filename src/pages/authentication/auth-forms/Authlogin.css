@@ -1,0 +1,255 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+    margin-bottom: 20px;
+    /* Add spacing below */
+    background-color: #37474f;
+    /* border-radius: 50%; */
+    
+}
+
+.login-logo {
+    width: 80px;
+    /* Adjust width */
+    height: 80px;
+    /* Adjust height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-img {
+    max-width: 100%;
+    /* Ensures the image fits */
+    height: auto;
+    /* Maintain aspect ratio */
+    border-radius: 50%;
+    /* Optional: Make it circular */
+}
+
+.login-box {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid black;
+    /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); */
+    text-align: center;
+}
+
+.illustration img {
+    width: 450px;
+    /* top: 90%; */
+    height: 100%;
+    margin-left: 0px;
+    border: none;
+    padding-top: 150px;
+}
+
+input {
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.login-btn {
+    background-color: #FFC107;
+    color: black;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 12px;
+    width: 100%;
+}
+
+.google-btn-container {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.google-btn {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.google-btn img {
+    width: 20px;
+}
+
+.google-btn img {
+    width: 24px;
+    margin-left: 10px;
+}
+
+.logo {
+    height: 50px;
+    width: 150px;
+}
+
+.error-text {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.error-input {
+    border: 1px solid red;
+}
+
+.password-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.remember-me input {
+    margin-right: -120px;
+}
+
+
+@media screen and (max-width: 768px) {
+
+    /* Make the body take full height and center the form */
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        /* Prevent scrolling */
+        background-color: #ffffff;
+        /* Set a clean background */
+    }
+
+    /* Hide all other elements except the form */
+    .top-bg,
+    .bottom-bg,
+    .illustration {
+        display: none !important;
+    }
+
+    /* Center the login box */
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .login-box {
+        width: 120%;
+        max-width: 350px;
+        padding: 50px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    input {
+        font-size: 14px;
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .login-btn,
+    .google-btn {
+        font-size: 16px;
+        padding: 10px;
+        width: 100%;
+        margin-top: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .google-btn {
+        background: white;
+        border: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .google-btn img {
+        width: 20px;
+        margin-left: 10px;
+    }
+
+    .remember-me input {
+        margin-right: 5px;
+    }
+}
+
+
+@media screen and (max-width: 480px) {
+    .login-box {
+        width: 120%;
+        padding: 50px;
+    }
+
+    input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .login-btn,
+    .google-btn {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .top-bg,
+    .bottom-bg {
+        height: 15vh;
+        /* Adjust background for very small screens */
+    }
+
+    .remember-me input {
+        margin-right: 5px;
+    }
+}

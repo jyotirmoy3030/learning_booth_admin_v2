@@ -15,7 +15,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { Table, Tag, Input } from 'antd';
-import { getAllJobsRoles } from 'services/Master/JobRoles';
+import { getAllJobroles } from 'services/Master/JobRoles';
 import {
   EditOutlined,
   DeleteOutlined,
@@ -38,7 +38,7 @@ const CoursesMaster = () => {
   const [markedSkills, setMarkedSkills] = useState([]);
   const [jobRole, setJobRole] = useState({});
   const getJobRoles = async () => {
-    const roles = await getAllJobsRoles();
+    const roles = await getAllJobroles();
     if (roles) {
       setJobRoles(roles.data);
     }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 import { getAllStats } from "services/Master/Stats";
 
 import dotsIcon from "../../assets/new-dashboard-img/Icon.svg";
@@ -7,21 +7,25 @@ import plusIcon from "../../assets/new-dashboard-img/Icon-1.svg";
 import angleDown from "../../assets/new-dashboard-img/arrow-down.svg";
 import search from "../../assets/new-dashboard-img/Search.svg";
 import plussign from "../../assets/new-dashboard-img/plussign.svg";
-import filter from "../../assets/new-dashboard-img/Filter.svg";
-import sort from "../../assets/new-dashboard-img/Sort.svg";
-import Sidebar from "components/SideNav/Sidebar";
 import Chart from "react-apexcharts";
 import { Link } from "react-router-dom";
+
 import { getAllJobs } from "services/Master/Job";
 import { getAllUsers } from "services/Master/Users";
 import { deleteResult, getAllResults, getAllCandidateWithScore } from "services/Master/Results";
 import { getAllTestsApi } from 'services/Master/Tests';
-import { Table, Tag } from "antd";
-import { Typography, Box } from "@mui/material";
-import { DeleteOutlined } from "@ant-design/icons";
+// import { GiSkills } from "react-icons/gi";
+import { Table } from "antd";
+import { Box } from "@mui/material";
 import { toast } from "react-toastify";
-import staticImageGraph from "../../assets/new-dashboard-img/Screenshot from 2024-06-07 19-46-56.png";
 import ScatterChart from './ScatterChart';
+import './dashboard.css';
+import centerImage from "../../assets/images/arrow.png";
+import dots from "../../assets/images/dots.png";
+import card_icon from "../../assets/images/card_icon1.png";
+import briefcase from "../../assets/images/briefcase.png";
+import plus from "../../assets/images/plus.png";
+import skill from "../../assets/images/skill.png";
 
 // avatar style
 const avatarSX = {
@@ -104,28 +108,18 @@ const DashboardDefault = () => {
       setUsers(reversedData);
     }
   };
+
   React.useEffect(() => {
     getUsers();
   }, []);
 
   const getResults = async () => {
-    try {
-      const js = await getAllResults();
-
-      // Ensure js, js.data, and js.data.scores exist and that js.data.scores is an array
-      if (js && js.data && Array.isArray(js.data.scores)) {
-        const reversedData = [...js.data.scores].reverse(); // Avoid mutating the original array
-        setResults(reversedData);
-      } else {
-        console.error("Invalid data format: js.data.scores is not an array", js);
-        setResults([]); // Set an empty array if data is not valid
-      }
-    } catch (error) {
-      console.error("Error fetching results:", error);
-      setResults([]); // Handle errors gracefully
+    const js = await getAllResults();
+    const reversedData = js.data.scores.reverse();
+    if (js) {
+      setResults(reversedData);
     }
   };
-
 
   React.useEffect(() => {
     getResults();
@@ -141,6 +135,7 @@ const DashboardDefault = () => {
     try {
       if (assessmentId) { // Check if assessmentId exists before making the API call
         const js = await getAllCandidateWithScore(assessmentId);
+        console.log(js)
         if (js && js.data) {
           updateScatterChartData(js.data);
         }
@@ -201,6 +196,29 @@ const DashboardDefault = () => {
       time: "Days",
     },
   ];
+  // const externalData = [
+  //   {
+  //     title: "Total Jobs",
+  //     value: 500,
+  //     lastMonth: 475,
+  //     icon: "img/users-profiles-01.svg",
+  //     changeIcon: "img/group-26829.png"
+  //   },
+  //   {
+  //     title: "Active Users",
+  //     value: 1200,
+  //     lastMonth: 1100,
+  //     icon: "img/active-users.svg",
+  //     changeIcon: "img/up-arrow.png"
+  //   },
+  //   {
+  //     title: "Active Users",
+  //     value: 1200,
+  //     lastMonth: 1100,
+  //     icon: "img/active-users.svg",
+  //     changeIcon: "img/up-arrow.png"
+  //   }
+  // ];
 
   const internalData = [
     {
@@ -362,109 +380,101 @@ const DashboardDefault = () => {
       dataIndex: "recommendedJobs",
       key: "recommendedJobs",
       render: (_, { scores }) => (
-        <>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="start"
-            flexDirection="column"
-          >
-            <div className="flex flex-row items-center justify-start gap-2">
-              {Object.keys(
-                Object.fromEntries(
-                  Object.keys(scores)
-                    .map((key) => [key, scores[key]])
-                    .sort(
-                      (a, b) => b[1].total_percentage - a[1].total_percentage
-                    )
-                    .slice(0, 4)
-                )
-              ).map((key) => {
-                return (
-                  <div className="w-min px-2.5 flex flex-row items-center justify-center h-5 rounded-full border  bg-[#0047FF0D] ">
-                    <span className="text-[8px] text-[#6A7B8B] font-black text-medium">
-                      {" "}
-                      {key}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </Box>
-        </>
-      ),
-    },
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      key: "actions",
-      render: (_, data) => (
-        <Box display="flex" alignItems="center" justifyContent="start">
-          <div className="flex flex-row items-center justify-center gap-[7.12px]">
-            <a
-              href={`https://www.thirdbracket.in/assessments/result?resultId=${data._id}`}
-              target="_blank"
-              className="bg-white border-[#0057FC] border  w-[35px] h-[35px]  rounded-lg flex flex-row items-center justify-center"
-            >
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+        <Box display="flex" alignItems="start" justifyContent="start" flexDirection="column">
+          <div className="flex flex-wrap items-center gap-2">
+            {Object.keys(
+              Object.fromEntries(
+                Object.keys(scores)
+                  .map((key) => [key, scores[key]])
+                  .sort((a, b) => b[1].total_percentage - a[1].total_percentage)
+                  .slice(0, 4)
+              )
+            ).map((key, index) => (
+              <div
+                key={index}
+                className="px-3 py-1 rounded-full border border-[#ffc727] bg-[#ffc727] shadow-sm flex items-center justify-center"
               >
-                <path
-                  d="M13.54 11.5135V5.2832H7.3097M13.3567 5.46645L5.84375 12.9794"
-                  stroke="#0057FC"
-                  strokeWidth="1.31935"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
-
-            <button className="bg-white border-[#CED4DA] border w-[35px] h-[35px] rounded-lg flex flex-row items-center justify-center">
-              <svg
-                width="16"
-                height="15"
-                viewBox="0 0 16 15"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.9095 7.0957L2.24284 3.55404V10.6374H8.61784V12.054H2.24284C1.85326 12.054 1.51975 11.9153 1.24232 11.6379C0.964887 11.3605 0.826172 11.027 0.826172 10.6374V2.13737C0.826172 1.74779 0.964887 1.41428 1.24232 1.13685C1.51975 0.859418 1.85326 0.720703 2.24284 0.720703H13.5762C13.9658 0.720703 14.2993 0.859418 14.5767 1.13685C14.8541 1.41428 14.9928 1.74779 14.9928 2.13737V7.0957H13.5762V3.55404L7.9095 7.0957ZM7.9095 5.67904L13.5762 2.13737H2.24284L7.9095 5.67904ZM12.8678 14.179L11.8762 13.1874L12.9918 12.054H10.0345V10.6374H12.9918L11.8585 9.50404L12.8678 8.51237L15.7012 11.3457L12.8678 14.179ZM2.24284 3.55404V11.3457V7.0957V7.14883V2.13737V3.55404Z"
-                  fill="#212529"
-                />
-              </svg>
-            </button>
-            <button
-              className="bg-white border-[#CED4DA] border rounded-lg  w-[35px] h-[35px] flex flex-row items-center justify-center"
-              onClick={async () => {
-                await deleteResult(data._id);
-                toast.success("Result deleted.");
-                getResults();
-              }}
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 18 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M5.28271 6.01533L5.89925 13.1056C5.96512 13.8631 6.59929 14.4445 7.35968 14.4445H10.902C11.6624 14.4445 12.2965 13.8631 12.3624 13.1056L12.9789 6.01533M7.48163 5.83209V5.28236C7.48163 4.47273 8.13793 3.81641 8.94758 3.81641H9.31406C10.1237 3.81641 10.78 4.47273 10.78 5.28236V5.83209M4 6.01533H14.2616"
-                  stroke="#212529"
-                  strokeWidth="1.31935"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
+                <span className="text-xs font-semibold text-[#FFFFFF] uppercase tracking-wide">
+                  {key}
+                </span>
+              </div>
+            ))}
           </div>
         </Box>
       ),
-    },
+    }
+
+    // {
+    //   title: "Actions",
+    //   dataIndex: "actions",
+    //   key: "actions",
+    //   render: (_, data) => (
+    //     <Box display="flex" alignItems="center" justifyContent="start">
+    //       <div className="flex flex-row items-center justify-center gap-[7.12px]">
+    //         <a
+    //           href={`https://www.thirdbracket.in/assessments/result?resultId=${data._id}`}
+    //           target="_blank"
+    //           className="bg-white border-[#0057FC] border  w-[35px] h-[35px]  rounded-lg flex flex-row items-center justify-center"
+    //         >
+    //           <svg
+    //             width="19"
+    //             height="18"
+    //             viewBox="0 0 19 18"
+    //             fill="none"
+    //             xmlns="http://www.w3.org/2000/svg"
+    //           >
+    //             <path
+    //               d="M13.54 11.5135V5.2832H7.3097M13.3567 5.46645L5.84375 12.9794"
+    //               stroke="#0057FC"
+    //               strokeWidth="1.31935"
+    //               strokeLinecap="round"
+    //               strokeLinejoin="round"
+    //             />
+    //           </svg>
+    //         </a>
+
+    //         <button className="bg-white border-[#CED4DA] border w-[35px] h-[35px] rounded-lg flex flex-row items-center justify-center">
+    //           <svg
+    //             width="16"
+    //             height="15"
+    //             viewBox="0 0 16 15"
+    //             fill="none"
+    //             xmlns="http://www.w3.org/2000/svg"
+    //           >
+    //             <path
+    //               d="M7.9095 7.0957L2.24284 3.55404V10.6374H8.61784V12.054H2.24284C1.85326 12.054 1.51975 11.9153 1.24232 11.6379C0.964887 11.3605 0.826172 11.027 0.826172 10.6374V2.13737C0.826172 1.74779 0.964887 1.41428 1.24232 1.13685C1.51975 0.859418 1.85326 0.720703 2.24284 0.720703H13.5762C13.9658 0.720703 14.2993 0.859418 14.5767 1.13685C14.8541 1.41428 14.9928 1.74779 14.9928 2.13737V7.0957H13.5762V3.55404L7.9095 7.0957ZM7.9095 5.67904L13.5762 2.13737H2.24284L7.9095 5.67904ZM12.8678 14.179L11.8762 13.1874L12.9918 12.054H10.0345V10.6374H12.9918L11.8585 9.50404L12.8678 8.51237L15.7012 11.3457L12.8678 14.179ZM2.24284 3.55404V11.3457V7.0957V7.14883V2.13737V3.55404Z"
+    //               fill="#212529"
+    //             />
+    //           </svg>
+    //         </button>
+    //         <button
+    //           className="bg-white border-[#CED4DA] border rounded-lg  w-[35px] h-[35px] flex flex-row items-center justify-center"
+    //           onClick={async () => {
+    //             await deleteResult(data._id);
+    //             toast.success("Result deleted.");
+    //             getResults();
+    //           }}
+    //         >
+    //           <svg
+    //             width="18"
+    //             height="18"
+    //             viewBox="0 0 18 18"
+    //             fill="none"
+    //             xmlns="http://www.w3.org/2000/svg"
+    //           >
+    //             <path
+    //               d="M5.28271 6.01533L5.89925 13.1056C5.96512 13.8631 6.59929 14.4445 7.35968 14.4445H10.902C11.6624 14.4445 12.2965 13.8631 12.3624 13.1056L12.9789 6.01533M7.48163 5.83209V5.28236C7.48163 4.47273 8.13793 3.81641 8.94758 3.81641H9.31406C10.1237 3.81641 10.78 4.47273 10.78 5.28236V5.83209M4 6.01533H14.2616"
+    //               stroke="#212529"
+    //               strokeWidth="1.31935"
+    //               strokeLinecap="round"
+    //               strokeLinejoin="round"
+    //             />
+    //           </svg>
+    //         </button>
+    //       </div>
+    //     </Box>
+    //   ),
+    // },
   ];
 
   const updateScatterChartData = (data) => {
@@ -487,53 +497,113 @@ const DashboardDefault = () => {
 
   return (
     <>
+      <div className="w-full flex justify-between items-center mt-4 px-6 pb-6">
+        {/* Welcome Text */}
+        <div className="flex flex-col gap-2">
+          <span className="font-bold text-[24px] text-[#141414]">Hello, Admin! 👋</span>
+          <span className="font-medium text-[12px] text-[#989ca0]">
+            Welcome back, track your team progress here!
+          </span>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex items-center gap-6">
+          {/* Post New Job */}
+          <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-solid border-[#dcdddf] cursor-pointer">
+            <div className="justify-center items-center w-5 h-5">
+              <img src={briefcase} alt="briefcase" />
+            </div>
+            <span className="font-bold text-[14px] text-[#141414]"><Link to="/dashboard/jobs">Post New Job</Link></span>
+          </div>
+
+          {/* Add Employee */}
+          <div className="flex items-center gap-2 bg-[#263238] px-4 py-3 rounded-lg cursor-pointer">
+            <div className="justify-center items-center w-5 h-5">
+              <img src={plus} alt="briefcase" />
+            </div>
+            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/users">Add Employee</Link></span>
+          </div>
+          <div className="flex items-center gap-2 bg-[#ffc727] px-4 py-3 rounded-lg cursor-pointer">
+            <div className="justify-center items-center w-5 h-5">
+              <img src={skill} alt="briefcase" />
+            </div>
+            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/road_to_content">Skills To Hire</Link></span>
+
+          </div>
+        </div>
+      </div>
       <section className="flex-1 flex flex-row ">
         <div className="flex-1 bg-white pl-7 pr-[30px] pt-[14.83px]">
           <h3 className="text-lg font-bold text-black mb-3">External Data</h3>
           <div
-            className="flex gap-4 flex-wrap flex-row items-center justify-center"
+            className="flex gap-4 flex-wrap flex-row"
             id={"ExternalData"}
           >
             {externalData.map((items, idx) => {
               return (
-                <div
-                  className={
-                    "flex-1 flex-col flex justify-center items-center p-[18.52px] box-border rounded-[10px] overflow-hidden externalBox"
-                  }
-                  key={idx}
-                >
-                  <div className="flex flex-row items-center justify-between w-full">
-                    <h3 className="line-clamp-1 flex-1 text-xs text-white font-bold">
-                      {items?.title}
-                    </h3>
-                    <button className="w-7 h-7 bg-transparent border-none flex flex-row items-center justify-center">
-                      <img src={dotsIcon} className="w-full h-full" alt="" />
-                    </button>
+                <div className="total-employee" key={idx}>
+                  {/* Title Section */}
+                  <div className="title">
+                    <div className="text-wrapper">{items?.title}</div>
+                    <img className="img" src={dots} alt="More" />
                   </div>
-                  <div className="my-3.5 flex justify-center flex-col items-center">
-                    <h3 className="text-white text-xl text-center font-bold">
-                      {items?.value}
-                    </h3>
-                  </div>
-                  <div className="flex flex-row items-center justify-center gap-[7.48px] ">
-                    <button className="w-[27.78px] h-[27.48px] rounded-full  border-none bg-[#ffffff26] flex flex-row items-center justify-center">
-                      <div className="w-3.5 h-3.5">
+
+                  {/* Content Section */}
+                  <div className="content">
+                    <div className="number-of-employees">
+                      <div className="icon">
+                        <img className="img" src={card_icon} alt="User Icon" />
+                      </div>
+                      <div className="text">
+                        <div className="div">{items?.value}</div>
+                        <p className="last-month">
+                          <span className="span">Last month: 0 </span>
+                          <span className="text-wrapper-2">{items?.lastMonth}</span>
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Change Indicator */}
+                    {/* <div className="group">
+                      <div className="overlap-group gauge-container">
+                        <Gauge
+                          value={60} // Dynamic percentage
+                          min={0}
+                          max={100}
+                          startAngle={-90}
+                          endAngle={90}
+                          sx={{ width: 53, height: 53 }} // Adjust size
+                        />
                         <img
-                          src={plusIcon}
-                          className="w-full h-full object-contain"
-                          alt=""
+                          src="../../assets/images/ellipse.png" // Replace with your actual image path
+                          alt="Center Icon"
+                          className="gauge-center-icon"
                         />
                       </div>
-                    </button>
-                    <button className="w-[62.78px] h-[27.48px] rounded-[13.89px]  border-none bg-[#ffffff26] flex flex-row items-center justify-center">
-                      <h3 className="text-white  font-black text-[9.26px]/[18.52px] text-center">
-                        View All
-                      </h3>
-                    </button>
+                    </div> */}
+                    <div className="gauge-container">
+                      {/* Green Gauge Chart */}
+                      <Gauge
+                        value={80}  // Dynamic percentage
+                        min={0}
+                        max={100}
+                        sx={(theme) => ({
+                          [`& .${gaugeClasses.valueText}`]: {
+                            fontSize: 0,
+                          },
+                          [`& .${gaugeClasses.valueArc}`]: {
+                            fill: '#ffc727',
+                          }
+                        })}
+                      />
+                      {/* Center Image */}
+                      <img src={centerImage} alt="Center Icon" className="gauge-center-icon" />
+                    </div>
                   </div>
                 </div>
               );
             })}
+
           </div>
           <div className="mt-3">
             <h3 className="text-lg font-bold text-black mb-3">Internal Data</h3>
@@ -542,41 +612,33 @@ const DashboardDefault = () => {
               className="flex gap-3 flex-wrap flex-row items-center justify-start"
               id={"ExternalData"}
             >
-              {internalData.map((items, idx) => {
-                return (
-                  <div className="bg-white rounded-md border-[#e9e9e9] border-[0.83px] w-1/4 overflow-hidden min-h-[149px] min-w-[228px]max-w-[230px] " key={idx}>
-                    <div className="internalDataCard my-1 ml-[21.56px]">
-                      <div className="ml-0.5 mt-5">
-                        <h3 className="font-bold text-[#3d4668] text-[11.11px] line-clamp-1">
-                          {items?.title}
-                        </h3>
-                        <div className="mt-8">
-                          <h3 className="font-bold text-2xl text-[#414d55] mb-0.5">
-                            {items?.value}
-                          </h3>
-                          <button className="bg-transparent border-none flex flex-row mb-[17.8px]  items-center justify-center">
-                            <span className="text-[#4c89ff] text-sm font-normal">
-                              <Link to={items?.url}>View All</Link>
-                            </span>
-                          </button>
-                        </div>
+              {internalData.map((items, idx) => (
+                <div className="assessment-card" key={idx}>
+                  <div className="assessment-content">
+                    <div className="assessment-text-group">
+                      <div className="assessment-title">{items?.title}</div>
+                      <div className="assessment-view">
+                        <Link to={items?.url}>View All</Link>
                       </div>
                     </div>
                   </div>
-                );
-              })}
+                  <div className="assessment-value">{items?.value}</div>
+                </div>
+              ))}
+
             </div>
           </div>
-          <div className='chart-section flex flex-row items-center justify-between flex-wrap lg:flex-nowrap  mt-8 mb-2.5 gap-4'>
-            <div className='bg-[#fafafb] rounded-md px-10 py-5 lg:w-3/5 w-full'>
-              <div className='flex-row flex justify-between w-full items-center'>
-                <h3 className='text-black text-lg font-semibold mb-4'>Unique Visiter</h3>
-                <div className='flex-row flex justify-end items-center gap-2'>
-                  <button className='bg-transparent border-none'>
-                    <span className='text-gray-500 text-base font-semibold'>Month</span>
+          <div className="chart-section flex flex-wrap lg:flex-nowrap items-center justify-between mt-8 mb-2.5 gap-4">
+            {/* Chart 1 */}
+            <div className="bg-[#fafafb] rounded-md px-10 py-5 flex-1 w-full lg:w-1/2 h-[550px]">
+              <div className="flex-row flex justify-between w-full items-center">
+                <h3 className="text-black text-lg font-semibold mb-4">Unique Visitors</h3>
+                <div className="flex-row flex justify-end items-center gap-2">
+                  <button className="bg-transparent border-none">
+                    <span className="text-gray-500 text-base font-semibold">Month</span>
                   </button>
-                  <button className='bg-transparent border h-8  px-2 flex flex-row items-center justify-center border-blue-500 rounded'>
-                    <span className='text-blue-500 text-base font-semibold'>Week</span>
+                  <button className="bg-transparent border h-8 px-2 flex flex-row items-center justify-center border-blue-500 rounded">
+                    <span className="text-blue-500 text-base font-semibold">Week</span>
                   </button>
                 </div>
               </div>
@@ -584,82 +646,69 @@ const DashboardDefault = () => {
                 <Chart
                   options={{
                     chart: {
-                      id: "basic-bar",
+                      id: "line-chart",
+                      type: "line",
                       background: "#fff",
-                      height: 400,
-                      width: "100%",
-                      redrawOnParentResize: true,
-                      redrawOnWindowResize: true,
-                      stackOnlyBar: true,
+                      toolbar: { show: false },
                     },
                     xaxis: {
-                      categories: [
-                        "Mon",
-                        "Tue",
-                        "Wed",
-                        "Thu",
-                        "Fri",
-                        "Sat",
-                        "Sun",
-                      ],
+                      categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
                     },
                     stroke: {
-                      show: true,
                       curve: "smooth",
-                      // lineCap: 'butt',
-                      colors: ["#6E91E9", "#8A9BD5"],
-                      width: 2,
-                      dashArray: 0,
+                      width: 4,
                     },
-                    dataLabels: {
-                      enabled: false,
-                    },
+                    dataLabels: { enabled: false },
+                    colors: ["#FAC684", "#84D78C"],
                   }}
                   series={[
                     {
                       name: "Page View",
                       data: [10, 30, 45, 40, 45, 70, 50],
-                      color: "#A1B2DF",
+                      // color: "#FAC684",
                     },
                     {
                       name: "Sessions",
                       data: [30, 35, 25, 40, 50, 55, 40],
-                      color: "#D4E1FE",
+                      // color: "#84D78C",
                     },
                   ]}
-                  type="area"
-                // width="500"
+                  type="line"
+                  height={400} // ✅ Ensures both charts have the same height
                 />
               </div>
             </div>
-            <div className='bg-[#1E2027] lg:w-2/5  py-5 rounded-md overflow-hidden w-full'>
+
+            {/* Chart 2 */}
+            <div className='bg-[#1E2027] lg:w-2/5 py-5 rounded-md overflow-hidden w-full relative'>
               <div className='flex-row flex justify-between w-full items-center pb-3 border-b border-[#585c6c] px-5 mb-3'>
                 <h3 className='text-white text-lg font-semibold'>Candidate Profiling</h3>
               </div>
               <div className='flex-row flex justify-between w-full items-center pb-3 border-b border-[#585c6c] px-5 mb-3'>
                 <select
                   onChange={handleAssesmentChange}
-                  name="" id="" className='bg-[#585c6c] h-7 border-none rounded-sm text-white px-1'
+                  className='bg-[#585c6c] h-7 border-none rounded-sm text-white px-1'
                 >
-                  {
-                    assesments.map((assessment, idx) => (
-                      <option
-                        className='text-white'
-                        value={assessment._id}
-                        key={idx}
-                        selected={selectedAssesment === assessment._id ? true : false}
-                      >
-                        {assessment.title}
-                      </option>
-                    ))
-                  }
+                  {assesments.map((assessment, idx) => (
+                    <option
+                      className='text-white'
+                      value={assessment._id}
+                      key={idx}
+                      selected={selectedAssesment === assessment._id}
+                    >
+                      {assessment.title}
+                    </option>
+                  ))}
                 </select>
-                {/* <select name="" id="" className='bg-[#585c6c] h-7 border-none rounded-sm text-white px-1'>
-                        <option value="Overall" className='text-white'>Overall</option>
-                    </select> */}
               </div>
+
               {loading ? (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60px' }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '60px'
+                }}>
                   <div style={{
                     border: '8px solid #f3f3f3',
                     borderRadius: '50%',
@@ -670,195 +719,80 @@ const DashboardDefault = () => {
                   }}></div>
                 </div>
               ) : (
-                <ScatterChart data={scatterChartData} />
+                <div className="relative">
+                  <ScatterChart data={scatterChartData} />
+
+                  {/* Black Overlay to Hide Watermark */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '1px',  // Adjust as needed
+                      right: '5px',   // Adjust as needed
+                      backgroundColor: '#1E2027',
+                      width: '75px',  // Adjust width to cover watermark
+                      height: '20px',  // Adjust height to cover watermark
+                      zIndex: 10       // Ensure it's above the chart
+                    }}
+                  ></div>
+                </div>
               )}
+
               <style>
                 {`
-                    @keyframes spin {
-                      0% { transform: rotate(0deg); }
-                      100% { transform: rotate(360deg); }
-                    }
-                  `}
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `}
               </style>
             </div>
+
           </div>
-          <div className="pt-9 w-full">
-            <div className="flex flex-row items-center justify-start gap-[19.64px] mb-[31px]">
-              <select
-                onChange={handleJobChange}
-                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
-              >
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value=""
-                >
-                  Select Jobs
-                </option>
-                {jobs.map((job, idx) => {
-                  return (
-                    <option
-                      className="text-[#1F222E] font-medium text-base"
-                      value={job._id} key={idx}
-                    >
-                      {job.title}
-                    </option>
-                  );
-                })}
-              </select>
 
-              <select
-                onChange={handleLocationChange}
-                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
-              >
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value=""
-                >
-                  Location
-                </option>
-                {results.map((result, idx) => {
-                  return (
-                    <option
-                      className="text-[#1F222E] font-medium text-base"
-                      value={result.userLocation} key={idx}
-                    >
-                      {result.userLocation}
-                    </option>
-                  );
-                })}
-              </select>
 
-              <select className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="someOption"
-                >
-                  {" "}
-                  Experience Level
-                </option>
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="otherOption"
-                >
-                  Other option
-                </option>
-              </select>
+          <div className="candidates-container pt-9 w-full">
+            {/* Filters Section */}
+            {/* <div className="filters-container flex flex-row items-center justify-start gap-[19.64px] mb-[31px]">
+              <button className="btn btn-outline-secondary">Jobs <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary">Location <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary">Experience Level <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary">Candidate Profile <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary">Range <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary">Last 30 Days <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary"><i className="fas fa-download me-2"></i> Export Data</button>
+            </div> */}
 
-              <select
-                onChange={handleProfileChange}
-                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
-              >
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value=""
-                >
-                  Candidate Profile
-                </option>
-                {users.map((user, idx) => {
-                  return (
-                    <option
-                      className="text-[#1F222E] font-medium text-base"
-                      value={user._id} key={idx}
-                    >
-                      {user.name}
-                    </option>
-                  );
-                })}
-              </select>
-              <select
-                onChange={handleResultTypeChange}
-                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
-              >
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value=""
-                >
-                  Range
-                </option>
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="30"
-                >
-                  Below Average (30 - 50)
-                </option>
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="65"
-                >
-                  Average (50 - 65)
-                </option>
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="85"
-                >
-                  Good (65 - 85)
-                </option>
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="100"
-                >
-                  Excellent (85 - 100)
-                </option>
-              </select>
-              <button className="bg-white border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px]">
-                <div className="w-5 h-5 bg-[#DCEAFF] flex flex-row items-center justify-center rounded">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M10.5844 0.994141H0.759766L3.85061 4.85772C4.04284 5.09798 4.14756 5.39651 4.14756 5.70426V10.1412C4.14756 10.5154 4.4509 10.8187 4.82512 10.8187H6.51902C6.89323 10.8187 7.19657 10.5154 7.19657 10.1412V5.70426C7.19657 5.39651 7.30132 5.09798 7.49355 4.85772L10.5844 0.994141Z"
-                      stroke="#6C757D"
-                      strokeWidth="1.01634"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-                <span className="text-[#1F222E] font-medium text-base">
-                  All Filter
-                </span>
-                <div className="w-3 h-2 -rotate-90">
-                  <img src={angleDown} alt="" className="w-full h-full" />
-                </div>
-              </button>
+            {/* Search & Add Candidate */}
+            <div className="search-add-container my-4 flex flex-row items-center justify-between">
+              <h3 className="text-lg font-bold text-black mb-3">Candidates</h3>
+              {/* <div className="flex items-center gap-4">
+                <select className="h-10 border border-[#CED4DA] rounded-md px-4">
+                  <option>Last 30 Days</option>
+                  <option>Last 7 Days</option>
+                  <option>Last 3 Months</option>
+                </select>
+                <button className="h-10 border border-[#CED4DA] rounded-md px-4">
+                  Export
+                </button>
+              </div> */}
             </div>
-            <div className="my-4">
-              <div className="flex flex-row items-center justify-between">
-                <div>
-                  <button className="border-[#0057FC] border bg-white p-2.5 rounded-md h-10 flex justify-center items-center flex-row gap-2">
-                    <span className="">
-                      <img src={plussign} alt="" />
-                    </span>
-                    <span className="font-semibold text-[#0057FC]  text-sm text-center">
-                      New candidate
-                    </span>
-                  </button>
-                </div>
-                <div className="w-[325px] h-10 relative">
-                  <div className="absolute w-4 h-4 left-3 top-3">
-                    <img src={search} alt="" />
+
+
+            {/* Candidates Table */}
+            <div className="candidates-table flex-1">
+              <div className="card tbl-card">
+                <div className="card">
+                  <div className="card-body">
+                    <div className="table-responsive">
+                      <Table dataSource={filteredResults} columns={columns} pagination={{ pageSize: 5 }} />
+                    </div>
                   </div>
-                  <input
-                    type="text"
-                    name=""
-                    className="h-10 border border-[#CED4DA] rounded-md py-3 pl-10 w-full"
-                    id=""
-                    value={searchTerm}
-                    onChange={handleSearch}
-                  />
                 </div>
               </div>
             </div>
-            <div className="flex-1">
-              <Table dataSource={filteredResults} columns={columns} />
-            </div>
           </div>
         </div>
-      </section>
+      </section >
     </>
   );
 };

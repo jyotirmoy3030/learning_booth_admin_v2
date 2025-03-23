@@ -1,3 +1,168 @@
 .ant-table-thead > tr > .ant-table-cell {
   background-color: #d3d3d3 !important;
+} 
+
+.card-nav:hover {
+  background-color: #5a6268 !important; /* Darker shade on hover */
+  border-color: #545b62 !important;
+  transform: scale(1.05);
+}
+
+.question-card {
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 400px; /* Ensure all cards are of same height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Keep spacing uniform */
+  box-shadow: 7px 5px 0px rgb(227, 225, 225);
+  transition: transform 0.2s ease-in-out;
+}
+
+.question-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Dots Icon */
+.dots-menu {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #666;
+}
+
+.dots-menu:hover {
+  color: #000;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 40px;
+  right: 15px;
+  background: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  width: 100px;
+  z-index: 10;
+  padding: 5px 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: #333;
+}
+
+.dropdown-item:hover {
+  background: #f0f0f0;
+}
+
+.dropdown-item .icon {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Question Title */
+.question-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Question Description */
+.question-description {
+  font-size: 14px;
+  color: #555;
+}
+
+.answer-box {
+  background: #f8f9fa;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border-left: 3px solid #ffc727;
+  color: #333;
+  margin-top: 10px;
+}
+
+.answer-box ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-top: 5px;
+}
+
+.answer-box li {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 4px;
+}
+
+.modal-title {
+  background: #ffc727;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  border-radius: 10px 10px 10px 10px;
+}
+.custom-modal .ant-modal-content {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.modal-body p {
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.status {
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.status.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.inactive {
+  background: #f8d7da;
+  color: #721c24;
 }

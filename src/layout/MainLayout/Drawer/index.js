@@ -28,7 +28,7 @@ const MainDrawer = ({ open, handleDrawerToggle, window }) => {
     <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300 }} aria-label="mailbox folders">
       {!matchDownMD ? (
         <MiniDrawerStyled variant="permanent" open={open}>
-          {drawerHeader}
+          {/* {drawerHeader} */}
           {drawerContent}
         </MiniDrawerStyled>
       ) : (
@@ -49,7 +49,7 @@ const MainDrawer = ({ open, handleDrawerToggle, window }) => {
             }
           }}
         >
-          {open && drawerHeader}
+          {/* {open && drawerHeader} */}
           {open && drawerContent}
         </Drawer>
       )}

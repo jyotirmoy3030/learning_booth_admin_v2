@@ -1,0 +1,134 @@
+.assessments-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 cards per row */
+    gap: 20px;
+    /* Space between cards */
+    justify-content: center;
+    align-items: center;
+}
+
+.assessment-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 20px;
+    position: relative;
+    border-radius: 12px;
+    border: 1px solid #E0E0E0;
+    /* Light gray border */
+    background: #fff;
+    transition: box-shadow 0.2s ease-in-out;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+    /* Light shadow */
+}
+
+.assessment-card:hover {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    /* Stronger shadow on hover */
+}
+
+.card-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #141414;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-container {
+    width: 20px;
+    height: 20px;
+}
+
+.more-options {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.card-body {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.thumbnail-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: #F5F5F5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img-thumbnail {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.duration {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.last-month {
+    font-size: 12px;
+    color: #777;
+}
+
+.text-card {
+    position: relative;
+    width: fit-content;
+    font-family: "Inter-Bold", Helvetica;
+    font-weight: 600;
+    color: #141414;
+    font-size: 18px;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.text-card2 {
+    position: relative;
+    width: fit-content;
+    font-family: "Inter-Bold", Helvetica;
+    font-weight: 600;
+    color: #141414;
+    font-size: 15px;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .assessments-container {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 cards per row on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .assessments-container {
+        grid-template-columns: repeat(1, 1fr);
+        /* 1 card per row on small screens */
+    }
+}

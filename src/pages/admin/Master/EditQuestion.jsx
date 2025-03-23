@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Button,
   FormHelperText,
@@ -9,252 +9,321 @@ import {
   Typography,
   Select,
   MenuItem,
-} from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import * as Yup from 'yup';
-import { Formik } from 'formik';
-import AnimateButton from 'components/@extended/AnimateButton';
-import '../styles/admin.css';
+} from "@mui/material";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import * as Yup from "yup";
+import { Formik } from "formik";
+import AnimateButton from "components/@extended/AnimateButton";
+import "../styles/admin.css";
 import {
   getQuestionById,
   getTestById,
   updateQuestion,
-} from 'services/Master/Tests';
-import { toast } from 'react-toastify';
+} from "services/Master/Tests";
+import { toast } from "react-toastify";
+import dr15_2 from "../../../assets/images/dr15_2.png";
+import plant from "../../../assets/images/Rocket.png";
+import briefcase from "../../../assets/images/briefcase.png";
+import plus from "../../../assets/images/plus.png";
+import skill from "../../../assets/images/skill.png";
 
+const styles = {
+  bottomBg: {
+    position: "fixed",
+    top: "10%", // Keep it fixed at the bottom of the page
+    left: 0,
+    bottom: 0, // Stick it to the bottom
+    width: "100%",
+    height: "auto", // Adjust height dynamically if needed
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "bottom center",
+    backgroundImage: `url(${dr15_2})`,
+    zIndex: -4, // Keeps it behind other elements
+  },
+  plant: {
+    position: "fixed",
+    bottom: "0",
+    right: "0", // Ensure it stays at the right
+    width: "10rem",  // Adjust as needed
+    height: "auto",
+    maxWidth: "100%", // Prevents overflow issues
+    zIndex: "-2", // Ensure it's behind content but above background
+    pointerEvents: "none", // Prevents interference with clicks
+  }
+
+};
 const EditQuestion = () => {
-  const [question, setQuestion] = useState([]);
-  const [compentency, setCompentency] = useState({});
-  const [test, setTest] = useState({});
+  const [question, setQuestion] = useState({});
+  const [competencies, setCompetencies] = useState([]);
+  const [capabilities, setCapabilities] = useState([]);
   const { testId, questionId } = useParams();
-  const getQuestion = async () => {
-    const js = await getQuestionById(questionId);
-    if (js) {
-      setQuestion(js.data);
-    }
-  };
-  const getTest = async () => {
-    const js = await getTestById(testId);
-    if (js) {
-      setTest(js.data);
-    }
-  };
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    getQuestion();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionId]);
-  React.useEffect(() => {
-    getTest();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [testId]);
-
-  React.useEffect(() => {
-    if (question?.compentency) {
-      setCompentency(question?.compentency);
+  // Centralized API Call Function
+  const fetchData = async (apiFn, params, setter, errorMessage) => {
+    try {
+      const response = await apiFn(...params);
+      if (response?.data) setter(response.data);
+    } catch (error) {
+      toast.error(errorMessage);
     }
-  }, [question]);
+  };
 
-  console.log(compentency);
+  useEffect(() => {
+    fetchData(
+      getQuestionById,
+      [questionId, testId],
+      (data) => {
+        setQuestion(data);
+        setCapabilities(data?.competency?.capabilities || []);
+      },
+      "Failed to fetch question details."
+    );
+    fetchData(
+      getTestById,
+      [testId],
+      (data) => setCompetencies(data?.Jobrole?.competencies || []),
+      "Failed to fetch test details."
+    );
+  }, [testId, questionId]);
+
+  const handleCompetencyChange = (selectedCompetencyId) => {
+    const selectedCompetency = competencies.find(
+      (comp) => comp._id === selectedCompetencyId
+    );
+    if (selectedCompetency) {
+      setCapabilities(selectedCompetency.capabilities || []);
+    }
+  };
+  console.log(question)
+
   return (
-    <div>
-      <Typography variant="h1">Edit Question - {question.title}</Typography>
+    <>
+      <div className="w-full flex justify-between items-center mt-4 px-6 pb-6 mb-10">
+        <div className="flex flex-col gap-2">
+          <span className="font-bold text-[24px] text-[#141414]">Hello, Admin! 👋</span>
+          <span className="font-medium text-[12px] text-[#989ca0]">
+            Welcome back, track your team progress here!
+          </span>
+        </div>
 
-      <Formik
-        initialValues={{
-          title: question.title,
-          skill: question.skill,
-          answers: question.answers,
-        }}
-        validationSchema={Yup.object().shape({
-          title: Yup.string()
-            .min(10, 'Title should be minimum 10 character.')
-            .max(255)
-            .required('Title is required'),
-          answers: Yup.array().min(2, 'Must provide two answers.'),
-          skill: Yup.string().required('Skill is required.'),
-          compentencyType: Yup.string().required('Type is required'),
-        })}
-        enableReinitialize
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          try {
-            await updateQuestion(questionId, { ...values, compentency });
-            navigate(-1);
-            setStatus({ success: true });
-            setSubmitting(false);
-            toast.success('Question edited!');
-          } catch (err) {
-            setStatus({ success: false });
-            setErrors({ submit: err.message });
-            toast.error('ERROR: Couldnt edit question.');
-            setSubmitting(false);
-          }
-        }}
-      >
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-          values,
-          setFieldValue,
-        }) => (
-          <form noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="title">Question Title</InputLabel>
-                  <OutlinedInput
-                    id="title"
-                    type="text"
-                    value={values.title}
-                    name="title"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Enter title."
-                    fullWidth
-                    error={Boolean(touched.title && errors.title)}
-                  />
-                  {touched.title && errors.title && (
-                    <FormHelperText
-                      error
-                      id="standard-weight-helper-text-title"
-                    >
-                      {errors.title}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="compentencyType">Type</InputLabel>
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-solid border-[#dcdddf] cursor-pointer">
+            <div className="justify-center items-center w-5 h-5">
+              <img src={briefcase} alt="briefcase" />
+            </div>
+            <span className="font-bold text-[14px] text-[#141414]"><Link to="/dashboard/jobs">Post New Job</Link></span>
+          </div>
+
+          <div className="flex items-center gap-2 bg-[#263238] px-4 py-3 rounded-lg cursor-pointer">
+            <div className="justify-center items-center w-5 h-5">
+              <img src={plus} alt="briefcase" />
+            </div>
+            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/users">Add Employee</Link></span>
+
+          </div>
+          <div className="flex items-center gap-2 bg-[#ffc727] px-4 py-3 rounded-lg cursor-pointer">
+            <div className="justify-center items-center w-5 h-5">
+              <img src={skill} alt="briefcase" />
+            </div>
+            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/road_to_content">Skills To Hire</Link></span>
+
+          </div>
+        </div>
+      </div>
+      <div>
+        <Typography variant="h1" className="mb-[4rem]">Edit Question - {question.title}</Typography>
+
+        <Formik
+          initialValues={{
+            title: question.title || "",
+            type: question.type || "", // Added 'type' initial value
+            skill: question.capability || "",
+            competency: question.competency?._id || "",
+            answers: question.answers || [
+              { title: "", weight: 0 },
+              { title: "", weight: 0 },
+            ],
+          }}
+          validationSchema={Yup.object().shape({
+            title: Yup.string()
+              .min(10, "Title should be minimum 10 characters.")
+              .max(255)
+              .required("Title is required"),
+            type: Yup.string().required("Type is required."), // Validation for 'type'
+            skill: Yup.string().required("Capability is required."),
+            competency: Yup.string().required("Competency is required."),
+            answers: Yup.array()
+              .min(2, "At least two answers are required.")
+              .of(
+                Yup.object().shape({
+                  title: Yup.string().required("Answer title is required"),
+                  weight: Yup.number()
+                    .min(0, "Weight must be a positive number")
+                    .required("Weight is required"),
+                })
+              ),
+          })}
+          enableReinitialize
+          onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+            try {
+              await updateQuestion(questionId, testId, { ...values });
+              toast.success("Question updated successfully!");
+              navigate(-1);
+              setStatus({ success: true });
+            } catch (error) {
+              setStatus({ success: false });
+              setErrors({ submit: error.message });
+              toast.error("Error updating question.");
+            } finally {
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({
+            errors,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+            values,
+            setFieldValue,
+          }) => (
+            <form noValidate onSubmit={handleSubmit} className="mb-[14rem]">
+              <div className="relative w-full mb-5">
+                <label htmlFor="title" className="text-gray-700 font-semibold block mb-1">Question Title</label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={values.title}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  className="w-full border border-gray-400 p-3 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
+                  placeholder="Enter question title"
+                />
+                {touched.title && errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
+              </div>
+
+
+              {/* Type Dropdown */}
+              <div className="relative w-full mb-5">
+                <label htmlFor="type" className="text-gray-700 font-semibold block mb-1">Type</label>
+                <select
+                  id="type"
+                  name="type"
+                  value={values.type}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className="w-full border border-gray-400 p-3 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
+                >
+                  <option value="" label="Select Type" />
+                  <option value="functional">Functional</option>
+                  <option value="behavioral">Behavioral</option>
+                  <option value="cultural">Cultural</option>
+                  <option value="cultural">Technical</option>
+                  <option value="cultural">Leadership</option>
+                </select>
+                {touched.type && errors.type && <p className="text-red-500 text-xs mt-1">{errors.type}</p>}
+              </div>
+
+              {/* Competency Dropdown */}
+              <div className="relative w-full mb-5">
+                <label htmlFor="competency" className="text-gray-700 font-semibold block mb-1">Competency</label>
+                <select
+                  id="competency"
+                  name="competency"
+                  value={values.competency}
+                  onChange={(e) => {
+                    setFieldValue("competency", e.target.value);
+                    handleCompetencyChange(e.target.value);
+                  }}
+                  className="w-full border border-gray-400 p-3 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
+                >
+                  <option value="" disabled>Select Competency</option>
+                  {competencies.map((comp) => (
+                    <option key={comp._id} value={comp._id}>{comp.name}</option>
+                  ))}
+                </select>
+                {touched.competency && errors.competency && <p className="text-red-500 text-xs mt-1">{errors.competency}</p>}
+              </div>
+
+              {/* Capability Dropdown */}
+              {capabilities.length > 0 && (
+                <div className="relative w-full mb-5">
+                  <label htmlFor="skill" className="text-gray-700 font-semibold block mb-1">Capability</label>
                   <select
-                    id="compentencyType"
-                    name="compentencyType"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.compentencyType}
-                    className="MuiInputBase-input MuiOutlinedInput-input"
+                    id="skill"
+                    name="skill"
+                    value={values.skill}
+                    onChange={(e) => setFieldValue("skill", e.target.value)}
+                    className="w-full border border-gray-400 p-3 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
                   >
-                    <option value="" label="Select Type" />
-                    <option value="functional" label="Functional" />
-                    <option value="behavioral" label="Behavioral" />
-                    <option value="cultural" label="Cultural" />
+                    <option value="" disabled>Select Capability</option>
+                    {capabilities.map((cap) => (
+                      <option key={cap._id} value={cap._id}>{cap.name}</option>
+                    ))}
                   </select>
-                  {touched.compentencyType && errors.compentencyType && (
-                    <FormHelperText error id="standard-weight-helper-text-compentencyType">
-                      {errors.compentencyType}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="compentency">
-                    Compentency ({compentency?.title})
-                  </InputLabel>
-                  <Select
-                    labelId="compentency"
-                    id="compentency"
-                    value={compentency}
-                    onChange={(e) => setCompentency(e.target.value)}
-                    name="compentency"
-                  >
-                    {test?.jobRole?.compentencies?.map((s, idx) => {
-                      return (
-                        <MenuItem value={s} key={idx}>
-                          {s.title}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </Stack>
-              </Grid>
-              {compentency?.capabilities && (
-                <Grid item xs={12}>
-                  <Stack spacing={1}>
-                    <InputLabel htmlFor="skill">Capability</InputLabel>
-                    <Select
-                      labelId="skill"
-                      id="skill"
-                      value={values.skill}
-                      onChange={handleChange}
-                      name="skill"
-                    >
-                      {compentency?.capabilities?.map((s, idx) => {
-                        return (
-                          <MenuItem value={s.name} key={idx}>
-                            {s.name}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </Stack>
-                </Grid>
+                  {touched.skill && errors.skill && <p className="text-red-500 text-xs mt-1">{errors.skill}</p>}
+                </div>
               )}
-              {values?.answers?.map((_, idx) => (
-                <Grid item xs={12} key={idx}>
-                  <Grid container>
-                    <Grid xs={10.5} sx={{ mr: 1 }}>
-                      <Stack spacing={1}>
-                        <InputLabel htmlFor="duration">Answer Title</InputLabel>
-                        <OutlinedInput
-                          type="text"
-                          value={values.answers[idx].title}
-                          onChange={(e) => {
-                            const answersCopy = [...values.answers];
-                            answersCopy[idx].title = e.target.value;
-                            console.log(answersCopy);
-                            setFieldValue('answers', answersCopy);
-                          }}
-                          placeholder="Enter answer text."
-                          fullWidth
-                        />
-                      </Stack>
-                    </Grid>
-                    <Grid xs={1}>
-                      <Stack spacing={1}>
-                        <InputLabel htmlFor="duration">Weight</InputLabel>
-                        <OutlinedInput
-                          type="number"
-                          value={values.answers[idx].weight}
-                          onChange={(e) => {
-                            const answersCopy = [...values.answers];
-                            answersCopy[idx].weight = parseInt(e.target.value);
-                            setFieldValue('answers', answersCopy);
-                          }}
-                          placeholder="Weight"
-                          fullWidth
-                          sx={{ borderRadius: 9999 }}
-                        />
-                      </Stack>
-                    </Grid>
-                  </Grid>
-                </Grid>
+              {values.answers.map((answer, idx) => (
+                <div key={idx} className="relative w-full mb-5 border border-gray-300 p-4 rounded-md shadow-md bg-white">
+                  {/* Flex Container for Answer Title & Weight */}
+                  <div className="flex gap-4">
+                    {/* Answer Title Field (80%) */}
+                    <div className="relative w-4/5">
+                      <label className="text-gray-700 text-sm font-semibold">Answer Title {idx + 1}</label>
+                      <input
+                        type="text"
+                        value={values.answers[idx].title}
+                        onChange={(e) => {
+                          const updatedAnswers = [...values.answers];
+                          updatedAnswers[idx].title = e.target.value;
+                          setFieldValue("answers", updatedAnswers);
+                        }}
+                        placeholder="Enter answer text"
+                        className="w-full border border-gray-400 p-3 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
+                      />
+                    </div>
+
+                    {/* Weight Field (20%) */}
+                    <div className="relative w-1/5">
+                      <label className="text-gray-700 text-sm font-semibold">Weight</label>
+                      <input
+                        type="number"
+                        value={values.answers[idx].weight}
+                        onChange={(e) => {
+                          const updatedAnswers = [...values.answers];
+                          updatedAnswers[idx].weight = parseInt(e.target.value) || 0;
+                          setFieldValue("answers", updatedAnswers);
+                        }}
+                        placeholder="Enter weight"
+                        className="w-full border border-gray-400 p-3 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none text-center"
+                      />
+                    </div>
+                  </div>
+                </div>
               ))}
-              <Grid item xs={12}>
-                <AnimateButton>
-                  <Button
-                    disableElevation
-                    disabled={isSubmitting}
-                    fullWidth
-                    size="large"
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                  >
-                    Save
-                  </Button>
-                </AnimateButton>
-              </Grid>
-            </Grid>
-          </form>
-        )}
-      </Formik>
-    </div>
+
+              <div className="col-span-2 flex justify-center">
+                <button type="submit" className="bg-[#263238] text-white px-6 py-3 rounded-lg" onClick={handleSubmit}>
+                  Save
+                </button>
+              </div>
+            </form>
+          )}
+        </Formik>
+        <img
+          src={plant}
+          alt="Bottom Right Image"
+          style={styles.plant}
+        />
+        <div className="bottom-bg" style={styles.bottomBg}></div>
+      </div>
+    </>
   );
 };
 

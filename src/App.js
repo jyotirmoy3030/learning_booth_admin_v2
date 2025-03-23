@@ -1,21 +1,21 @@
-// project import
-import Routes from 'routes';
+// Project imports
+import AppRoutes from 'routes'; // Ensure this is correctly defined
 import ThemeCustomization from 'themes';
 import ScrollTop from 'components/ScrollTop';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import AssessmentReport from 'pages/AssessmentReport/AssessmentReport';
 
-// ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
+// Styles
+import 'react-toastify/dist/ReactToastify.css';
+
+// ==============================|| APP - THEME, ROUTER, LOCAL ||============================== //
 
 const App = () => (
   <ThemeCustomization>
     <ToastContainer />
     <ScrollTop>
-      <Routes />
-      {/* <AssessmentReport /> */}
+      <AppRoutes /> {/* Ensure `routes.js` correctly exports `Routes` */}
     </ScrollTop>
   </ThemeCustomization>
 );
- 
+
 export default App;

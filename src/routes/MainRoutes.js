@@ -4,11 +4,20 @@ import MainLayout from 'layout/MainLayout';
  
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
+const RoadtoContent = Loadable(
+  lazy(() => import('pages/admin/Master/RoadToContent'))
+);
 const JobRoleMaster = Loadable(
   lazy(() => import('pages/admin/Master/JobRoleMaster'))
 );
+const NewJobRoleMaster = Loadable(
+  lazy(() => import('pages/admin/Master/NewJobRoleMaster'))
+);
 const JobsMaster = Loadable(
   lazy(() => import('pages/admin/Master/JobsMaster'))
+);
+const NewJobsMaster = Loadable(
+  lazy(() => import('pages/admin/Master/NewJobsMaster'))
 );
 const JobsApplicationMaster = Loadable(
   lazy(() => import('pages/admin/Master/JobsApplication'))
@@ -25,6 +34,9 @@ const EditCourseMaster = Loadable(
 const AddTestMaster = Loadable(
   lazy(() => import('pages/admin/Master/CreateTest'))
 );
+const AddNewTestMaster = Loadable(
+  lazy(() => import('pages/admin/Master/CreateNewTest'))
+);
 const AddQuestionMaster = Loadable(
   lazy(() => import('pages/admin/Master/AddQuestion'))
 );
@@ -33,6 +45,9 @@ const EditQuestionMaster = Loadable(
 );
 const UsersMaster = Loadable(
   lazy(() => import('pages/admin/Master/UsersMaster'))
+);
+const NewUsersMaster = Loadable(
+  lazy(() => import('pages/admin/Master/NewUserMaster'))
 );
 const EditUserMaster = Loadable(
   lazy(() => import('pages/admin/Master/EditUser'))
@@ -43,12 +58,21 @@ const ResultsMaster = Loadable(
 const CapabilitiesMaster = Loadable(
   lazy(() => import('pages/admin/Master/CapabilitiesMaster'))
 );
+const CompetencyMaster = Loadable(
+  lazy(() => import('pages/admin/Master/CompetencyMaster'))
+);
 const NewUsers = Loadable(lazy(() => import('pages/admin/Master/NewUsers')));
 const WebsiteContent = Loadable(
   lazy(() => import('pages/admin/Master/WebsiteContent'))
 );
 const DemoRequests = Loadable(
   lazy(() => import('pages/admin/Master/DemoRequests'))
+);
+const AiAssessment = Loadable(
+  lazy(() => import('pages/admin/Master/Ai/CreateAssesment'))
+);
+const AiQuestion = Loadable(
+  lazy(() => import('pages/admin/Master/Ai/CreateQuestion'))
 );
 const MainRoutes = {
   path: '/dashboard',
@@ -59,12 +83,24 @@ const MainRoutes = {
       element: <DashboardDefault />,
     },
     {
+      path: 'road_to_content',
+      element: <RoadtoContent />,
+    },
+    {
       path: 'job-roles',
       element: <JobRoleMaster />,
     },
     {
+      path: 'new-job-roles',
+      element: <NewJobRoleMaster />,
+    },
+    {
       path: 'jobs',
       element: <JobsMaster />,
+    },
+    {
+      path: 'new-jobs',
+      element: <NewJobsMaster />,
     },
     {
       path: 'jobs-application',
@@ -87,8 +123,16 @@ const MainRoutes = {
       element: <AddTestMaster />,
     },
     {
+      path: 'new-assessments',
+      element: <AddNewTestMaster />,
+    },
+    {
       path: 'capabilities',
       element: <CapabilitiesMaster />,
+    },
+    {
+      path: 'competency',
+      element: <CompetencyMaster />,
     },
     {
       path: 'tests/:id/questions',
@@ -98,10 +142,16 @@ const MainRoutes = {
       path: 'tests/:testId/questions/:questionId/edit',
       element: <EditQuestionMaster />,
     },
+    
     {
       path: 'users',
       element: <UsersMaster />,
     },
+    {
+      path: 'new-users',
+      element: <NewUsersMaster />,
+    },
+
     {
       path: 'users/:id/edit',
       element: <EditUserMaster />,
@@ -121,6 +171,14 @@ const MainRoutes = {
     {
       path: 'demo-requests',
       element: <DemoRequests />,
+    },
+    {
+      path: 'ai-assessments',
+      element: <AiAssessment />,
+    },
+    {
+      path: 'tests/:id/ask-ai',
+      element: <AiQuestion />,
     },
   ],
 };

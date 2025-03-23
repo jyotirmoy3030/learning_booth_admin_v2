@@ -3,7 +3,6 @@ export function secondsToHms(seconds) {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = Math.floor(seconds % 60);
-  console.log(hours, minutes, remainingSeconds);
   const hDisplay =
     hours > 0 ? hours + (hours === 1 ? ' hour, ' : ' hours, ') : '';
   const mDisplay =

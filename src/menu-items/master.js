@@ -29,6 +29,14 @@ const dashboard = {
       icon: icons.UserOutlined,
       breadcrumbs: false,
     },
+    {
+      id: 'competency',
+      title: 'Competency',
+      type: 'item',
+      url: '/dashboard/competency',
+      icon: icons.UserOutlined,
+      breadcrumbs: false,
+    },
 
     {
       id: 'jobRole',

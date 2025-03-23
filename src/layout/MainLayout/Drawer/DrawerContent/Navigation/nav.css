@@ -1,0 +1,134 @@
+.pc-sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #263238;
+    color: white;
+    transition: width 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Enables scrolling when needed */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.pc-sidebar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+
+/* Collapsed Sidebar */
+.pc-sidebar.collapsed {
+    width: 80px;
+    overflow: hidden;
+}
+
+/* Sidebar Items */
+.pc-navbar {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pc-item {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sidebar Links */
+.pc-link {
+    display: flex;
+    align-items: center; /* Align items in the same line */
+    justify-content: flex-start; /* Ensure text stays next to the icon */
+    padding: 12px;
+    text-decoration: none;
+    color: white;
+    transition: background 0.3s;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    gap: 10px; /* Add space between icon and text */
+}
+
+.pc-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Sidebar Icons */
+.pc-micon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ensure text doesn't wrap */
+.pc-mtext {
+    white-space: nowrap;
+}
+
+/* Hide Text When Collapsed */
+.pc-sidebar.collapsed {
+    display: none;
+}
+
+/* Dropdown Items */
+.pc-submenu {
+    list-style: none;
+    padding-left: 30px;
+    display: none;
+}
+
+.pc-dropdown .pc-submenu {
+    display: block;
+}
+
+/* Style Dropdown Links */
+.pc-submenu li a {
+    display: block;
+    padding: 8px 10px;
+    font-size: 13px;
+    color: #d1d1d1;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.pc-submenu li a:hover {
+    color: #ffc727;
+}
+
+/* Section Headers */
+.pc-caption {
+    padding: 12px;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #d1d1d1;
+}
+
+/* Book A Demo Button */
+.card-nav {
+    padding: 14px;
+    background-color: #ffc727;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 20px;
+    margin-top: auto;
+    width: 99%;
+}
+
+.card-nav:hover {
+    background-color: #e6b300;
+}
+
+/* Hide Demo Text When Collapsed */
+.pc-sidebar.collapsed .card span {
+    display: none;
+}
+
+.logo{
+    padding: 25px 25px 25px 0;
+    display: flex;
+    justify-content: start;
+}
