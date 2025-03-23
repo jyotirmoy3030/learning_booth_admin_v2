@@ -121,7 +121,7 @@ const Navigation = () => {
             {/* Book a Demo Button */}
             <div className="card-nav text-center mb-[1rem]">
               <a
-                href="https://admin-frontend-self-iota.vercel.app/"
+                href="https://admin-frontend-self-iota.vercel.app/dashboard/ai-assessments"
                 target="_blank"
                 className="btn btn-secondary flex items-center justify-center gap-1 font-semibold"
               >
