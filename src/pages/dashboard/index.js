@@ -109,12 +109,23 @@ const DashboardDefault = () => {
   }, []);
 
   const getResults = async () => {
-    const js = await getAllResults();
-    const reversedData = js.data.reverse();
-    if (js) {
-      setResults(reversedData);
+    try {
+      const js = await getAllResults();
+
+      // Ensure js, js.data, and js.data.scores exist and that js.data.scores is an array
+      if (js && js.data && Array.isArray(js.data.scores)) {
+        const reversedData = [...js.data.scores].reverse(); // Avoid mutating the original array
+        setResults(reversedData);
+      } else {
+        console.error("Invalid data format: js.data.scores is not an array", js);
+        setResults([]); // Set an empty array if data is not valid
+      }
+    } catch (error) {
+      console.error("Error fetching results:", error);
+      setResults([]); // Handle errors gracefully
     }
   };
+
 
   React.useEffect(() => {
     getResults();
@@ -140,13 +151,13 @@ const DashboardDefault = () => {
       setLoading(false); // Set loading to false after the API call, regardless of success or failure
     }
   };
-  
+
   React.useEffect(() => {
     if (selectedAssesment) {
       getCandidateWithScore(selectedAssesment);
     }
   }, [selectedAssesment]);
-  
+
   const getAllassignmentDetails = async () => {
     const js = await getAllTestsApi();
     if (js && js.data) {
@@ -221,7 +232,7 @@ const DashboardDefault = () => {
   const handleJobChange = (e) => {
     setselectedJob(e.target.value);
   };
-  
+
   const handleAssesmentChange = (e) => {
     const selectedId = e.target.value;
     setselectedAssesment(selectedId);
@@ -310,36 +321,35 @@ const DashboardDefault = () => {
             </span>
             <div className="w-min px-2.5 flex flex-row items-center justify-center h-5 rounded-full border  bg-[#29CC390D] ">
               <span className={`text-[8px] 
-                ${
-                  data?.totalPercentage?.toFixed(2) > 80
+                ${data?.totalPercentage?.toFixed(2) > 80
                   ? 'text-[#29CC39]'
                   : data?.totalPercentage?.toFixed(2) > 70
-                  ? 'text-[#29CC39]'
-                  : data?.totalPercentage?.toFixed(2) > 60
-                  ? 'text-[#29CC39]'
-                  : data?.totalPercentage?.toFixed(2) > 50
-                  ? 'text-[#29CC39]'
-                  : data?.totalPercentage?.toFixed(2) > 40
-                  ? 'text-[#29CC39]'
-                  : data?.totalPercentage?.toFixed(2) > 30
-                  ? 'text-[#cc294a]'
-                  : 'text-[#cc294a]'
+                    ? 'text-[#29CC39]'
+                    : data?.totalPercentage?.toFixed(2) > 60
+                      ? 'text-[#29CC39]'
+                      : data?.totalPercentage?.toFixed(2) > 50
+                        ? 'text-[#29CC39]'
+                        : data?.totalPercentage?.toFixed(2) > 40
+                          ? 'text-[#29CC39]'
+                          : data?.totalPercentage?.toFixed(2) > 30
+                            ? 'text-[#cc294a]'
+                            : 'text-[#cc294a]'
                 }
                 font-black text-center`}>
                 {" "}
                 {data?.totalPercentage?.toFixed(2) > 80
                   ? "Excellent"
                   : data?.totalPercentage?.toFixed(2) > 70
-                  ? "Best"
-                  : data?.totalPercentage?.toFixed(2) > 60
-                  ? "Better"
-                  : data?.totalPercentage?.toFixed(2) > 50
-                  ? "Good"
-                  : data?.totalPercentage?.toFixed(2) > 40
-                  ? "Average"
-                  : data?.totalPercentage?.toFixed(2) > 30
-                  ? "Below Average"
-                  : "Below Average"}
+                    ? "Best"
+                    : data?.totalPercentage?.toFixed(2) > 60
+                      ? "Better"
+                      : data?.totalPercentage?.toFixed(2) > 50
+                        ? "Good"
+                        : data?.totalPercentage?.toFixed(2) > 40
+                          ? "Average"
+                          : data?.totalPercentage?.toFixed(2) > 30
+                            ? "Below Average"
+                            : "Below Average"}
               </span>
             </div>
           </div>
@@ -473,7 +483,7 @@ const DashboardDefault = () => {
     });
     setScatterChartData(updatedData);
   };
-  
+
 
   return (
     <>
@@ -560,15 +570,15 @@ const DashboardDefault = () => {
           <div className='chart-section flex flex-row items-center justify-between flex-wrap lg:flex-nowrap  mt-8 mb-2.5 gap-4'>
             <div className='bg-[#fafafb] rounded-md px-10 py-5 lg:w-3/5 w-full'>
               <div className='flex-row flex justify-between w-full items-center'>
-                  <h3 className='text-black text-lg font-semibold mb-4'>Unique Visiter</h3>
-                  <div className='flex-row flex justify-end items-center gap-2'>
-                      <button className='bg-transparent border-none'>
-                          <span className='text-gray-500 text-base font-semibold'>Month</span>
-                      </button>
-                      <button className='bg-transparent border h-8  px-2 flex flex-row items-center justify-center border-blue-500 rounded'>
-                          <span className='text-blue-500 text-base font-semibold'>Week</span>
-                      </button>
-                  </div>
+                <h3 className='text-black text-lg font-semibold mb-4'>Unique Visiter</h3>
+                <div className='flex-row flex justify-end items-center gap-2'>
+                  <button className='bg-transparent border-none'>
+                    <span className='text-gray-500 text-base font-semibold'>Month</span>
+                  </button>
+                  <button className='bg-transparent border h-8  px-2 flex flex-row items-center justify-center border-blue-500 rounded'>
+                    <span className='text-blue-500 text-base font-semibold'>Week</span>
+                  </button>
+                </div>
               </div>
               <div className="mixed-chart border border-slate-300 rounded overflow-hidden">
                 <Chart
@@ -618,58 +628,58 @@ const DashboardDefault = () => {
                     },
                   ]}
                   type="area"
-                  // width="500"
+                // width="500"
                 />
               </div>
             </div>
             <div className='bg-[#1E2027] lg:w-2/5  py-5 rounded-md overflow-hidden w-full'>
-                <div className='flex-row flex justify-between w-full items-center pb-3 border-b border-[#585c6c] px-5 mb-3'>
-                    <h3 className='text-white text-lg font-semibold'>Candidate Profiling</h3>
-                </div>
-                <div className='flex-row flex justify-between w-full items-center pb-3 border-b border-[#585c6c] px-5 mb-3'>
-                    <select 
-                      onChange={handleAssesmentChange}
-                      name="" id="" className='bg-[#585c6c] h-7 border-none rounded-sm text-white px-1'
-                    >
-                      {
-                        assesments.map((assessment, idx) => (
-                          <option
-                            className='text-white'
-                            value={assessment._id}
-                            key={idx}
-                            selected={selectedAssesment === assessment._id ? true : false}
-                          >
-                            {assessment.title}
-                          </option>
-                        ))
-                      }
-                    </select>
-                    {/* <select name="" id="" className='bg-[#585c6c] h-7 border-none rounded-sm text-white px-1'>
+              <div className='flex-row flex justify-between w-full items-center pb-3 border-b border-[#585c6c] px-5 mb-3'>
+                <h3 className='text-white text-lg font-semibold'>Candidate Profiling</h3>
+              </div>
+              <div className='flex-row flex justify-between w-full items-center pb-3 border-b border-[#585c6c] px-5 mb-3'>
+                <select
+                  onChange={handleAssesmentChange}
+                  name="" id="" className='bg-[#585c6c] h-7 border-none rounded-sm text-white px-1'
+                >
+                  {
+                    assesments.map((assessment, idx) => (
+                      <option
+                        className='text-white'
+                        value={assessment._id}
+                        key={idx}
+                        selected={selectedAssesment === assessment._id ? true : false}
+                      >
+                        {assessment.title}
+                      </option>
+                    ))
+                  }
+                </select>
+                {/* <select name="" id="" className='bg-[#585c6c] h-7 border-none rounded-sm text-white px-1'>
                         <option value="Overall" className='text-white'>Overall</option>
                     </select> */}
+              </div>
+              {loading ? (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60px' }}>
+                  <div style={{
+                    border: '8px solid #f3f3f3',
+                    borderRadius: '50%',
+                    borderTop: '8px solid #3498db',
+                    width: '60px',
+                    height: '60px',
+                    animation: 'spin 2s linear infinite'
+                  }}></div>
                 </div>
-                {loading ? (
-                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60px' }}>
-                    <div style={{
-                      border: '8px solid #f3f3f3',
-                      borderRadius: '50%',
-                      borderTop: '8px solid #3498db',
-                      width: '60px',
-                      height: '60px',
-                      animation: 'spin 2s linear infinite'
-                    }}></div>
-                  </div>
-                ) : (
-                  <ScatterChart data={scatterChartData} />
-                )}
-                <style>
-                  {`
+              ) : (
+                <ScatterChart data={scatterChartData} />
+              )}
+              <style>
+                {`
                     @keyframes spin {
                       0% { transform: rotate(0deg); }
                       100% { transform: rotate(360deg); }
                     }
                   `}
-                </style>
+              </style>
             </div>
           </div>
           <div className="pt-9 w-full">

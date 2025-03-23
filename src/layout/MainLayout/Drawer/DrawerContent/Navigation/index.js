@@ -170,7 +170,7 @@ const Navigation = () => {
       id: 'Application',
       title: 'AI++',
       type: 'item',
-      url: 'https://admin-frontend-self-iota.vercel.app/',
+      url: 'https://admin-frontend-self-iota.vercel.app/dashboard',
       icon: icons.SnippetsOutlined,
       breadcrumbs: false,
     }
