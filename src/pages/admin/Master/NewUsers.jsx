@@ -8,317 +8,479 @@ import {
   InputLabel,
   Typography,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { createAdmin } from 'services/Master/Admin';
+import briefcase from "../../../assets/images/briefcase.png";
+import ai from "../../../assets/images/ai.png";
+import plus from "../../../assets/images/plus.png";
+import dr15_1 from "../../../assets/images/dr15_1.png";
+import dr15_2 from "../../../assets/images/dr15_2.png";
+import magnifying from "../../../assets/images/magnifying.png";
+import skill from "../../../assets/images/skill.png";
 
+const styles = {
+  bottomBg: {
+    position: "fixed",
+    left: 0,
+    bottom: 0, // Sticks to the bottom of the viewport
+    width: "100%",
+    height: "100vh", // Covers full viewport height
+    backgroundSize: "cover", // Ensure it covers entire background
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "bottom center",
+    backgroundImage: `url(${dr15_2})`,
+    zIndex: "-50", // Push it far behind everything
+  },
+  plant: {
+    position: "fixed",
+    bottom: "0",
+    right: "0", // Stays fixed at bottom-right
+    width: "20rem",
+    height: "auto",
+    maxWidth: "100%",
+    zIndex: "-40", // Keep it behind content but above background
+    pointerEvents: "none", // Prevent accidental clicks
+  },
+
+};
 // ... (import statements)
 
 const NewUsers = () => {
   return (
-    <div>
-      <Typography variant="h4" sx={{ my: 2 }}>
-        Add New User
-      </Typography>
-      <Formik
-        initialValues={{
-          userDesignation: '',
-          name: '',
-          phoneNumber: '',
-          email: '',
-          password: '', // Add password field
-          profilePicture: null, // Handle file upload logic for profile picture
-          address: '',
-          usersAllowed: '',
-          permissions: [],
-        }}
-        validationSchema={Yup.object().shape({
-          userDesignation: Yup.string().required('User designation is required'),
-          name: Yup.string().required('Name is required'),
-          phoneNumber: Yup.string().required('Phone number is required'),
-          email: Yup.string().email('Email should be valid').required('Email is required'),
-          password: Yup.string().required('Password is required'),
-         // profilePicture: Yup.mixed().required('Profile picture is required'),
-          address: Yup.string(),
-          usersAllowed: Yup.string().required('Number of users allowed is required'),
-          permissions: Yup.array().required('Select at least one permission'),
-        })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
-          try {
-            const admin = {
-              userDesignation: values.userDesignation,
-              name: values.name,
-              phoneNumber: values.phoneNumber,
-              email: values.email,
-              password: values.password,
-              //profilePicture: values.profilePicture, // Handle file upload logic for profile picture
-              address: values.address,
-              usersAllowed: values.usersAllowed,
-              permissions: values.permissions,
-            };
-            console.log(admin);
-            await createAdmin(admin);
-            console.log('marker');
-            resetForm();
-            setStatus({ success: true });
-            toast.success('Admin added.');
-            setSubmitting(false);
-          } catch (err) {
-            setStatus({ success: false });
-            toast.error('ERROR: Cannot add admin.');
-            setErrors({ submit: err.message });
-            setSubmitting(false);
-          }
-        }}
-      >
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-          values,
-          setFieldValue,
-        }) => (
-          <form noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="userDesignation">User Designation</InputLabel>
-                  <select
-                    id="userDesignation"
-                    name="userDesignation"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.userDesignation}
-                    className="MuiInputBase-input MuiOutlinedInput-input"
-                  >
-                    <option value="" label="Select User Designation" />
-                    <option value="organization" label="Organization" />
-                    <option value="institution" label="Institution" />
-                  </select>
-                  {touched.userDesignation && errors.userDesignation && (
-                    <FormHelperText error id="standard-weight-helper-text-userDesignation">
-                      {errors.userDesignation}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="name">Name</InputLabel>
-                  <OutlinedInput
+    <>
+      <div className="bottom-bg" style={styles.bottomBg}></div>
+
+      {/* Fixed Plant Image */}
+      <img src={magnifying} alt="Bottom Right Image" style={styles.plant} />
+      <div className="w-full flex justify-between items-center mt-4 px-6 pb-6 mb-10">
+        {/* Welcome Text */}
+        <div className="flex flex-col gap-2">
+          <span className="font-bold text-[24px] text-[#141414]">Hello, Admin! 👋</span>
+          <span className="font-medium text-[12px] text-[#989ca0]">
+            Welcome back, track your team progress here!
+          </span>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex items-center gap-6">
+          {/* Post New Job */}
+          <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-solid border-[#dcdddf] cursor-pointer">
+            <div className="justify-center items-center w-5 h-5">
+              <img src={briefcase} alt="briefcase" />
+            </div>
+            <span className="font-bold text-[14px] text-[#141414]"><Link to="/dashboard/jobs">Post New Job</Link></span>
+          </div>
+
+          {/* Add Employee */}
+          <div className="flex items-center gap-2 bg-[#263238] px-4 py-3 rounded-lg cursor-pointer">
+            <div className="justify-center items-center w-5 h-5">
+              <img src={plus} alt="briefcase" />
+            </div>
+            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/users">Add Employee</Link></span>
+
+          </div>
+          <div className="flex items-center gap-2 bg-[#ffc727] px-4 py-3 rounded-lg cursor-pointer">
+            <div className="justify-center items-center w-5 h-5">
+              <img src={skill} alt="briefcase" />
+            </div>
+            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/road_to_content">Skills To Hire</Link></span>
+
+          </div>
+        </div>
+      </div>
+      <div>
+        <Typography variant="h4" sx={{ my: 2 }}>
+          Add New Organization
+        </Typography>
+        <Formik
+          initialValues={{
+            userDesignation: '',
+            name: '',
+            phoneNumber: '',
+            email: '',
+            password: '', // Add password field
+            profilePicture: null, // Handle file upload logic for profile picture
+            address: '',
+            usersAllowed: '',
+            permissions: [],
+          }}
+          validationSchema={Yup.object().shape({
+            userDesignation: Yup.string().required('User designation is required'),
+            name: Yup.string().required('Name is required'),
+            phoneNumber: Yup.string().required('Phone number is required'),
+            email: Yup.string().email('Email should be valid').required('Email is required'),
+            password: Yup.string().required('Password is required'),
+            // profilePicture: Yup.mixed().required('Profile picture is required'),
+            address: Yup.string(),
+            usersAllowed: Yup.string().required('Number of users allowed is required'),
+            permissions: Yup.array().required('Select at least one permission'),
+          })}
+          onSubmit={async (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
+            try {
+              const admin = {
+                userDesignation: values.userDesignation,
+                name: values.name,
+                phoneNumber: values.phoneNumber,
+                email: values.email,
+                password: values.password,
+                //profilePicture: values.profilePicture, // Handle file upload logic for profile picture
+                address: values.address,
+                usersAllowed: values.usersAllowed,
+                permissions: values.permissions,
+              };
+              console.log(admin);
+              await createAdmin(admin);
+              console.log('marker');
+              resetForm();
+              setStatus({ success: true });
+              toast.success('Admin added.');
+              setSubmitting(false);
+            } catch (err) {
+              setStatus({ success: false });
+              toast.error('ERROR: Cannot add admin.');
+              setErrors({ submit: err.message });
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({
+            errors,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+            values,
+            setFieldValue,
+          }) => (
+            <form noValidate onSubmit={handleSubmit} className="mb-[8rem]">
+              <div className="relative w-full mb-5">
+                {/* Dropdown */}
+                <select
+                  id="userDesignation"
+                  name="userDesignation"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.userDesignation}
+                  className="w-full border border-gray-400 p-3 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
+                >
+                  <option value="">Select User Designation</option>
+                  <option value="organization">Organization</option>
+                  <option value="institution">Institution</option>
+                </select>
+
+                {/* Error Message */}
+                {touched.userDesignation && errors.userDesignation && (
+                  <p className="text-red-500 text-xs mt-1">{errors.userDesignation}</p>
+                )}
+              </div>
+
+              <div className="relative w-full mb-5">
+                {/* Input with SVG Icon */}
+                <div className="relative">
+                  <input
                     id="name"
                     type="text"
-                    value={values.name}
                     name="name"
-                    onBlur={handleBlur}
+                    value={values.name}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="Enter name."
-                    fullWidth
-                    error={Boolean(touched.name && errors.name)}
+                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
                   />
-                  {touched.name && errors.name && (
-                    <FormHelperText
-                      error
-                      id="standard-weight-helper-text-name"
-                    >
-                      {errors.name}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
-                  <OutlinedInput
+                  {/* SVG Icon inside input */}
+                  <svg
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 11c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 1c-1.2 0-2.4.3-3.4.8-1 .5-1.8 1.2-2.6 2.1-1.5-1.4-2.8-2.4-4.3-3.2A9.5 9.5 0 011 11m15 8c1.9 0 3.7-.5 5.3-1.5m-10.7 0c-1.6 1-3.4 1.5-5.3 1.5m-3.3-6.8c-1.5-.8-2.8-1.8-4.3-3.2A9.5 9.5 0 011 11m9-9c-1.9 0-3.7.5-5.3 1.5m10.7 0C15.3 2.5 13.4 2 11.5 2"
+                    />
+                  </svg>
+                </div>
+
+                {/* Error Message */}
+                {touched.name && errors.name && (
+                  <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                )}
+              </div>
+
+              <div className="relative w-full mb-5">
+                {/* Input with SVG Icon */}
+                <div className="relative">
+                  <input
                     id="phoneNumber"
                     type="text"
-                    value={values.phoneNumber}
                     name="phoneNumber"
-                    onBlur={handleBlur}
+                    value={values.phoneNumber}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="Enter phone number."
-                    fullWidth
-                    error={Boolean(touched.phoneNumber && errors.phoneNumber)}
+                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
                   />
-                  {touched.phoneNumber && errors.phoneNumber && (
-                    <FormHelperText
-                      error
-                      id="standard-weight-helper-text-phoneNumber"
-                    >
-                      {errors.phoneNumber}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="email">Email</InputLabel>
-                  <OutlinedInput
+                  {/* SVG Phone Icon */}
+                  <svg
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 10a6 6 0 0112 0v3a6 6 0 01-12 0v-3z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 16.5a4.5 4.5 0 00-4.5-4.5h-3a4.5 4.5 0 00-4.5 4.5V18"
+                    />
+                  </svg>
+                </div>
+
+                {/* Error Message */}
+                {touched.phoneNumber && errors.phoneNumber && (
+                  <p className="text-red-500 text-xs mt-1">{errors.phoneNumber}</p>
+                )}
+              </div>
+
+              <div className="w-full mb-5">
+
+                <div className="relative">
+                  <input
                     id="email"
                     type="email"
-                    value={values.email}
                     name="email"
-                    onBlur={handleBlur}
+                    value={values.email}
                     onChange={handleChange}
-                    placeholder="Enter email."
-                    fullWidth
-                    error={Boolean(touched.email && errors.email)}
+                    onBlur={handleBlur}
+                    placeholder="Enter email"
+                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
                   />
-                  {touched.email && errors.email && (
-                    <FormHelperText
-                      error
-                      id="standard-weight-helper-text-email"
-                    >
-                      {errors.email}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="password">Password</InputLabel>
-                  <OutlinedInput
+                  {/* Email SVG Icon */}
+                  <svg
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 12l-4 4-4-4m8-4l-4-4-4 4"
+                    />
+                  </svg>
+                </div>
+                {touched.email && errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                )}
+              </div>
+
+              <div className="w-full mb-5">
+
+                <div className="relative">
+                  <input
                     id="password"
                     type="password"
-                    value={values.password}
                     name="password"
-                    onBlur={handleBlur}
+                    value={values.password}
                     onChange={handleChange}
-                    placeholder="Enter password."
-                    fullWidth
-                    error={Boolean(touched.password && errors.password)}
+                    onBlur={handleBlur}
+                    placeholder="Enter password"
+                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
                   />
-                  {touched.password && errors.password && (
-                    <FormHelperText
-                      error
-                      id="standard-weight-helper-text-password"
-                    >
-                      {errors.password}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="profilePicture">Profile Picture</InputLabel>
+                  {/* Password SVG Icon */}
+                  <svg
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m0-10v6m6 4H6m6-10h.01"
+                    />
+                  </svg>
+                </div>
+                {touched.password && errors.password && (
+                  <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                )}
+              </div>
+
+              <div className="w-full mb-5">
+                {/* Label */}
+                <label htmlFor="profilePicture" className="block text-gray-700 font-medium mb-1">
+                  Profile Picture
+                </label>
+
+                {/* File Input with SVG Icon */}
+                <div className="relative border border-gray-400 p-3 rounded bg-[#e9e9e9] flex items-center">
+                  <svg
+                    className="w-5 h-5 text-gray-500 mr-2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v8m0 0l-4-4m4 4l4-4M8 16h8"
+                    />
+                  </svg>
+
                   <input
                     id="profilePicture"
                     name="profilePicture"
                     type="file"
                     onChange={(event) => setFieldValue('profilePicture', event.currentTarget.files[0])}
                     onBlur={handleBlur}
+                    className="w-full bg-transparent text-gray-700 cursor-pointer focus:outline-none"
                   />
-                  {touched.profilePicture && errors.profilePicture && (
-                    <FormHelperText
-                      error
-                      id="standard-weight-helper-text-profilePicture"
-                    >
-                      {errors.profilePicture}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="address">Address</InputLabel>
-                  <OutlinedInput
+                </div>
+
+                {/* Error Message */}
+                {touched.profilePicture && errors.profilePicture && (
+                  <p className="text-red-500 text-xs mt-1">{errors.profilePicture}</p>
+                )}
+              </div>
+
+              <div className="w-full mb-5">
+
+                <div className="relative">
+                  <input
                     id="address"
                     type="text"
-                    value={values.address}
                     name="address"
-                    onBlur={handleBlur}
+                    value={values.address}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="Address of the client"
-                    fullWidth
-                    error={Boolean(touched.address && errors.address)}
+                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
                   />
-                  {touched.address && errors.address && (
-                    <FormHelperText
-                      error
-                      id="standard-weight-helper-text-address"
-                    >
-                      {errors.address}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="usersAllowed">Number of Users Allowed</InputLabel>
-                  <OutlinedInput
+                  {/* Address SVG Icon */}
+                  <svg
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 2C8.134 2 5 5.134 5 9c0 3.866 7 13 7 13s7-9.134 7-13c0-3.866-3.134-7-7-7zM12 11a2 2 0 110-4 2 2 0 010 4z"
+                    />
+                  </svg>
+                </div>
+                {touched.address && errors.address && (
+                  <p className="text-red-500 text-xs mt-1">{errors.address}</p>
+                )}
+              </div>
+
+              <div className="w-full mb-5">
+
+                <div className="relative">
+                  <input
                     id="usersAllowed"
                     type="text"
-                    value={values.usersAllowed}
                     name="usersAllowed"
-                    onBlur={handleBlur}
+                    value={values.usersAllowed}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="Enter number of users allowed."
-                    fullWidth
-                    error={Boolean(touched.usersAllowed && errors.usersAllowed)}
+                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
                   />
-                  {touched.usersAllowed && errors.usersAllowed && (
-                    <FormHelperText
-                      error
-                      id="standard-weight-helper-text-usersAllowed"
-                    >
-                      {errors.usersAllowed}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel>Permissions</InputLabel>
-                  <div>
-                    {['Users', 'Job Roles', 'Jobs', 'Courses', 'Assessments','Results'].map((permission) => (
-                      <div key={permission}>
-                        <input
-                          type="checkbox"
-                          id={`permission-${permission}`}
-                          name="permissions"
-                          value={permission}
-                          onChange={() => {
-                            const updatedPermissions = values.permissions.includes(permission)
-                              ? values.permissions.filter((p) => p !== permission)
-                              : [...values.permissions, permission];
-                            setFieldValue('permissions', updatedPermissions);
-                          }}
-                          checked={values.permissions.includes(permission)}
-                        />
-                        <label htmlFor={`permission-${permission}`}>{permission}</label>
-                      </div>
-                    ))}
-                  </div>
-                  {touched.permissions && errors.permissions && (
-                    <FormHelperText error id="standard-weight-helper-text-permissions">
-                      {errors.permissions}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  disableElevation
-                  disabled={isSubmitting}
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                >
-                  Create
+                  {/* Users Allowed SVG Icon */}
+                  <svg
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5.121 17.804A4 4 0 0112 14a4 4 0 016.879 3.804M12 12a4 4 0 100-8 4 4 0 000 8z"
+                    />
+                  </svg>
+                </div>
+                {touched.usersAllowed && errors.usersAllowed && (
+                  <p className="text-red-500 text-xs mt-1">{errors.usersAllowed}</p>
+                )}
+              </div>
 
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-        )}
-      </Formik>
-    </div>
+              <div className="w-full mb-5">
+                {/* Label */}
+
+                {/* Checkbox Group */}
+                <div className="flex flex-wrap gap-3">
+                  {['Users', 'Job Roles', 'Jobs', 'Courses', 'Assessments', 'Results'].map((permission) => (
+                    <div key={permission} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id={`permission-${permission}`}
+                        name="permissions"
+                        value={permission}
+                        onChange={() => {
+                          const updatedPermissions = values.permissions.includes(permission)
+                            ? values.permissions.filter((p) => p !== permission)
+                            : [...values.permissions, permission];
+                          setFieldValue('permissions', updatedPermissions);
+                        }}
+                        checked={values.permissions.includes(permission)}
+                        className="w-5 h-5 text-blue-500 border-gray-300 rounded focus:ring focus:ring-blue-200"
+                      />
+                      <label htmlFor={`permission-${permission}`} className="text-gray-700">
+                        {permission}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Error Message */}
+                {touched.permissions && errors.permissions && (
+                  <p className="text-red-500 text-xs mt-1">{errors.permissions}</p>
+                )}
+              </div>
+
+              <div className="flex justify-center mt-6">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`bg-[#263238] text-white px-6 py-3 rounded-lg ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-800 transition'
+                    }`}
+                >
+                  {"Create"}
+                </button>
+              </div>
+
+            </form>
+          )}
+        </Formik>
+      </div>
+    </>
   );
 };
 

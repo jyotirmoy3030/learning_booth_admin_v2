@@ -197,6 +197,36 @@ const ResultsMaster = () => {
         <Box display="flex" alignItems="center" justifyContent="start">
           <div className="flex flex-row items-center justify-center gap-[7.12px]">
             <a
+              href={`https://www.thirdbracket.in/assessments/details-report?resultId=${data._id}`}
+              target="_blank"
+              className="bg-white border-[#0057FC] border w-[35px] h-[35px] rounded-lg flex flex-row items-center justify-center"
+            >
+              {/* View SVG */}
+              <svg
+                width="19"
+                height="18"
+                viewBox="0 0 19 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.5 2V11M9.5 11L6 7.5M9.5 11L13 7.5"
+                  stroke="#0057FC"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M3 13.5V15H16V13.5"
+                  stroke="#0057FC"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+
+            </a>
+            <a
               href={`https://www.thirdbracket.in/assessments/result?resultId=${data._id}`}
               target="_blank"
               className="bg-white border-[#0057FC] border w-[35px] h-[35px] rounded-lg flex flex-row items-center justify-center"

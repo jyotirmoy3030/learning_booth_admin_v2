@@ -86,7 +86,12 @@ const Navigation = () => {
             </li>
 
 
-
+            <li className="pc-item">
+              <Link to="/dashboard/newUsers" className="pc-link">
+                <span className="pc-micon"><FaTachometerAlt /></span>
+                {!collapsed && <span className="pc-mtext">Create New Organization</span>}
+              </Link>
+            </li>
             <li className="pc-item">
               <a href="../dashboard/index.html" className="pc-link">
                 <span className="pc-micon"><FaUserPlus /></span>
@@ -120,14 +125,15 @@ const Navigation = () => {
 
             {/* Book a Demo Button */}
             <div className="card-nav text-center mb-[1rem]">
-              <a
-                href="https://admin-frontend-self-iota.vercel.app/dashboard/ai-assessments"
-                target="_blank"
+              <Link
+                to="/dashboard/ai-assessments"
                 className="btn btn-secondary flex items-center justify-center gap-1 font-semibold"
               >
-                <span className="pc-micon"><LuBrainCircuit /></span>
+                <span className="pc-micon">
+                  <LuBrainCircuit />
+                </span>
                 {!collapsed && <span>Ai++</span>}
-              </a>
+              </Link>
             </div>
 
             <div className="card-nav text-center">
