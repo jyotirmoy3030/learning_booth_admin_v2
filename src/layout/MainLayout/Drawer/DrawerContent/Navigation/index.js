@@ -126,7 +126,7 @@ const Navigation = () => {
             {/* Book a Demo Button */}
             <div className="card-nav text-center mb-[1rem]">
               <Link
-                to="/dashboard/ai-assessments"
+                to="https://admin-frontend-self-iota.vercel.app/dashboard/ai-assessments"
                 className="btn btn-secondary flex items-center justify-center gap-1 font-semibold"
               >
                 <span className="pc-micon">
