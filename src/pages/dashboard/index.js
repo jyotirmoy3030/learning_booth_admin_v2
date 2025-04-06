@@ -228,12 +228,12 @@ const DashboardDefault = () => {
     },
     {
       title: "Total Employees",
-      value: 1265,
+      value: 0,
       url: "/dashboard",
     },
     {
       title: "Total Skilled Employees",
-      value: 254,
+      value: 0,
       url: "/dashboard",
     },
   ];
@@ -752,29 +752,167 @@ const DashboardDefault = () => {
 
           <div className="candidates-container pt-9 w-full">
             {/* Filters Section */}
-            {/* <div className="filters-container flex flex-row items-center justify-start gap-[19.64px] mb-[31px]">
-              <button className="btn btn-outline-secondary">Jobs <i className="fas fa-chevron-down ms-1"></i></button>
-              <button className="btn btn-outline-secondary">Location <i className="fas fa-chevron-down ms-1"></i></button>
-              <button className="btn btn-outline-secondary">Experience Level <i className="fas fa-chevron-down ms-1"></i></button>
-              <button className="btn btn-outline-secondary">Candidate Profile <i className="fas fa-chevron-down ms-1"></i></button>
-              <button className="btn btn-outline-secondary">Range <i className="fas fa-chevron-down ms-1"></i></button>
-              <button className="btn btn-outline-secondary">Last 30 Days <i className="fas fa-chevron-down ms-1"></i></button>
-              <button className="btn btn-outline-secondary"><i className="fas fa-download me-2"></i> Export Data</button>
-            </div> */}
+            <div className="filters-container flex flex-row items-center justify-start gap-[19.64px] mb-[31px]">
+            <select
+                onChange={handleJobChange}
+                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
+              >
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value=""
+                >
+                  Select Jobs
+                </option>
+                
+                {jobs.map((job, idx) => {
+                  return (
+                    <option
+                      className="text-[#1F222E] font-medium text-base"
+                      value={job._id} key={idx}
+                    >
+                      {job.title}
+                    </option>
+                  );
+                })}
+              </select>
+
+              <select
+                onChange={handleLocationChange}
+                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
+              >
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value=""
+                >
+                  Location
+                </option>
+                {results.map((result, idx) => {
+                  return (
+                    <option
+                      className="text-[#1F222E] font-medium text-base"
+                      value={result.userLocation} key={idx}
+                    >
+                      {result.userLocation}
+                    </option>
+                  );
+                })}
+              </select>
+
+              <select className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="someOption"
+                >
+                  {" "}
+                  Experience Level
+                </option>
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="otherOption"
+                >
+                  Other option
+                </option>
+              </select>
+
+              <select
+                onChange={handleProfileChange}
+                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
+              >
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value=""
+                >
+                  Candidate Profile
+                </option>
+                {users.map((user, idx) => {
+                  return (
+                    <option
+                      className="text-[#1F222E] font-medium text-base"
+                      value={user._id} key={idx}
+                    >
+                      {user.name}
+                    </option>
+                  );
+                })}
+              </select>
+              <select
+                onChange={handleResultTypeChange}
+                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
+              >
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value=""
+                >
+                  Range
+                </option>
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="30"
+                >
+                  Below Average (30 - 50)
+                </option>
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="65"
+                >
+                  Average (50 - 65)
+                </option>
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="85"
+                >
+                  Good (65 - 85)
+                </option>
+                <option
+                  className="text-[#1F222E] font-medium text-base"
+                  value="100"
+                >
+                  Excellent (85 - 100)
+                </option>
+              </select>
+              {/* <button className="bg-white border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px]">
+                <div className="w-5 h-5 bg-[#DCEAFF] flex flex-row items-center justify-center rounded">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10.5844 0.994141H0.759766L3.85061 4.85772C4.04284 5.09798 4.14756 5.39651 4.14756 5.70426V10.1412C4.14756 10.5154 4.4509 10.8187 4.82512 10.8187H6.51902C6.89323 10.8187 7.19657 10.5154 7.19657 10.1412V5.70426C7.19657 5.39651 7.30132 5.09798 7.49355 4.85772L10.5844 0.994141Z"
+                      stroke="#6C757D"
+                      strokeWidth="1.01634"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+                <span className="text-[#1F222E] font-medium text-base">
+                  All Filter
+                </span>
+                <div className="w-3 h-2 -rotate-90">
+                  <img src={angleDown} alt="" className="w-full h-full" />
+                </div>
+              </button> */}
+            </div>
 
             {/* Search & Add Candidate */}
             <div className="search-add-container my-4 flex flex-row items-center justify-between">
               <h3 className="text-lg font-bold text-black mb-3">Candidates</h3>
-              {/* <div className="flex items-center gap-4">
-                <select className="h-10 border border-[#CED4DA] rounded-md px-4">
-                  <option>Last 30 Days</option>
-                  <option>Last 7 Days</option>
-                  <option>Last 3 Months</option>
-                </select>
-                <button className="h-10 border border-[#CED4DA] rounded-md px-4">
-                  Export
-                </button>
-              </div> */}
+              <div className="flex items-center gap-4">
+              <div className="absolute w-4 h-4 left-3 top-3">
+                    <img src={search} alt="" />
+                  </div>
+                  <input
+                    type="text"
+                    name=""
+                    className="h-10 border border-[#CED4DA] rounded-md py-3 pl-10 w-full"
+                    id=""
+                    value={searchTerm}
+                    onChange={handleSearch}
+                  />
+              </div>
             </div>
 
 
