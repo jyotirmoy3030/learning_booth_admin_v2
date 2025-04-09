@@ -330,7 +330,7 @@ const ResultsMaster = () => {
   
       return {
         ...baseData,
-        "Compentency Score": jsonString,
+        ...jsonString,
       };
     });
   
