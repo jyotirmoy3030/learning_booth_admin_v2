@@ -83,7 +83,9 @@ const ResultsMaster = () => {
           assessmentTitle: result.assessments?.assessment?.title || "No Title",
           jobRoleTitle: result.assessments?.assessment?.jobRole?.title || "No Job Role",
           userLocation: result.userLocation,
+          scores: result.scores,
         };
+        
         return formattedResult;
       });
       setResults(formattedResults);
@@ -281,7 +283,6 @@ const ResultsMaster = () => {
   };
 
   const handlePageChange = (page, limit) => {
-    console.log(page)
     setCurrentPage(page);
     setPageSize(limit);
     getResults(page, limit, jobRoleFilter); // Pass job role filter as well
@@ -299,11 +300,9 @@ const ResultsMaster = () => {
       setLoading(false); // Hide loader
     }
   };
-  console.log("XLSX.utils:", jobRoleOptions);
-
   const downloadExcel = () => {
     const dataForExport = filteredResults.map((result) => {
-      return {
+      const baseData = {
         "User Name": result.user?.name || "Unknown User",
         Assessment: result?.assessmentTitle || "N/A",
         "Total Percentage": result.totalPercentage
@@ -319,8 +318,22 @@ const ResultsMaster = () => {
             ?.map((course) => course.title)
             .join(", ") || "No Recommended Courses",
       };
+      
+      // Add score category percentages dynamically
+      const scoreData = {};
+      const score = result.scores || {};
+      Object.entries(score).forEach(([category, value]) => {
+        scoreData[category] = value?.total_percentage ?? "N/A";
+      });
+      const jsonString = JSON.stringify(scoreData);
+      
+  
+      return {
+        ...baseData,
+        "Compentency Score": jsonString,
+      };
     });
-
+  
     const worksheet = XLSX.utils.json_to_sheet(dataForExport);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Results");
