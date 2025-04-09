@@ -325,12 +325,11 @@ const ResultsMaster = () => {
       Object.entries(score).forEach(([category, value]) => {
         scoreData[category] = value?.total_percentage ?? "N/A";
       });
-      const jsonString = JSON.stringify(scoreData);
       
   
       return {
         ...baseData,
-        ...jsonString,
+        ...scoreData,
       };
     });
   
