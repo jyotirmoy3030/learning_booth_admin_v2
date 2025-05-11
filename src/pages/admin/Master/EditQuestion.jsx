@@ -83,7 +83,9 @@ const EditQuestion = () => {
     fetchData(
       getTestById,
       [testId],
-      (data) => setCompetencies(data?.Jobrole?.competencies || []),
+      (data) => {
+        setCompetencies(data?.jobRole?.compentencies || []);
+      },
       "Failed to fetch test details."
     );
   }, [testId, questionId]);
@@ -96,7 +98,6 @@ const EditQuestion = () => {
       setCapabilities(selectedCompetency.capabilities || []);
     }
   };
-  console.log(question)
 
   return (
     <>
@@ -138,9 +139,9 @@ const EditQuestion = () => {
         <Formik
           initialValues={{
             title: question.title || "",
-            type: question.type || "", // Added 'type' initial value
+            compentencyType: question.compentencyType || "", // Added 'type' initial value
             skill: question.capability || "",
-            competency: question.competency?._id || "",
+            compentency: question.competency?._id || "",
             answers: question.answers || [
               { title: "", weight: 0 },
               { title: "", weight: 0 },
@@ -151,26 +152,20 @@ const EditQuestion = () => {
               .min(10, "Title should be minimum 10 characters.")
               .max(255)
               .required("Title is required"),
-            type: Yup.string().required("Type is required."), // Validation for 'type'
+            compentencyType: Yup.string().required("Type is required."), // Validation for 'type'
             skill: Yup.string().required("Capability is required."),
-            competency: Yup.string().required("Competency is required."),
-            answers: Yup.array()
-              .min(2, "At least two answers are required.")
-              .of(
-                Yup.object().shape({
-                  title: Yup.string().required("Answer title is required"),
-                  weight: Yup.number()
-                    .min(0, "Weight must be a positive number")
-                    .required("Weight is required"),
-                })
-              ),
+            compentency: Yup.string().required("Competency is required."),
           })}
           enableReinitialize
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
-              await updateQuestion(questionId, testId, { ...values });
+
+              let newcompetency = competencies.filter((item) => item._id == values.compentency)
+              values.compentency = newcompetency[0];
+              console.log(values)
+              await updateQuestion(questionId, { ...values });
               toast.success("Question updated successfully!");
-              navigate(-1);
+              // navigate(-1);
               setStatus({ success: true });
             } catch (error) {
               setStatus({ success: false });
@@ -210,11 +205,11 @@ const EditQuestion = () => {
 
               {/* Type Dropdown */}
               <div className="relative w-full mb-5">
-                <label htmlFor="type" className="text-gray-700 font-semibold block mb-1">Type</label>
+                <label htmlFor="type" className="text-gray-700 font-semibold block mb-1">Type({values.compentencyType})</label>
                 <select
-                  id="type"
-                  name="type"
-                  value={values.type}
+                  id="compentencyType"
+                  name="compentencyType"
+                  value={values.compentencyType}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   className="w-full border border-gray-400 p-3 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
@@ -223,31 +218,31 @@ const EditQuestion = () => {
                   <option value="functional">Functional</option>
                   <option value="behavioral">Behavioral</option>
                   <option value="cultural">Cultural</option>
-                  <option value="cultural">Technical</option>
-                  <option value="cultural">Leadership</option>
+                  <option value="technical">Technical</option>
+                  <option value="leadership">Leadership</option>
                 </select>
-                {touched.type && errors.type && <p className="text-red-500 text-xs mt-1">{errors.type}</p>}
+                {touched.compentencyType && errors.compentencyType && <p className="text-red-500 text-xs mt-1">{errors.compentencyType}</p>}
               </div>
 
               {/* Competency Dropdown */}
               <div className="relative w-full mb-5">
-                <label htmlFor="competency" className="text-gray-700 font-semibold block mb-1">Competency</label>
+                <label htmlFor="competency" className="text-gray-700 font-semibold block mb-1">Compentency({question?.compentency?.title})</label>
                 <select
-                  id="competency"
-                  name="competency"
-                  value={values.competency}
+                  id="compentency"
+                  name="compentency"
+                  value={values.compentency}
                   onChange={(e) => {
-                    setFieldValue("competency", e.target.value);
+                    setFieldValue("compentency", e.target.value);
                     handleCompetencyChange(e.target.value);
                   }}
                   className="w-full border border-gray-400 p-3 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
                 >
                   <option value="" disabled>Select Competency</option>
                   {competencies.map((comp) => (
-                    <option key={comp._id} value={comp._id}>{comp.name}</option>
+                    <option key={comp._id} value={comp._id}>{comp.title}</option>
                   ))}
                 </select>
-                {touched.competency && errors.competency && <p className="text-red-500 text-xs mt-1">{errors.competency}</p>}
+                {errors.competency && <p className="text-red-500 text-xs mt-1">{errors.competency}</p>}
               </div>
 
               {/* Capability Dropdown */}
@@ -309,7 +304,7 @@ const EditQuestion = () => {
               ))}
 
               <div className="col-span-2 flex justify-center">
-                <button type="submit" className="bg-[#263238] text-white px-6 py-3 rounded-lg" onClick={handleSubmit}>
+                <button type="submit" className="bg-[#263238] text-white px-6 py-3 rounded-lg">
                   Save
                 </button>
               </div>

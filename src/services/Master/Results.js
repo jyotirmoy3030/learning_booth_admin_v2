@@ -36,3 +36,14 @@ export const deleteResult = async (id) => {
     console.log('Error del result.', error);
   }
 };
+
+
+export const getAllScreenshots = async (resultId) => {
+  try {
+    const response = await appAxios.get(`/assessment/${resultId}/get-all-screenshot`);
+    return response;
+  } catch (error) {
+    console.error('Error fetching screenshots:', error);
+    throw error;
+  }
+};

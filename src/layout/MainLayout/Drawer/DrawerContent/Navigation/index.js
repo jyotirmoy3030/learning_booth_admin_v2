@@ -20,6 +20,7 @@ const Navigation = () => {
     })();
   }, []);
 
+  console.log(permission)
   return (
     <nav className={`pc-sidebar ${collapsed ? "collapsed" : ""}`}>
       <div className="navbar-wrapper">
@@ -46,7 +47,7 @@ const Navigation = () => {
             </li>
 
             {/* Hiring Management */}
-            {permission.includes("Jobs") || permission.includes("Job Roles") || permission.includes("Capabilities") ? (
+            {permission.includes("Jobs") || permission.includes("Job Role") || permission.includes("Capabilities") ? (
               <li className="pc-item pc-dropdown">
                 <div className="pc-link dropdown-toggle" onClick={() => setHiringOpen(!hiringOpen)}>
                   <span className="pc-micon"><FaUserTie /></span>
@@ -57,8 +58,8 @@ const Navigation = () => {
                   <ul className="pc-submenu">
                     {permission.includes("Jobs") && <li><Link to="/dashboard/jobs">Open Roles</Link></li>}
                     {permission.includes("Jobs") && <li><Link to="/dashboard/new-jobs">New Role</Link></li>}
-                    {permission.includes("Job Roles") && <li><Link to="/dashboard/job-roles">Existing Roles</Link></li>}
-                    {permission.includes("Job Roles") && <li><Link to="/dashboard/new-job-roles">Role Competency</Link></li>}
+                    {permission.includes("Job Role") && <li><Link to="/dashboard/job-roles">Existing Roles</Link></li>}
+                    {permission.includes("Job Role") && <li><Link to="/dashboard/new-job-roles">Role Competency</Link></li>}
                     {permission.includes("Capabilities") && <li><Link to="/dashboard/capabilities">Capabilities</Link></li>}
                   </ul>
                 )}

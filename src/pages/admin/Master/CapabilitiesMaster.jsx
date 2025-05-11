@@ -32,6 +32,8 @@ import dr15_2 from "../../../assets/images/dr15_2.png";
 import tab from "../../../assets/images/tab.png";
 import ai from "../../../assets/images/ai.png";
 import skill from "../../../assets/images/skill.png";
+import HeaderTwo from '../../../components/HeaderTwo';
+import BackgroundDesign from '../../../components/background_design/BackgroundDesign';
 
 const CapabilitiesMaster = () => {
   const [capabilities, setCapabilities] = useState([]);
@@ -48,27 +50,29 @@ const CapabilitiesMaster = () => {
   const styles = {
     bottomBg: {
       position: "fixed",
+      top: "10%",
       left: 0,
-      bottom: 0, // Sticks to the bottom of the viewport
+      bottom: 0,
       width: "100%",
-      height: "100vh", // Covers full viewport height
-      backgroundSize: "cover", // Ensure it covers entire background
+      height: "auto",
+      backgroundSize: "cover", // Better for full coverage on smaller screens
       backgroundRepeat: "no-repeat",
       backgroundPosition: "bottom center",
       backgroundImage: `url(${dr15_2})`,
-      zIndex: "-50", // Push it far behind everything
+      zIndex: -4,
     },
     plant: {
       position: "fixed",
       bottom: "0",
-      right: "0", // Stays fixed at bottom-right
-      width: "20rem",
+      right: "0",
+      width: "6rem",
       height: "auto",
       maxWidth: "100%",
-      zIndex: "-40", // Keep it behind content but above background
-      pointerEvents: "none", // Prevent accidental clicks
+      zIndex: -2,
+      pointerEvents: "none",
     },
   };
+
   const get = async () => {
     setLoading(true);
     try {
@@ -207,42 +211,13 @@ const CapabilitiesMaster = () => {
 
   return (
     <>
-      <div className="bottom-bg" style={styles.bottomBg}></div>
+      {/* <div className="bottom-bg" style={styles.bottomBg}></div> */}
 
       {/* Fixed Plant Image */}
-      <img src={tab} alt="Bottom Right Image" style={styles.plant} />
-      <div className="w-full flex justify-between items-center mt-4 px-6 pb-6 mb-10">
-        <div className="flex flex-col gap-2">
-          <span className="font-bold text-[24px] text-[#141414]">Hello, Admin! 👋</span>
-          <span className="font-medium text-[12px] text-[#989ca0]">
-            Welcome back, track your team progress here!
-          </span>
-        </div>
+      {/* <img src={tab} alt="Bottom Right Image" style={styles.plant} /> */}
+      <BackgroundDesign character_image={tab} custom_size={'10rem'} />
 
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-solid border-[#dcdddf] cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={briefcase} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-[#141414]"><Link to="/dashboard/jobs">Post New Job</Link></span>
-          </div>
-
-          <div className="flex items-center gap-2 bg-[#263238] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={plus} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/users">Add Employee</Link></span>
-
-          </div>
-          <div className="flex items-center gap-2 bg-[#ffc727] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={skill} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/road_to_content">Skills To Hire</Link></span>
-
-          </div>
-        </div>
-      </div>
+      <HeaderTwo />
       <div>
         <Typography variant="h1">Capabilities</Typography>
         {/* <Typography variant="h4" sx={{ my: 2 }}>Manage</Typography> */}
@@ -281,13 +256,25 @@ const CapabilitiesMaster = () => {
 
         <Formik
           initialValues={{
-            name: editMode ? currentCapability.name : '',
-            description: editMode ? currentCapability.description : '',
+            name: '',
+            description: '',
+            areasOfImprovementLow: '',
+            areasOfImprovementMid: '',
+            areasOfImprovementHigh: '',
+            recommendationsLow: '',
+            recommendationsMid: '',
+            recommendationsHigh: '',
           }}
           enableReinitialize
           validationSchema={Yup.object().shape({
-            name: Yup.string().max(255).required('Name is required'),
-            description: Yup.string().required('Description is required'),
+            name: '',
+            description: '',
+            areasOfImprovementLow: '',
+            areasOfImprovementMid: '',
+            areasOfImprovementHigh: '',
+            recommendationsLow: '',
+            recommendationsMid: '',
+            recommendationsHigh: '',
           })}
           onSubmit={handleSubmit}
         >
@@ -300,8 +287,8 @@ const CapabilitiesMaster = () => {
             touched,
             values,
           }) => (
-            <form noValidate onSubmit={handleSubmit} className="grid grid-cols-2 gap-6 mb-[8rem]">
-              <div className="relative w-full mb-5">
+            <form noValidate onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-[14rem]">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 {/* Label */}
                 <label htmlFor="name" className="block text-gray-700 font-semibold mb-1">
                   Capability Name
@@ -323,25 +310,28 @@ const CapabilitiesMaster = () => {
                   </span>
 
                   {/* Input Field */}
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={values.name}
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none text-gray-800 font-semibold"
-                    placeholder="Enter capability name"
-                  />
-                </div>
+                  <div className="flex flex-col w-full">
 
-                {/* Error Message */}
-                {touched.name && errors.name && (
-                  <p className="text-red-500 text-xs mt-1">{errors.name}</p>
-                )}
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={values.name}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none text-gray-800 font-semibold"
+                      placeholder="Enter capability name"
+                    />
+                    {/* Error Message */}
+                    {touched.name && errors.name && (
+                      <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                    )}
+                  </div>
+
+                </div>
               </div>
 
-              <div className="relative w-full mb-5">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 {/* Label */}
                 <label htmlFor="description" className="block text-gray-700 font-semibold mb-1">
                   Capability Description
@@ -381,7 +371,7 @@ const CapabilitiesMaster = () => {
                 )}
               </div>
 
-              <div className="w-full mb-5">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 {/* Label for <50% */}
                 <label className="text-black font-bold text-sm block mb-1">Areas of Improvement(&lt;50%)</label>
                 <textarea
@@ -394,13 +384,13 @@ const CapabilitiesMaster = () => {
                 ></textarea>
               </div>
 
-              <div className="w-full mb-5">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 {/* Label for 50% - 75% */}
                 <label className="text-black font-bold text-sm block mb-1">Areas of Improvement(50% - 75%)</label>
                 <textarea
-                  id="areasOfImprovementMedium"
-                  name="areasOfImprovementMedium"
-                  value={values.areasOfImprovementMedium}
+                  id="areasOfImprovementMid"
+                  name="areasOfImprovementMid"
+                  value={values.areasOfImprovementMid}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   className="w-full border border-gray-300 p-3 rounded-md bg-[#e9e9e9] focus:border-gray-400 focus:outline-none resize-none min-h-[80px]"
@@ -408,7 +398,7 @@ const CapabilitiesMaster = () => {
               </div>
 
               {/* Areas of Improvement (More than 75%) */}
-              <div className="w-full mb-5">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 <label className="text-black font-bold text-sm block mb-1">Areas of Improvement(More than 75%)</label>
                 <textarea
                   id="areasOfImprovementHigh"
@@ -421,7 +411,7 @@ const CapabilitiesMaster = () => {
               </div>
 
               {/* Recommendations (Less than 50%) */}
-              <div className="w-full mb-5">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 <label className="text-black font-bold text-sm block mb-1">Recommendations(&lt;50%)</label>
                 <textarea
                   id="recommendationsLow"
@@ -434,7 +424,7 @@ const CapabilitiesMaster = () => {
               </div>
 
               {/* Recommendations (51% - 75%) */}
-              <div className="w-full mb-5">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 <label className="text-black font-bold text-sm block mb-1">Recommendations(51% - 75%)</label>
                 <textarea
                   id="recommendationsMid"
@@ -447,7 +437,7 @@ const CapabilitiesMaster = () => {
               </div>
 
               {/* Recommendations (More than 75%) */}
-              <div className="w-full mb-5">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 <label className="text-black font-bold text-sm block mb-1">Recommendations(More than 75%)</label>
                 <textarea
                   id="recommendationsHigh"
@@ -461,7 +451,7 @@ const CapabilitiesMaster = () => {
 
               {/* Capability Description (Single Box) */}
 
-              <div className="relative w-full mb-5">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 {/* Label */}
                 <label htmlFor="description" className="block text-gray-700 font-semibold mb-1">
                   Description

@@ -1,0 +1,32 @@
+.bottom-bg {
+    position: fixed;
+    top: 10%;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    background-size: cover;           /* Full coverage */
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-image: url('../../assets/images/dr15_2.png'); /* Update path as needed */
+    z-index: -4;
+  }
+  
+  .character_img {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: auto;
+    max-width: 100%;
+    pointer-events: none;
+    z-index: -2;
+  
+    width: 6rem; /* default size for mobile */
+  }
+  
+  @media (min-width: 768px) {
+    .character_img {
+      width: 20rem; /* larger on desktop */
+    }
+  }
+  

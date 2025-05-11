@@ -35,6 +35,9 @@ import briefcase from "../../../assets/images/briefcase.png";
 import plus from "../../../assets/images/plus.png";
 import ai from "../../../assets/images/ai.png";
 import skill from "../../../assets/images/skill.png";
+import { useNavigate } from '../../../../node_modules/react-router-dom/dist/index';
+import HeaderTwo from '../../../components/HeaderTwo';
+import BackgroundDesign from '../../../components/background_design/BackgroundDesign';
 
 const jobTypes = [
     'ON_SITE_PART_TIME',
@@ -48,32 +51,32 @@ const jobTypes = [
 const styles = {
     bottomBg: {
         position: "fixed",
-        top: "10%", // Keep it fixed at the bottom of the page
+        top: "10%",
         left: 0,
-        bottom: 0, // Stick it to the bottom
+        bottom: 0,
         width: "100%",
-        height: "auto", // Adjust height dynamically if needed
-        backgroundSize: "contain",
+        height: "auto",
+        backgroundSize: "cover", // Better for full coverage on smaller screens
         backgroundRepeat: "no-repeat",
         backgroundPosition: "bottom center",
         backgroundImage: `url(${dr15_2})`,
-        zIndex: -4, // Keeps it behind other elements
+        zIndex: -4,
     },
     plant: {
         position: "fixed",
         bottom: "0",
-        right: "0", // Ensure it stays at the right
-        width: "6rem",  // Adjust as needed
+        right: "0",
+        width: "6rem",
         height: "auto",
-        maxWidth: "100%", // Prevents overflow issues
-        zIndex: "-2", // Ensure it's behind content but above background
-        pointerEvents: "none", // Prevents interference with clicks
-    }
-
+        maxWidth: "100%",
+        zIndex: -2,
+        pointerEvents: "none",
+    },
 };
 
 const { TextArea } = Input;
 const JobsMaster = () => {
+    const navigator = useNavigate();
     const [jobRoles, setJobRoles] = useState([]);
     const [jobs, setJobs] = useState([]);
     const [markedSkills, setMarkedSkills] = useState([]);
@@ -177,6 +180,7 @@ const JobsMaster = () => {
 
     React.useEffect(() => {
         if (Object.keys(jobRole).length > 0) {
+            // console.log(jobRole)
             setMarkedSkills(
                 jobRole?.compentencies?.map((skill) => ({
                     title: skill.title,
@@ -190,44 +194,9 @@ const JobsMaster = () => {
         _ms[idx].leastCutoffPercentage = value;
         setMarkedSkills(_ms);
     };
-
     return (
         <>
-            <div className="w-full flex justify-between items-center mt-4 px-6 pb-6 mb-10">
-                {/* Welcome Text */}
-                <div className="flex flex-col gap-2">
-                    <span className="font-bold text-[24px] text-[#141414]">Hello, Admin! 👋</span>
-                    <span className="font-medium text-[12px] text-[#989ca0]">
-                        Welcome back, track your team progress here!
-                    </span>
-                </div>
-
-                {/* Buttons */}
-                <div className="flex items-center gap-6">
-                    {/* Post New Job */}
-                    <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-solid border-[#dcdddf] cursor-pointer">
-                        <div className="justify-center items-center w-5 h-5">
-                            <img src={briefcase} alt="briefcase" />
-                        </div>
-                        <span className="font-bold text-[14px] text-[#141414]"><Link to="/dashboard/jobs">Post New Job</Link></span>
-                    </div>
-
-                    {/* Add Employee */}
-                    <div className="flex items-center gap-2 bg-[#263238] px-4 py-3 rounded-lg cursor-pointer">
-                        <div className="justify-center items-center w-5 h-5">
-                            <img src={plus} alt="briefcase" />
-                        </div>
-                        <span className="font-bold text-[14px] text-white"><Link to="/dashboard/users">Add Employee</Link></span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-[#ffc727] px-4 py-3 rounded-lg cursor-pointer">
-                        <div className="justify-center items-center w-5 h-5">
-                            <img src={skill} alt="briefcase" />
-                        </div>
-                        <span className="font-bold text-[14px] text-white"><Link to="/dashboard/road_to_content">Skills To Hire</Link></span>
-
-                    </div>
-                </div>
-            </div>
+            <HeaderTwo />
 
             <div>
                 <Typography variant="h1">New Role</Typography>
@@ -266,12 +235,15 @@ const JobsMaster = () => {
                             formData.append("criteria", JSON.stringify(markedSkills));
                             formData.append("jobRole", JSON.stringify(jobRole));
 
-                            await createJob(formData);
+                            let createjob = await createJob(formData);
+                            if (createjob) {
+                                navigator('/dashboard/jobs')
+                            }
                             toast.success("Job Added.");
-                            getJobs();
-                            resetForm();
-                            setJobRole(null);
-                            setSubmitting(false);
+                            // getJobs();
+                            // resetForm();
+                            // setJobRole(null);
+                            // setSubmitting(false);
                         } catch (err) {
                             setErrors({ submit: err.message });
                             toast.error("ERROR: Cannot add job.");
@@ -280,9 +252,9 @@ const JobsMaster = () => {
                     }}
                 >
                     {({ errors, handleBlur, handleChange, handleSubmit, touched, values, setFieldValue }) => (
-                        <form noValidate onSubmit={handleSubmit} className="grid grid-cols-2 gap-6 mb-[14rem]">
+                        <form noValidate onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-[14rem]">
                             {/* Job Title */}
-                            <div className="relative w-full mb-5">
+                            <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                                 {/* Icon */}
                                 <span className="absolute left-3 top-[35%] transform -translate-y-1/2 text-gray-500">
                                     <svg
@@ -301,28 +273,29 @@ const JobsMaster = () => {
                                     </svg>
                                 </span>
 
-                                {/* Input Field */}
-                                <input
-                                    type="text"
-                                    name="title"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.title}
-                                    className="w-full border border-gray-400 p-3 pl-12 rounded bg-[#e9e9e9]"
-                                    placeholder="Job Role"
-                                />
-
-                                {/* Error Message (Properly Placed Below Input) */}
-                                {touched.title && errors.title && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.title}</p>
-                                )}
+                                {/* Input & Error (stacked vertically) */}
+                                <div className="flex flex-col w-full">
+                                    <input
+                                        type="text"
+                                        name="title"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.title}
+                                        className="w-full border border-gray-400 p-3 pl-12 rounded bg-[#e9e9e9]"
+                                        placeholder="Job Role"
+                                    />
+                                    {touched.title && errors.title && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.title}</p>
+                                    )}
+                                </div>
                             </div>
 
 
 
 
+
                             {/* Annual CTC */}
-                            <div className="relative w-full mb-5">
+                            <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                                 {/* Icon */}
                                 <span className="absolute left-3 top-[35%] transform -translate-y-1/2 text-gray-500">
                                     <svg
@@ -341,21 +314,27 @@ const JobsMaster = () => {
                                     </svg>
                                 </span>
 
-                                {/* Input Field with Extra Left Padding */}
-                                <input
-                                    type="text"
-                                    name="annualCtc"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.annualCtc}
-                                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9]"
-                                    placeholder="Annual CTC"
-                                />
+                                {/* Input & Error (stacked vertically) */}
+                                <div className="flex flex-col w-full">
+                                    <input
+                                        type="text"
+                                        name="annualCtc"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.annualCtc}
+                                        className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9]"
+                                        placeholder="Annual CTC"
+                                    />
+                                    {touched.annualCtc && errors.annualCtc && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.annualCtc}</p>
+                                    )}
+                                </div>
                             </div>
 
 
+
                             {/* Required Qualifications */}
-                            <div className="relative w-full mb-5">
+                            <div className="relative w-full mb-2 col-span-2 sm:col-span-1 flex items-center sm:mb-5">
                                 {/* Icon */}
                                 <span className="absolute left-3 top-[35%] transform -translate-y-1/2 text-gray-500">
                                     <svg
@@ -375,25 +354,26 @@ const JobsMaster = () => {
                                 </span>
 
                                 {/* Input Field with Extra Left Padding */}
-                                <input
-                                    type="text"
-                                    name="requiredQualification"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.requiredQualification}
-                                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9]"
-                                    placeholder="Required Qualifications"
-                                />
-                                {touched.requiredQualification && errors.requiredQualification && (
-                                    <p className="text-red-500 text-xs">{errors.requiredQualification}</p>
-                                )}
+                                <div className="flex flex-col w-full">
+                                    <input
+                                        type="text"
+                                        name="requiredQualification"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.requiredQualification}
+                                        className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9]"
+                                        placeholder="Required Qualifications"
+                                    />
+                                    {touched.requiredQualification && errors.requiredQualification && (
+                                        <p className="text-red-500 text-xs">{errors.requiredQualification}</p>
+                                    )}
+                                </div>
                             </div>
-
                             {/* Error Message */}
 
 
                             {/* Required Experience */}
-                            <div className="relative w-full mb-5">
+                            <div className="relative w-full mb-2 col-span-2 sm:col-span-1 flex items-center sm:mb-5">
                                 {/* Icon */}
                                 <span className="absolute left-3 top-[35%] transform -translate-y-1/2 text-gray-500">
                                     <svg
@@ -413,25 +393,27 @@ const JobsMaster = () => {
                                 </span>
 
                                 {/* Input Field with Extra Left Padding */}
-                                <input
-                                    type="number"
-                                    name="requiredYearsOfExperience"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.requiredYearsOfExperience}
-                                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9]"
-                                    placeholder="Years of Experience"
-                                />
-                                {touched.requiredYearsOfExperience && errors.requiredYearsOfExperience && (
-                                    <p className="text-red-500 text-xs">{errors.requiredYearsOfExperience}</p>
-                                )}
-                            </div>
+                                <div className="flex flex-col w-full">
 
+                                    <input
+                                        type="number"
+                                        name="requiredYearsOfExperience"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.requiredYearsOfExperience}
+                                        className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9]"
+                                        placeholder="Years of Experience"
+                                    />
+                                    {touched.requiredYearsOfExperience && errors.requiredYearsOfExperience && (
+                                        <p className="text-red-500 text-xs">{errors.requiredYearsOfExperience}</p>
+                                    )}
+                                </div>
+                            </div>
                             {/* Error Message */}
 
 
                             {/* Job Type */}
-                            <div className="relative w-full mb-5">
+                            <div className="relative w-full mb-2 col-span-2 sm:col-span-1 flex items-center sm:mb-5">
                                 {/* Icon */}
                                 <span className="absolute left-3 top-[35%] transform -translate-y-1/2 text-gray-500">
                                     <svg
@@ -451,30 +433,32 @@ const JobsMaster = () => {
                                 </span>
 
                                 {/* Select Dropdown with Extra Left Padding */}
-                                <select
-                                    name="jobType"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.jobType}
-                                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] appearance-none"
-                                >
-                                    <option value="">Job Type</option>
-                                    {jobTypes?.map((type, idx) => (
-                                        <option value={type} key={idx}>
-                                            {type}
-                                        </option>
-                                    ))}
-                                </select>
-                                {touched.jobType && errors.jobType && <p className="text-red-500 text-xs">{errors.jobType}</p>}
-                            </div>
+                                <div className="flex flex-col w-full">
 
+                                    <select
+                                        name="jobType"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.jobType}
+                                        className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] appearance-none"
+                                    >
+                                        <option value="">Job Type</option>
+                                        {jobTypes?.map((type, idx) => (
+                                            <option value={type} key={idx}>
+                                                {type}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {touched.jobType && errors.jobType && <p className="text-red-500 text-xs">{errors.jobType}</p>}
+                                </div>
+                            </div>
                             {/* Error Message */}
 
 
 
 
                             {/* Company Name */}
-                            <div className="relative w-full mb-5">
+                            <div className="relative w-full mb-2 col-span-2 sm:col-span-1 flex items-center sm:mb-5">
                                 {/* Icon */}
                                 <span className="absolute left-3 top-[35%] transform -translate-y-1/2 text-gray-500">
                                     <svg
@@ -494,23 +478,25 @@ const JobsMaster = () => {
                                 </span>
 
                                 {/* Input Field with Extra Left Padding */}
-                                <input
-                                    type="text"
-                                    name="companyName"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.companyName}
-                                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9]"
-                                    placeholder="Company Name"
-                                />
-                                {touched.companyName && errors.companyName && <p className="text-red-500 text-xs">{errors.companyName}</p>}
-                            </div>
+                                <div className="flex flex-col w-full">
 
+                                    <input
+                                        type="text"
+                                        name="companyName"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.companyName}
+                                        className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9]"
+                                        placeholder="Company Name"
+                                    />
+                                    {touched.companyName && errors.companyName && <p className="text-red-500 text-xs">{errors.companyName}</p>}
+                                </div>
+                            </div>
                             {/* Error Message */}
 
 
                             {/* Company Logo Upload */}
-                            <div className="relative w-full mb-5">
+                            <div className="relative w-full mb-2 col-span-2 sm:col-span-1 flex items-center sm:mb-5">
                                 {/* Icon */}
                                 <span className="absolute left-3 top-[35%] transform -translate-y-1/2 text-gray-500">
                                     <svg
@@ -530,20 +516,20 @@ const JobsMaster = () => {
                                 </span>
 
                                 {/* File Input with Custom Styling */}
-                                <input
-                                    type="file"
-                                    name="companyLogo"
-                                    onBlur={handleBlur}
-                                    onChange={(event) => setFieldValue("companyLogo", event.currentTarget.files[0])}
-                                    className="w-full border border-gray-400 p-2 pl-10 rounded bg-[#e9e9e9] file:mr-3 file:py-2 file:px-3 file:rounded file:border-0 file:bg-gray-300 file:text-gray-700"
-                                />
-                                {touched.companyLogo && errors.companyLogo && <p className="text-red-500 text-xs">{errors.companyLogo}</p>}
+                                <div className="flex flex-col w-full">
+
+                                    <input
+                                        type="file"
+                                        name="companyLogo"
+                                        onBlur={handleBlur}
+                                        onChange={(event) => setFieldValue("companyLogo", event.currentTarget.files[0])}
+                                        className="w-full border border-gray-400 p-2 pl-10 rounded bg-[#e9e9e9] file:mr-3 file:py-2 file:px-3 file:rounded file:border-0 file:bg-gray-300 file:text-gray-700"
+                                    />
+                                    {touched.companyLogo && errors.companyLogo && <p className="text-red-500 text-xs">{errors.companyLogo}</p>}
+                                </div>
                             </div>
-
-                            {/* Error Message */}
-
                             {/* Job Details */}
-                            <div className="relative w-full mb-5">
+                            <div className="relative w-full mb-2 col-span-2 sm:col-span-1 flex items-center sm:mb-5">
                                 {/* Icon */}
                                 <span className="absolute left-3 top-[35%] transform -translate-y-1/2 text-gray-500">
                                     <svg
@@ -563,23 +549,139 @@ const JobsMaster = () => {
                                 </span>
 
                                 {/* Input Field */}
-                                <input
-                                    type="text"
-                                    name="jobDetails"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.jobDetails}
-                                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] h-[42px]"
-                                    placeholder="Job Details"
-                                />
+                                <div className="flex flex-col w-full">
 
-                                {/* Error Message (Separate div for proper placement) */}
-                                {touched.jobDetails && errors.jobDetails && (
-                                    <div className="mt-1">
-                                        <p className="text-red-500 text-xs">{errors.jobDetails}</p>
-                                    </div>
-                                )}
+                                    <input
+                                        type="text"
+                                        name="jobDetails"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.jobDetails}
+                                        className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] h-[42px]"
+                                        placeholder="Job Details"
+                                    />
+
+                                    {/* Error Message (Separate div for proper placement) */}
+                                    {touched.jobDetails && errors.jobDetails && (
+                                        <div className="mt-1">
+                                            <p className="text-red-500 text-xs">{errors.jobDetails}</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
+                            {/* Job Role */}
+                            {/* <div className="w-full"> */}
+                            {/* Full-Width Job Role Dropdown */}
+                            <div className="relative w-full mb-5 col-span-2 flex items-center">
+                                {/* Icon */}
+                                <span className="absolute left-3 top-[35%] transform -translate-y-1/2 text-gray-500">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="w-5 h-5"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M13 16h-1v-4h-1m1-4h.01M12 3a9 9 0 110 18 9 9 0 010-18z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                {/* Dropdown Field */}
+                                <div className="flex flex-col w-full">
+
+                                    <select
+                                        id="jobRole"
+                                        name="jobRole"
+                                        value={jobRole?._id || ""}
+                                        onChange={(e) => {
+                                            const selectedRole = jobRoles.find((role) => role._id === e.target.value);
+                                            setJobRole(selectedRole || null);
+                                            setMarkedSkills(
+                                                selectedRole?.compentencies?.map((skill) => ({
+                                                    title: skill.title,
+                                                    leastCutoffPercentage: 0,
+                                                })) || []
+                                            );
+                                        }}
+                                        className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] h-[42px] focus:border-blue-500 focus:outline-none"
+                                    >
+                                        <option value="">Select Job Role</option>
+                                        {jobRoles.map((role) => (
+                                            <option key={role._id} value={role._id}>
+                                                {role.title}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    {/* Error Message */}
+                                    {touched.jobRole && errors.jobRole && (
+                                        <p className="text-red-500 text-xs">{errors.jobRole}</p>
+                                    )}
+                                </div>
+                            </div>
+
+
+                            {/* Competency Section (Now Positioned Correctly) */}
+                            {jobRole?.compentencies && jobRole.compentencies.length > 0 && (
+                                <div className="w-full bg-gray-100 p-4 rounded-lg mt-3 col-span-2">
+                                    {/* Section Title */}
+                                    <h3 className="text-gray-700 font-semibold mb-2">Required Competencies</h3>
+
+                                    {/* Grid Layout for Full Width */}
+                                    <div className="grid grid-cols-12 gap-4">
+                                        {jobRole.compentencies.map((skill, idx) => (
+                                            <div key={idx} className="col-span-12 flex flex-wrap md:flex-nowrap items-center gap-4 bg-white p-4 rounded-lg shadow-sm border border-gray-300">
+
+                                                {/* Competency Input */}
+                                                <div className="w-full md:w-10/12 relative">
+                                                    <label className="block text-gray-700 font-medium mb-1">Competency</label>
+                                                    <input
+                                                        type="text"
+                                                        value={skill.title}
+                                                        disabled
+                                                        placeholder="Competency"
+                                                        className="w-full border border-gray-400 p-3 rounded bg-gray-200 text-gray-700 h-[42px] focus:outline-none"
+                                                    />
+                                                </div>
+
+                                                {/* LCP Input Field */}
+                                                <div className="w-full md:w-2/12 relative">
+                                                    <label className="block text-gray-700 font-medium mb-1">LCP</label>
+                                                    <input
+                                                        type="number"
+                                                        value={markedSkills[idx]?.leastCutoffPercentage || ""}
+                                                        onChange={(e) => handleCutOffChange(parseInt(e.target.value), idx)}
+                                                        placeholder="LCP"
+                                                        className="w-full border border-gray-400 p-3 rounded bg-white focus:outline-none focus:border-blue-500"
+                                                    />
+                                                </div>
+
+                                                {/* Error Message */}
+                                                {touched.compentencies?.[idx]?.leastCutoffPercentage &&
+                                                    errors.compentencies?.[idx]?.leastCutoffPercentage && (
+                                                        <div className="w-full">
+                                                            <p className="text-red-500 text-xs mt-1">
+                                                                {errors.compentencies[idx].leastCutoffPercentage}
+                                                            </p>
+                                                        </div>
+                                                    )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+
+
+
+
+
+
 
 
                             {/* Error Message */}
@@ -607,37 +709,40 @@ const JobsMaster = () => {
                                 </span>
 
                                 {/* Input Field with Extra Left Padding */}
-                                <input
-                                    type="text"
-                                    name="otherInformation"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.otherInformation}
-                                    className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] h-[42px] flex items-center"
-                                    placeholder="Other Information"
-                                />
-                                {touched.otherInformation && errors.otherInformation && (
-                                    <p className="text-red-500 text-xs">{errors.otherInformation}</p>
-                                )}
-                            </div>
+                                <div className="flex flex-col w-full">
 
+                                    <input
+                                        type="text"
+                                        name="otherInformation"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.otherInformation}
+                                        className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] h-[42px] flex items-center"
+                                        placeholder="Other Information"
+                                    />
+                                    {touched.otherInformation && errors.otherInformation && (
+                                        <p className="text-red-500 text-xs">{errors.otherInformation}</p>
+                                    )}
+                                </div>
+                            </div>
                             {/* Error Message */}
 
                             {/* Submit Button */}
                             <div className="col-span-2 flex justify-center">
-                                <button type="submit" className="bg-[#263238] text-white px-6 py-3 rounded-lg">
+                                <button type="submit" className="bg-[#263238] text-white px-6 py-3 rounded-lg font-semibold text-lg ">
                                     Create
                                 </button>
                             </div>
                         </form>
                     )}
                 </Formik>
-                <img
+                {/* <img
                     src={plant}
                     alt="Bottom Right Image"
                     style={styles.plant}
                 />
-                <div className="bottom-bg" style={styles.bottomBg}></div>
+                <div className="bottom-bg" style={styles.bottomBg}></div> */}
+                <BackgroundDesign character_image={plant}/>
             </div>
         </>
     );
