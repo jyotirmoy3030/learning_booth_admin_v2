@@ -30,32 +30,35 @@ import dr15_2 from "../../../assets/images/dr15_2.png";
 import magnifying from "../../../assets/images/magnifying.png";
 import { Modal } from "antd";
 import skill from "../../../assets/images/skill.png";
+import HeaderTwo from '../../../components/HeaderTwo';
+import BackgroundDesign from '../../../components/background_design/BackgroundDesign';
 
 const styles = {
   bottomBg: {
     position: "fixed",
+    top: "10%",
     left: 0,
-    bottom: 0, // Sticks to the bottom of the viewport
+    bottom: 0,
     width: "100%",
-    height: "100vh", // Covers full viewport height
-    backgroundSize: "cover", // Ensure it covers entire background
+    height: "auto",
+    backgroundSize: "cover", // Better for full coverage on smaller screens
     backgroundRepeat: "no-repeat",
     backgroundPosition: "bottom center",
     backgroundImage: `url(${dr15_2})`,
-    zIndex: "-50", // Push it far behind everything
+    zIndex: -4,
   },
   plant: {
     position: "fixed",
     bottom: "0",
-    right: "0", // Stays fixed at bottom-right
-    width: "20rem",
+    right: "0",
+    width: "6rem",
     height: "auto",
     maxWidth: "100%",
-    zIndex: "-40", // Keep it behind content but above background
-    pointerEvents: "none", // Prevent accidental clicks
+    zIndex: -2,
+    pointerEvents: "none",
   },
-
 };
+
 const UsersMaster = () => {
   const [users, setUsers] = useState([]);
   const [tests, setTests] = useState([]);
@@ -138,8 +141,9 @@ const UsersMaster = () => {
         await updateUser(currentUser._id, values);
         toast.success('User updated!');
       } else {
-        await createUser(values);
-        toast.success('User added!');
+        console.log(values)
+        // await createUser(values);
+        // toast.success('User added!');
       }
       getUsers();
       setStatus({ success: true });
@@ -189,7 +193,6 @@ const UsersMaster = () => {
       ),
     },
   ];
-  console.log(users)
 
   return (
     <>
@@ -226,82 +229,49 @@ const UsersMaster = () => {
           <p>Loading user details...</p>
         )}
       </Modal>
-      <div className="bottom-bg" style={styles.bottomBg}></div>
+      {/* <div className="bottom-bg" style={styles.bottomBg}></div> */}
 
       {/* Fixed Plant Image */}
-      <img src={magnifying} alt="Bottom Right Image" style={styles.plant} />
-      <div className="w-full flex justify-between items-center mt-4 px-6 pb-6 mb-10">
-        {/* Welcome Text */}
-        <div className="flex flex-col gap-2">
-          <span className="font-bold text-[24px] text-[#141414]">Hello, Admin! 👋</span>
-          <span className="font-medium text-[12px] text-[#989ca0]">
-            Welcome back, track your team progress here!
-          </span>
-        </div>
-
-        {/* Buttons */}
-        <div className="flex items-center gap-6">
-          {/* Post New Job */}
-          <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-solid border-[#dcdddf] cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={briefcase} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-[#141414]"><Link to="/dashboard/jobs">Post New Job</Link></span>
-          </div>
-
-          {/* Add Employee */}
-          <div className="flex items-center gap-2 bg-[#263238] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={plus} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/users">Add Employee</Link></span>
-
-          </div>
-          <div className="flex items-center gap-2 bg-[#ffc727] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={skill} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/road_to_content">Skills To Hire</Link></span>
-
-          </div>
-        </div>
-      </div>
-      <div>
+      {/* <img src={magnifying} alt="Bottom Right Image" style={styles.plant} /> */}
+      <BackgroundDesign character_image={magnifying}/>
+      <HeaderTwo />
+      <div className="px-4 sm:px-8 md:px-0 lg:px-0 py-4 relative overflow-hidden">
         <Typography variant="h1">User List</Typography>
 
         {/* <TextField placeholder="Search by name or email" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
           sx={{ mb: 2, width: '300px' }} /> */}
-
-        <Table
-          dataSource={users.map((user) => ({ ...user, key: user._id }))}
-          columns={columns}
-          loading={loading}
-          pagination={{
-            current: pagination.current,
-            pageSize: pagination.pageSize,
-            total: pagination.total,
-            showSizeChanger: true,
-            pageSizeOptions: ['5', '10', '20', '50', '100'],
-            onChange: (currentPage, newPageSize) => {
-              setPagination((prev) => ({
-                ...prev,
-                current: currentPage,
-                pageSize: newPageSize,
-              }));
-            },
-          }}
-          onChange={(pagination, filters, sorter) => {
-            const order = sorter.order === "ascend" ? "asc" : "desc";
-            setSortField(sorter.field || "");
-            setSortOrder(order || "");
-            setPagination((prev) => ({
-              ...prev,
+        <div className="overflow-x-auto">
+          <Table
+            dataSource={users.map((user) => ({ ...user, key: user._id }))}
+            columns={columns}
+            loading={loading}
+            pagination={{
               current: pagination.current,
               pageSize: pagination.pageSize,
-            }));
-          }}
-          style={{ marginBottom: '6rem' }}
-        />
+              total: pagination.total,
+              showSizeChanger: true,
+              pageSizeOptions: ['5', '10', '20', '50', '100'],
+              onChange: (currentPage, newPageSize) => {
+                setPagination((prev) => ({
+                  ...prev,
+                  current: currentPage,
+                  pageSize: newPageSize,
+                }));
+              },
+            }}
+            onChange={(pagination, filters, sorter) => {
+              const order = sorter.order === "ascend" ? "asc" : "desc";
+              setSortField(sorter.field || "");
+              setSortOrder(order || "");
+              setPagination((prev) => ({
+                ...prev,
+                current: pagination.current,
+                pageSize: pagination.pageSize,
+              }));
+            }}
+            style={{ marginBottom: '6rem' }}
+          />
+        </div>
 
 
         {/* <Typography variant="h4" sx={{ my: 2 }}>{editMode ? 'Edit User' : 'Create User'}</Typography> */}

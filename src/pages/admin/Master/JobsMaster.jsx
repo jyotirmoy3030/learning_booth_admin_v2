@@ -35,6 +35,8 @@ import briefcase from "../../../assets/images/briefcase.png";
 import plus from "../../../assets/images/plus.png";
 import ai from "../../../assets/images/ai.png";
 import skill from "../../../assets/images/skill.png";
+import HeaderTwo from '../../../components/HeaderTwo';
+import BackgroundDesign from '../../../components/background_design/BackgroundDesign';
 
 const jobTypes = [
   'ON_SITE_PART_TIME',
@@ -45,29 +47,29 @@ const jobTypes = [
 const styles = {
   bottomBg: {
     position: "fixed",
-    top: "10%", // Keep it fixed at the bottom of the page
+    top: "10%",
     left: 0,
-    bottom: 0, // Stick it to the bottom
+    bottom: 0,
     width: "100%",
-    height: "auto", // Adjust height dynamically if needed
-    backgroundSize: "contain",
+    height: "auto",
+    backgroundSize: "cover", // Better for full coverage on smaller screens
     backgroundRepeat: "no-repeat",
     backgroundPosition: "bottom center",
     backgroundImage: `url(${dr15_2})`,
-    zIndex: -4, // Keeps it behind other elements
+    zIndex: -4,
   },
   plant: {
     position: "fixed",
     bottom: "0",
-    right: "0", // Ensure it stays at the right
-    width: "6rem",  // Adjust as needed
+    right: "0",
+    width: "6rem",
     height: "auto",
-    maxWidth: "100%", // Prevents overflow issues
-    zIndex: "-2", // Ensure it's behind content but above background
-    pointerEvents: "none", // Prevents interference with clicks
-  }
-
+    maxWidth: "100%",
+    zIndex: -2,
+    pointerEvents: "none",
+  },
 };
+
 
 const { TextArea } = Input;
 const JobsMaster = () => {
@@ -77,6 +79,7 @@ const JobsMaster = () => {
   const [jobRole, setJobRole] = useState({});
   const getJobRoles = async () => {
     const roles = await getAllJobroles();
+    console.log(roles)
     if (roles) {
       setJobRoles(roles.data);
     }
@@ -94,7 +97,7 @@ const JobsMaster = () => {
       key: "title",
       render: (_, data) => (
         <Box display="flex" alignItems="center" justifyContent="start">
-          {data?.title}
+          {data?.title ? data?.title : ""}
         </Box>
       ),
       sorter: (a, b) => a.title.localeCompare(b.title),
@@ -110,7 +113,7 @@ const JobsMaster = () => {
               className="px-3 py-1 rounded-full border border-[#ffc727] bg-[#ffc727] shadow-sm flex items-center justify-center"
             >
               <span className="text-xs font-semibold text-[#FFFFFF] uppercase tracking-wide">
-                {jobRole.title}
+                {jobRole?.title}
               </span>
             </div>
           </div>
@@ -190,56 +193,26 @@ const JobsMaster = () => {
 
   return (
     <>
-      <div className="w-full flex justify-between items-center mt-4 px-6 pb-6 mb-10">
-        {/* Welcome Text */}
-        <div className="flex flex-col gap-2">
-          <span className="font-bold text-[24px] text-[#141414]">Hello, Admin! 👋</span>
-          <span className="font-medium text-[12px] text-[#989ca0]">
-            Welcome back, track your team progress here!
-          </span>
+      <HeaderTwo />
+
+      <div className="px-4 sm:px-8 md:px-0 lg:px-0 py-4 relative overflow-hidden">
+        <Typography variant="h1" className="text-xl sm:text-2xl md:text-3xl">Open Roles</Typography>
+        <Typography variant="h4" className="text-base sm:text-lg my-2">Manage</Typography>
+
+        <div className="overflow-x-auto">
+          <Table dataSource={jobs} columns={columns} style={{ marginBottom: '6rem', width: '100%' }} />
         </div>
 
-        {/* Buttons */}
-        <div className="flex items-center gap-6">
-          {/* Post New Job */}
-          <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-solid border-[#dcdddf] cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={briefcase} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-[#141414]"><Link to="/dashboard/jobs">Post New Job</Link></span>
-          </div>
-
-          {/* Add Employee */}
-          <div className="flex items-center gap-2 bg-[#263238] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={plus} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/users">Add Employee</Link></span>
-          </div>
-          <div className="flex items-center gap-2 bg-[#ffc727] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={skill} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/road_to_content">Skills To Hire</Link></span>
-
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <Typography variant="h1">Open Roles</Typography>
-        <Typography variant="h4" sx={{ my: 2 }}>
-          Manage
-        </Typography>
-
-        <Table dataSource={jobs} columns={columns} style={{marginBottom:'6rem'}} />
-        <img
+        {/* <img
           src={plant}
           alt="Bottom Right Image"
-          style={styles.plant}
+          className="fixed bottom-0 right-0 w-20 sm:w-24 md:w-28 z-[-2] pointer-events-none"
         />
-        <div className="bottom-bg" style={styles.bottomBg}></div>
+
+        <div className="bottom-bg" style={styles.bottomBg}></div> */}
+        <BackgroundDesign character_image={plant}/>
       </div>
+
     </>
   );
 };

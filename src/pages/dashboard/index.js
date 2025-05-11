@@ -26,6 +26,7 @@ import card_icon from "../../assets/images/card_icon1.png";
 import briefcase from "../../assets/images/briefcase.png";
 import plus from "../../assets/images/plus.png";
 import skill from "../../assets/images/skill.png";
+import HeaderTwo from "../../components/HeaderTwo";
 
 // avatar style
 const avatarSX = {
@@ -61,7 +62,7 @@ const status = [
 ];
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
-
+ 
 const DashboardDefault = () => {
   const [jobs, setJobs] = useState([]);
   const [users, setUsers] = useState([]);
@@ -228,12 +229,12 @@ const DashboardDefault = () => {
     },
     {
       title: "Total Employees",
-      value: 0,
+      value: 1265,
       url: "/dashboard",
     },
     {
       title: "Total Skilled Employees",
-      value: 0,
+      value: 254,
       url: "/dashboard",
     },
   ];
@@ -497,43 +498,10 @@ const DashboardDefault = () => {
 
   return (
     <>
-      <div className="w-full flex justify-between items-center mt-4 px-6 pb-6">
-        {/* Welcome Text */}
-        <div className="flex flex-col gap-2">
-          <span className="font-bold text-[24px] text-[#141414]">Hello, Admin! 👋</span>
-          <span className="font-medium text-[12px] text-[#989ca0]">
-            Welcome back, track your team progress here!
-          </span>
-        </div>
-
-        {/* Buttons */}
-        <div className="flex items-center gap-6">
-          {/* Post New Job */}
-          <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-solid border-[#dcdddf] cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={briefcase} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-[#141414]"><Link to="/dashboard/jobs">Post New Job</Link></span>
-          </div>
-
-          {/* Add Employee */}
-          <div className="flex items-center gap-2 bg-[#263238] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={plus} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/users">Add Employee</Link></span>
-          </div>
-          <div className="flex items-center gap-2 bg-[#ffc727] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={skill} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/road_to_content">Skills To Hire</Link></span>
-
-          </div>
-        </div>
-      </div>
+      <HeaderTwo />
       <section className="flex-1 flex flex-row ">
-        <div className="flex-1 bg-white pl-7 pr-[30px] pt-[14.83px]">
+      <div className="w-[100%] lg:flex-1 bg-white pl-4 pr-4 pt-4 lg:pl-7 lg:pr-[30px] lg:pt-[14.83px]">
+
           <h3 className="text-lg font-bold text-black mb-3">External Data</h3>
           <div
             className="flex gap-4 flex-wrap flex-row"
@@ -628,16 +596,16 @@ const DashboardDefault = () => {
 
             </div>
           </div>
-          <div className="chart-section flex flex-wrap lg:flex-nowrap items-center justify-between mt-8 mb-2.5 gap-4">
+          <div className="chart-section flex flex-col lg:flex-row items-start justify-between mt-8 mb-2.5 gap-4">
             {/* Chart 1 */}
-            <div className="bg-[#fafafb] rounded-md px-10 py-5 flex-1 w-full lg:w-1/2 h-[550px]">
-              <div className="flex-row flex justify-between w-full items-center">
-                <h3 className="text-black text-lg font-semibold mb-4">Unique Visitors</h3>
-                <div className="flex-row flex justify-end items-center gap-2">
+            <div className="bg-[#fafafb] rounded-md px-5 py-4 flex-1 w-full lg:w-1/2">
+              <div className="flex flex-col sm:flex-row justify-between w-full items-start sm:items-center mb-4 gap-2">
+                <h3 className="text-black text-lg font-semibold">Unique Visitors</h3>
+                <div className="flex gap-2">
                   <button className="bg-transparent border-none">
                     <span className="text-gray-500 text-base font-semibold">Month</span>
                   </button>
-                  <button className="bg-transparent border h-8 px-2 flex flex-row items-center justify-center border-blue-500 rounded">
+                  <button className="bg-transparent border h-8 px-2 flex items-center justify-center border-blue-500 rounded">
                     <span className="text-blue-500 text-base font-semibold">Week</span>
                   </button>
                 </div>
@@ -665,33 +633,33 @@ const DashboardDefault = () => {
                     {
                       name: "Page View",
                       data: [10, 30, 45, 40, 45, 70, 50],
-                      // color: "#FAC684",
                     },
                     {
                       name: "Sessions",
                       data: [30, 35, 25, 40, 50, 55, 40],
-                      // color: "#84D78C",
                     },
                   ]}
                   type="line"
-                  height={400} // ✅ Ensures both charts have the same height
+                  height={400}
+                  width="100%"
                 />
               </div>
             </div>
 
             {/* Chart 2 */}
-            <div className='bg-[#1E2027] lg:w-2/5 py-5 rounded-md overflow-hidden w-full relative'>
-              <div className='flex-row flex justify-between w-full items-center pb-3 border-b border-[#585c6c] px-5 mb-3'>
-                <h3 className='text-white text-lg font-semibold'>Candidate Profiling</h3>
+            <div className="bg-[#1E2027] w-full lg:w-2/5 py-5 rounded-md overflow-hidden relative">
+              <div className="px-5 mb-3 border-b border-[#585c6c] pb-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                <h3 className="text-white text-lg font-semibold">Candidate Profiling</h3>
               </div>
-              <div className='flex-row flex justify-between w-full items-center pb-3 border-b border-[#585c6c] px-5 mb-3'>
+
+              <div className="px-5 mb-3 border-b border-[#585c6c] pb-3">
                 <select
                   onChange={handleAssesmentChange}
-                  className='bg-[#585c6c] h-7 border-none rounded-sm text-white px-1'
+                  className="bg-[#585c6c] h-8 w-full sm:w-auto border-none rounded-sm text-white px-2"
                 >
                   {assesments.map((assessment, idx) => (
                     <option
-                      className='text-white'
+                      className="text-white"
                       value={assessment._id}
                       key={idx}
                       selected={selectedAssesment === assessment._id}
@@ -703,216 +671,56 @@ const DashboardDefault = () => {
               </div>
 
               {loading ? (
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '60px'
-                }}>
-                  <div style={{
-                    border: '8px solid #f3f3f3',
-                    borderRadius: '50%',
-                    borderTop: '8px solid #3498db',
-                    width: '60px',
-                    height: '60px',
-                    animation: 'spin 2s linear infinite'
-                  }}></div>
+                <div className="flex justify-center items-center h-[80px]">
+                  <div className="w-12 h-12 border-8 border-gray-200 border-t-blue-500 rounded-full animate-spin" />
                 </div>
               ) : (
-                <div className="relative">
+                <div className="relative px-2">
                   <ScatterChart data={scatterChartData} />
-
                   {/* Black Overlay to Hide Watermark */}
                   <div
                     style={{
                       position: 'absolute',
-                      bottom: '1px',  // Adjust as needed
-                      right: '5px',   // Adjust as needed
+                      bottom: '1px',
+                      right: '5px',
                       backgroundColor: '#1E2027',
-                      width: '75px',  // Adjust width to cover watermark
-                      height: '20px',  // Adjust height to cover watermark
-                      zIndex: 10       // Ensure it's above the chart
+                      width: '75px',
+                      height: '20px',
+                      zIndex: 10,
                     }}
-                  ></div>
+                  />
                 </div>
               )}
-
-              <style>
-                {`
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-    `}
-              </style>
             </div>
-
           </div>
+
 
 
           <div className="candidates-container pt-9 w-full">
             {/* Filters Section */}
-            <div className="filters-container flex flex-row items-center justify-start gap-[19.64px] mb-[31px]">
-            <select
-                onChange={handleJobChange}
-                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
-              >
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value=""
-                >
-                  Select Jobs
-                </option>
-                
-                {jobs.map((job, idx) => {
-                  return (
-                    <option
-                      className="text-[#1F222E] font-medium text-base"
-                      value={job._id} key={idx}
-                    >
-                      {job.title}
-                    </option>
-                  );
-                })}
-              </select>
-
-              <select
-                onChange={handleLocationChange}
-                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
-              >
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value=""
-                >
-                  Location
-                </option>
-                {results.map((result, idx) => {
-                  return (
-                    <option
-                      className="text-[#1F222E] font-medium text-base"
-                      value={result.userLocation} key={idx}
-                    >
-                      {result.userLocation}
-                    </option>
-                  );
-                })}
-              </select>
-
-              <select className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none ">
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="someOption"
-                >
-                  {" "}
-                  Experience Level
-                </option>
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="otherOption"
-                >
-                  Other option
-                </option>
-              </select>
-
-              <select
-                onChange={handleProfileChange}
-                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
-              >
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value=""
-                >
-                  Candidate Profile
-                </option>
-                {users.map((user, idx) => {
-                  return (
-                    <option
-                      className="text-[#1F222E] font-medium text-base"
-                      value={user._id} key={idx}
-                    >
-                      {user.name}
-                    </option>
-                  );
-                })}
-              </select>
-              <select
-                onChange={handleResultTypeChange}
-                className="bg-[#F9F9FB] border-[#EDEDED] border h-[44px] w-[200px] py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px] focus-within:outline-none focus-visible:outline-none "
-              >
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value=""
-                >
-                  Range
-                </option>
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="30"
-                >
-                  Below Average (30 - 50)
-                </option>
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="65"
-                >
-                  Average (50 - 65)
-                </option>
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="85"
-                >
-                  Good (65 - 85)
-                </option>
-                <option
-                  className="text-[#1F222E] font-medium text-base"
-                  value="100"
-                >
-                  Excellent (85 - 100)
-                </option>
-              </select>
-              {/* <button className="bg-white border-[#EDEDED] border h-[44px] w-max py-[10.4px] px-[15.02px] flex flex-row items-center rounded  gap-[9px]">
-                <div className="w-5 h-5 bg-[#DCEAFF] flex flex-row items-center justify-center rounded">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M10.5844 0.994141H0.759766L3.85061 4.85772C4.04284 5.09798 4.14756 5.39651 4.14756 5.70426V10.1412C4.14756 10.5154 4.4509 10.8187 4.82512 10.8187H6.51902C6.89323 10.8187 7.19657 10.5154 7.19657 10.1412V5.70426C7.19657 5.39651 7.30132 5.09798 7.49355 4.85772L10.5844 0.994141Z"
-                      stroke="#6C757D"
-                      strokeWidth="1.01634"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-                <span className="text-[#1F222E] font-medium text-base">
-                  All Filter
-                </span>
-                <div className="w-3 h-2 -rotate-90">
-                  <img src={angleDown} alt="" className="w-full h-full" />
-                </div>
-              </button> */}
-            </div>
+            {/* <div className="filters-container flex flex-row items-center justify-start gap-[19.64px] mb-[31px]">
+              <button className="btn btn-outline-secondary">Jobs <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary">Location <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary">Experience Level <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary">Candidate Profile <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary">Range <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary">Last 30 Days <i className="fas fa-chevron-down ms-1"></i></button>
+              <button className="btn btn-outline-secondary"><i className="fas fa-download me-2"></i> Export Data</button>
+            </div> */}
 
             {/* Search & Add Candidate */}
             <div className="search-add-container my-4 flex flex-row items-center justify-between">
               <h3 className="text-lg font-bold text-black mb-3">Candidates</h3>
-              <div className="flex items-center gap-4">
-              <div className="absolute w-4 h-4 left-3 top-3">
-                    <img src={search} alt="" />
-                  </div>
-                  <input
-                    type="text"
-                    name=""
-                    className="h-10 border border-[#CED4DA] rounded-md py-3 pl-10 w-full"
-                    id=""
-                    value={searchTerm}
-                    onChange={handleSearch}
-                  />
-              </div>
+              {/* <div className="flex items-center gap-4">
+                <select className="h-10 border border-[#CED4DA] rounded-md px-4">
+                  <option>Last 30 Days</option>
+                  <option>Last 7 Days</option>
+                  <option>Last 3 Months</option>
+                </select>
+                <button className="h-10 border border-[#CED4DA] rounded-md px-4">
+                  Export
+                </button>
+              </div> */}
             </div>
 
 

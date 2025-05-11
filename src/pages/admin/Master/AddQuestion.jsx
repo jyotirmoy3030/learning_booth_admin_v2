@@ -37,6 +37,7 @@ import plant from "../../../assets/images/deskplant.png";
 import briefcase from "../../../assets/images/briefcase.png";
 import plus from "../../../assets/images/plus.png";
 import skill from "../../../assets/images/skill.png";
+import { ConstructionOutlined } from '../../../../node_modules/@mui/icons-material/index';
 
 const styles = {
   bottomBg: {
@@ -125,6 +126,7 @@ const AddQuestion = () => {
       toast.error('Error uploading and processing Excel file.');
     }
   };
+  console.log(compentency)
   return (
     <>
       <div className="w-full flex justify-between items-center mt-4 px-6 pb-6 mb-10">
@@ -339,6 +341,7 @@ const AddQuestion = () => {
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
+              console.log(id, { ...values, compentency })
               await addQuestionToTest(id, { ...values, compentency });
               getAllQuestions();
               setStatus({ success: true });
@@ -439,46 +442,56 @@ const AddQuestion = () => {
                 )}
               </div>
               <div className="relative w-full mb-5">
-                {/* Icon */}
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16m-7 6h7"
-                    />
-                  </svg>
-                </span>
+              
 
-                {/* Select Dropdown Field */}
-                <select
+                {/* Icon - Hide when value is selected */}
+                {!compentency && (
+                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 z-10">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-5 h-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 6h16M4 12h16m-7 6h7"
+                      />
+                    </svg>
+                  </span>
+                )}
+
+                {/* Select Field */}
+                <InputLabel htmlFor="grouped-native-select">Competency</InputLabel>
+                <Select
+                  labelId="compentency"
                   id="compentency"
+                  value={compentency}
+                  onChange={(e) => setCompentency(e.target.value)}
                   name="compentency"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.compentency}
-                  className="w-full border border-gray-400 p-3 pl-10 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
+                  displayEmpty
+                  label="Competency"
+                  className="w-full border border-gray-400 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
                 >
-                  <option value="" label="Select Competency" />
+                  <MenuItem value="" disabled>
+                    Select Competency
+                  </MenuItem>
                   {test?.jobRole?.compentencies?.map((s, idx) => (
-                    <option key={idx} value={s.title}>
+                    <MenuItem value={s} key={idx}>
                       {s.title}
-                    </option>
+                    </MenuItem>
                   ))}
-                </select>
+                </Select>
 
                 {/* Error Message */}
                 {touched.compentency && errors.compentency && (
                   <p className="text-red-500 text-xs mt-1">{errors.compentency}</p>
                 )}
               </div>
+
               {compentency?.capabilities && (
                 <div className="relative w-full mb-5">
                   {/* Icon */}

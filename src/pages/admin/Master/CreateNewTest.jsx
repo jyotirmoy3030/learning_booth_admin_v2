@@ -25,6 +25,8 @@ import briefcase from "../../../assets/images/briefcase.png";
 import plus from "../../../assets/images/plus.png";
 import ai from "../../../assets/images/ai.png";
 import skill from "../../../assets/images/skill.png";
+import BackgroundDesign from '../../../components/background_design/BackgroundDesign';
+import HeaderTwo from '../../../components/HeaderTwo';
 
 const styles = {
   bottomBg: {
@@ -179,38 +181,7 @@ const CreateTest = () => {
 
   return (
     <>
-      <div className="w-full flex justify-between items-center mt-4 px-6 pb-6 mb-10">
-        <div className="flex flex-col gap-2">
-          <span className="font-bold text-[24px] text-[#141414]">Hello, Admin! 👋</span>
-          <span className="font-medium text-[12px] text-[#989ca0]">
-            Welcome back, track your team progress here!
-          </span>
-        </div>
-
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-solid border-[#dcdddf] cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={briefcase} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-[#141414]"><Link to="/dashboard/jobs">Post New Job</Link></span>
-          </div>
-
-          <div className="flex items-center gap-2 bg-[#263238] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={plus} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/users">Add Employee</Link></span>
-
-          </div>
-          <div className="flex items-center gap-2 bg-[#ffc727] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={skill} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/road_to_content">Skills To Hire</Link></span>
-
-          </div>
-        </div>
-      </div>
+      <HeaderTwo />
       <div>
         <Typography variant="h2" className="mb-6">New Assessment</Typography>
         <Typography variant="h4" sx={{ my: 2 }}>
@@ -237,10 +208,15 @@ const CreateTest = () => {
                   formData.append(key, values[key]);
                 }
               });
-              formData.append('jobRole', JSON.stringify(values.jobRole));
+              let jobrole = jobRoles.filter((item) => item._id == values.jobRole)
+
+              formData.append('jobRole', JSON.stringify(jobrole[0]));
               formData.append('duration', values.duration);
               formData.append('title', values.title);
               formData.append('overview', overview);
+              for (let [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+              }
               const response = await createTest(formData);
               setTests([...tests, response.data]);
               navigate(`/dashboard/tests/${response.data._id}/questions`);
@@ -266,8 +242,8 @@ const CreateTest = () => {
             handleSubmit,
             isSubmitting,
           }) => (
-            <form noValidate onSubmit={handleSubmit} className="grid grid-cols-2 gap-6 mb-[8rem]">
-              <div className="relative w-full">
+            <form noValidate onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-[8rem]">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 {/* Icon */}
                 <span className="absolute inset-y-0 left-3 top-[-30%] flex items-center text-gray-500">
                   <svg
@@ -303,9 +279,9 @@ const CreateTest = () => {
                 )}
               </div>
 
-              <div className="relative w-full mb-5">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 {/* Icon */}
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 z-10">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-5 h-5"
@@ -323,7 +299,7 @@ const CreateTest = () => {
                 </span>
 
                 {/* Time Picker Input Field */}
-                <input
+                {/* <input
                   type="time"
                   name="duration"
                   onBlur={handleBlur}
@@ -331,7 +307,17 @@ const CreateTest = () => {
                   value={values.duration}
                   className="w-full border border-gray-400 p-3 pl-12 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
                   placeholder="Select Time"
+                /> */}
+                <TimePicker
+                  onChange={(e) => {
+                    console.log(e);
+                    setFieldValue('duration', `${e.$H}:${e.$m}:${e.$s}`);
+                  }}
+                  id="duration"
+                  name="duration"
+                  className="w-full rounded border border-gray-400 bg-[#e9e9e9] pl-12 p-3 focus:border-blue-500 focus:outline-none hover:bg-[#e9e9e9]"
                 />
+
 
                 {/* Error Message */}
                 {touched.duration && errors.duration && (
@@ -339,7 +325,7 @@ const CreateTest = () => {
                 )}
               </div>
 
-              <div className="relative w-full mb-5">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 {/* Custom Upload Button */}
                 <div className="flex items-center gap-3 border border-gray-300 p-3 rounded bg-[#e9e9e9] cursor-pointer">
                   <input
@@ -369,6 +355,9 @@ const CreateTest = () => {
                       </span>
                     )}
                   </label>
+                  {errors.thumbnail && (
+                    <p className="text-red-500 text-xs mt-1">{errors.thumbnail}</p>
+                  )}
                 </div>
 
                 {/* Error Message */}
@@ -377,9 +366,7 @@ const CreateTest = () => {
                 )}
               </div>
 
-              <div className="relative w-full mb-5">
-
-
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 {/* Dropdown */}
                 <select
                   id="jobRole"
@@ -402,7 +389,7 @@ const CreateTest = () => {
                 )}
               </div>
 
-              <div className="relative w-full mb-5">
+              <div className="relative w-full mb-2 col-span-2 sm:col-span-1">
                 {/* Icon */}
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
                   <svg
@@ -450,12 +437,7 @@ const CreateTest = () => {
             </form>
           )}
         </Formik>
-        <img
-          src={plant}
-          alt="Bottom Right Image"
-          style={styles.plant}
-        />
-        <div className="bottom-bg" style={styles.bottomBg}></div>
+        <BackgroundDesign character_image={plant} custom_size={'40rem'}/>
       </div>
     </>
   );

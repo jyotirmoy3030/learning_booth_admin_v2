@@ -5,74 +5,72 @@ import MainLayout from 'layout/MainLayout';
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
 const RoadtoContent = Loadable(
-  lazy(() => import('pages/admin/Master/RoadToContent'))
+  lazy(() => import('../pages/admin/Master/RoadToContent'))
 );
 const JobRoleMaster = Loadable(
-  lazy(() => import('pages/admin/Master/JobRoleMaster'))
+  lazy(() => import('../pages/admin/Master/JobRoleMaster'))
 );
 const NewJobRoleMaster = Loadable(
-  lazy(() => import('pages/admin/Master/NewJobRoleMaster'))
+  lazy(() => import('../pages/admin/Master/NewJobRoleMaster'))
 );
 const JobsMaster = Loadable(
-  lazy(() => import('pages/admin/Master/JobsMaster'))
+  lazy(() => import('../pages/admin/Master/JobsMaster'))
 );
 const NewJobsMaster = Loadable(
-  lazy(() => import('pages/admin/Master/NewJobsMaster'))
+  lazy(() => import('../pages/admin/Master/NewJobsMaster'))
 );
 const JobsApplicationMaster = Loadable(
-  lazy(() => import('pages/admin/Master/JobsApplication'))
+  lazy(() => import('../pages/admin/Master/JobsApplication'))
 );
 const EditJobMaster = Loadable(
-  lazy(() => import('pages/admin/Master/EditJob'))
+  lazy(() => import('../pages/admin/Master/EditJob'))
 );
 const CoursesMaster = Loadable(
-  lazy(() => import('pages/admin/Master/CoursesMaster'))
+  lazy(() => import('../pages/admin/Master/CoursesMaster'))
 );
 const EditCourseMaster = Loadable(
-  lazy(() => import('pages/admin/Master/EditCourse'))
+  lazy(() => import('../pages/admin/Master/EditCourse'))
 );
 const AddTestMaster = Loadable(
-  lazy(() => import('pages/admin/Master/CreateTest'))
+  lazy(() => import('../pages/admin/Master/CreateTest'))
 );
 const AddNewTestMaster = Loadable(
-  lazy(() => import('pages/admin/Master/CreateNewTest'))
+  lazy(() => import('../pages/admin/Master/CreateNewTest'))
 );
 const AddQuestionMaster = Loadable(
-  lazy(() => import('pages/admin/Master/AddQuestion'))
+  lazy(() => import('../pages/admin/Master/AddQuestion'))
 );
 const EditQuestionMaster = Loadable(
-  lazy(() => import('pages/admin/Master/EditQuestion'))
+  lazy(() => import('../pages/admin/Master/EditQuestion'))
 );
 const UsersMaster = Loadable(
-  lazy(() => import('pages/admin/Master/UsersMaster'))
+  lazy(() => import('../pages/admin/Master/UsersMaster'))
 );
 const NewUsersMaster = Loadable(
-  lazy(() => import('pages/admin/Master/NewUserMaster'))
+  lazy(() => import('../pages/admin/Master/NewUserMaster'))
 );
 const EditUserMaster = Loadable(
-  lazy(() => import('pages/admin/Master/EditUser'))
+  lazy(() => import('../pages/admin/Master/EditUser'))
 );
 const ResultsMaster = Loadable(
-  lazy(() => import('pages/admin/Master/ResultsMaster'))
+  lazy(() => import('../pages/admin/Master/ResultsMaster'))
+);
+const ProctorMaster = Loadable(
+  lazy(() => import('../pages/admin/Master/ProctoringView'))
 );
 const CapabilitiesMaster = Loadable(
-  lazy(() => import('pages/admin/Master/CapabilitiesMaster'))
+  lazy(() => import('../pages/admin/Master/CapabilitiesMaster'))
 );
 const CompetencyMaster = Loadable(
-  lazy(() => import('pages/admin/Master/CompetencyMaster'))
+  lazy(() => import('../pages/admin/Master/CompetencyMaster'))
 );
-const NewUsers = Loadable(lazy(() => import('pages/admin/Master/NewUsers')));
+const NewUsers = Loadable(lazy(() => import('../pages/admin/Master/NewUsers')));
+// const OrganizationList = Loadable(lazy(() => import('../pages/admin/Master/')));
 const WebsiteContent = Loadable(
-  lazy(() => import('pages/admin/Master/WebsiteContent'))
+  lazy(() => import('../pages/admin/Master/WebsiteContent'))
 );
 const DemoRequests = Loadable(
-  lazy(() => import('pages/admin/Master/DemoRequests'))
-);
-const AiAssessment = Loadable(
-  lazy(() => import('pages/admin/Master/Ai/CreateAssesment'))
-);
-const AiQuestion = Loadable(
-  lazy(() => import('pages/admin/Master/Ai/CreateQuestion'))
+  lazy(() => import('../pages/admin/Master/DemoRequests'))
 );
 const MainRoutes = {
   path: '/dashboard',
@@ -161,9 +159,17 @@ const MainRoutes = {
       element: <ResultsMaster />,
     },
     {
+      path: 'proctoring-view/:id',
+      element: <ProctorMaster />,
+    },
+    {
       path: 'newUsers',
       element: <NewUsers />,
     },
+    // {
+    //   path: 'organization-list',
+    //   element: <OrganizationList />,
+    // },
     {
       path: 'websiteContent',
       element: <WebsiteContent />,
@@ -171,14 +177,6 @@ const MainRoutes = {
     {
       path: 'demo-requests',
       element: <DemoRequests />,
-    },
-    {
-      path: 'ai-assessments',
-      element: <AiAssessment />,
-    },
-    {
-      path: 'tests/:id/ask-ai',
-      element: <AiQuestion />,
     },
   ],
 };

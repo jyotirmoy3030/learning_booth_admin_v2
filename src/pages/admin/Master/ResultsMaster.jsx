@@ -14,8 +14,9 @@ import dr15_2 from "../../../assets/images/dr15_2.png";
 import character from "../../../assets/images/character2.png";
 import ai from "../../../assets/images/ai.png";
 import skill from "../../../assets/images/skill.png";
-
-import { Link } from 'react-router-dom';
+import HeaderTwo from '../../../components/HeaderTwo';
+import BackgroundDesign from '../../../components/background_design/BackgroundDesign';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ResultsMaster = () => {
   const [results, setResults] = useState([]);
@@ -27,28 +28,30 @@ const ResultsMaster = () => {
   const [totalResults, setTotalResults] = useState(0); // Total results count
   const [loading, setLoading] = useState(false); // Loader state for API calls
   const [dropdownLoading, setDropdownLoading] = useState(false);
+  const navigate = useNavigate();
   const styles = {
     bottomBg: {
       position: "fixed",
+      top: "10%",
       left: 0,
-      bottom: 0, // Sticks to the bottom of the viewport
+      bottom: 0,
       width: "100%",
-      height: "100vh", // Covers full viewport height
-      backgroundSize: "cover", // Ensure it covers entire background
+      height: "auto",
+      backgroundSize: "cover", // Better for full coverage on smaller screens
       backgroundRepeat: "no-repeat",
       backgroundPosition: "bottom center",
       backgroundImage: `url(${dr15_2})`,
-      zIndex: "-50", // Push it far behind everything
+      zIndex: -4,
     },
     plant: {
       position: "fixed",
       bottom: "0",
-      right: "0", // Stays fixed at bottom-right
-      width: "20rem",
+      right: "0",
+      width: "6rem",
       height: "auto",
       maxWidth: "100%",
-      zIndex: "-40", // Keep it behind content but above background
-      pointerEvents: "none", // Prevent accidental clicks
+      zIndex: -2,
+      pointerEvents: "none",
     },
   };
 
@@ -83,9 +86,7 @@ const ResultsMaster = () => {
           assessmentTitle: result.assessments?.assessment?.title || "No Title",
           jobRoleTitle: result.assessments?.assessment?.jobRole?.title || "No Job Role",
           userLocation: result.userLocation,
-          scores: result.scores,
         };
-        
         return formattedResult;
       });
       setResults(formattedResults);
@@ -273,7 +274,71 @@ const ResultsMaster = () => {
             </button>
           </div>
         </Box>
-      ),
+      ), render: (_, data) => (
+        <Box display="flex" alignItems="center" justifyContent="start">
+          <div className="flex flex-row items-center justify-center gap-[7.12px]">
+            {/* Details Report Button */}
+            <a
+              href={`https://www.thirdbracket.in/assessments/details-report?resultId=${data._id}`}
+              target="_blank"
+              className="bg-white border-[#0057FC] border w-[35px] h-[35px] rounded-lg flex flex-row items-center justify-center"
+            >
+              <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.5 2V11M9.5 11L6 7.5M9.5 11L13 7.5" stroke="#0057FC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M3 13.5V15H16V13.5" stroke="#0057FC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </a>
+
+            {/* Result Button */}
+            <a
+              href={`https://www.thirdbracket.in/assessments/result?resultId=${data._id}`}
+              target="_blank"
+              className="bg-white border-[#0057FC] border w-[35px] h-[35px] rounded-lg flex flex-row items-center justify-center"
+            >
+              <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.54 11.5135V5.2832H7.3097M13.3567 5.46645L5.84375 12.9794" stroke="#0057FC" strokeWidth="1.31935" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </a>
+
+            {/* Delete Button */}
+            <button
+              className="bg-white border-[#CED4DA] border rounded-lg w-[35px] h-[35px] flex flex-row items-center justify-center"
+              onClick={() => handleDelete(data._id)}
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M5.28271 6.01533L5.89925 13.1056C5.96512 13.8631 6.59929 14.4445 7.35968 14.4445H10.902C11.6624 14.4445 12.2965 13.8631 12.3624 13.1056L12.9789 6.01533M7.48163 5.83209V5.28236C7.48163 4.47273 8.13793 3.81641 8.94758 3.81641H9.31406C10.1237 3.81641 10.78 4.47273 10.78 5.28236V5.83209M4 6.01533H14.2616"
+                  stroke="#212529"
+                  strokeWidth="1.31935"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+
+            {/* Download Button (New) */}
+            <button
+              className="bg-white border-[#28a745] border rounded-lg w-[35px] h-[35px] flex flex-row items-center justify-center"
+              onClick={() => handleView(data._id)}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#28a745"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </button>
+
+          </div>
+        </Box>
+      )
     },
   ];
 
@@ -283,6 +348,7 @@ const ResultsMaster = () => {
   };
 
   const handlePageChange = (page, limit) => {
+    console.log(page)
     setCurrentPage(page);
     setPageSize(limit);
     getResults(page, limit, jobRoleFilter); // Pass job role filter as well
@@ -300,9 +366,19 @@ const ResultsMaster = () => {
       setLoading(false); // Hide loader
     }
   };
+  const handleView = async (id) => {
+    try {
+      navigate(`/dashboard/proctoring-view/${id}`); // Navigate to the proctoring view page
+    } catch (error) {
+      toast.error("Failed to delete result."); // Error handling
+    } finally {
+      setLoading(false); // Hide loader
+    }
+  };
+
   const downloadExcel = () => {
     const dataForExport = filteredResults.map((result) => {
-      const baseData = {
+      return {
         "User Name": result.user?.name || "Unknown User",
         Assessment: result?.assessmentTitle || "N/A",
         "Total Percentage": result.totalPercentage
@@ -318,21 +394,8 @@ const ResultsMaster = () => {
             ?.map((course) => course.title)
             .join(", ") || "No Recommended Courses",
       };
-      
-      // Add score category percentages dynamically
-      const scoreData = {};
-      const score = result.scores || {};
-      Object.entries(score).forEach(([category, value]) => {
-        scoreData[category] = value?.total_percentage ?? "N/A";
-      });
-      
-  
-      return {
-        ...baseData,
-        ...scoreData,
-      };
     });
-  
+
     const worksheet = XLSX.utils.json_to_sheet(dataForExport);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Results");
@@ -346,57 +409,26 @@ const ResultsMaster = () => {
   return (
     <>
 
-      <div className="bottom-bg" style={styles.bottomBg}></div>
+      {/* <div className="bottom-bg" style={styles.bottomBg}></div> */}
 
       {/* Fixed Plant Image */}
-      <img src={character} alt="Bottom Right Image" style={styles.plant} />
-      <div className="w-full flex justify-between items-center mt-4 px-6 pb-6 mb-10">
-        {/* Welcome Text */}
-        <div className="flex flex-col gap-2">
-          <span className="font-bold text-[24px] text-[#141414]">Hello, Admin! 👋</span>
-          <span className="font-medium text-[12px] text-[#989ca0]">
-            Welcome back, track your team progress here!
-          </span>
-        </div>
+      {/* <img src={character} alt="Bottom Right Image" style={styles.plant} /> */}
+      <BackgroundDesign character_image={character} />
 
-        {/* Buttons */}
-        <div className="flex items-center gap-6">
-          {/* Post New Job */}
-          <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-solid border-[#dcdddf] cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={briefcase} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-[#141414]"><Link to="/dashboard/jobs">Post New Job</Link></span>
-          </div>
-
-          {/* Add Employee */}
-          <div className="flex items-center gap-2 bg-[#263238] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={plus} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/users">Add Employee</Link></span>
-
-          </div>
-          <div className="flex items-center gap-2 bg-[#ffc727] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={skill} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/road_to_content">Skills To Hire</Link></span>
-
-          </div>
-        </div>
-      </div>
+      <HeaderTwo />
 
       <div>
-        <div className="search-add-container my-4 flex items-center justify-between">
+        <div className="search-add-container my-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           {/* Title on the Left */}
-          <Typography variant="h1" style={{ color: '#141414' }}>Results</Typography>
+          <Typography variant="h1" style={{ color: '#141414' }}>
+            Results
+          </Typography>
 
           {/* Right Section (Select + Button) */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center sm:items-end justify-start sm:justify-end gap-4 w-full sm:w-auto">
             {/* Dropdown for Last 30 Days */}
             <Select
-              style={{ width: 300 }} // Ensure consistent width
+              className="w-full sm:w-[300px]"
               placeholder="Filter by Job Role"
               onChange={handleJobRoleChange}
               allowClear
@@ -416,7 +448,11 @@ const ResultsMaster = () => {
             </Select>
 
             {/* Export Button */}
-            <Button type="primary" onClick={downloadExcel} className="card-nav">
+            <Button
+              type="primary"
+              onClick={downloadExcel}
+              className="card-nav w-full sm:w-auto"
+            >
               Download Excel
             </Button>
           </div>
@@ -424,8 +460,12 @@ const ResultsMaster = () => {
 
 
 
-        <div style={{ marginBottom: "15rem" }}>
-          <Table dataSource={results} columns={columns} pagination={false} />
+
+
+        <div className="px-4 sm:px-8 md:px-0 lg:px-0 py-4 relative overflow-hidden" style={{ marginBottom: "15rem" }}>
+          <div className="overflow-x-auto">
+            <Table dataSource={results} columns={columns} pagination={false} />
+          </div>
           <Pagination
             current={currentPage}
             pageSize={pageSize}

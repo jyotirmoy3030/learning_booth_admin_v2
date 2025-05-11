@@ -13,7 +13,6 @@ export const getAllJobroles = async ({
 } = {}) => {
   try {
     const response = await appAxios.get('/job/job-role');
-    console.log(response)
     return response;
   } catch (error) {
     console.log('Error getting all job roles.', error);

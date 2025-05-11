@@ -20,6 +20,8 @@ import dr15_1 from "../../../assets/images/dr15_1.png";
 import dr15_2 from "../../../assets/images/dr15_2.png";
 import magnifying from "../../../assets/images/magnifying.png";
 import skill from "../../../assets/images/skill.png";
+import BackgroundDesign from '../../../components/background_design/BackgroundDesign';
+import HeaderTwo from '../../../components/HeaderTwo';
 
 const styles = {
   bottomBg: {
@@ -51,46 +53,13 @@ const styles = {
 const NewUsers = () => {
   return (
     <>
-      <div className="bottom-bg" style={styles.bottomBg}></div>
+      {/* <div className="bottom-bg" style={styles.bottomBg}></div> */}
 
       {/* Fixed Plant Image */}
-      <img src={magnifying} alt="Bottom Right Image" style={styles.plant} />
-      <div className="w-full flex justify-between items-center mt-4 px-6 pb-6 mb-10">
-        {/* Welcome Text */}
-        <div className="flex flex-col gap-2">
-          <span className="font-bold text-[24px] text-[#141414]">Hello, Admin! 👋</span>
-          <span className="font-medium text-[12px] text-[#989ca0]">
-            Welcome back, track your team progress here!
-          </span>
-        </div>
+      {/* <img src={magnifying} alt="Bottom Right Image" style={styles.plant} /> */}
+      <BackgroundDesign character_image={magnifying} />
 
-        {/* Buttons */}
-        <div className="flex items-center gap-6">
-          {/* Post New Job */}
-          <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-solid border-[#dcdddf] cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={briefcase} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-[#141414]"><Link to="/dashboard/jobs">Post New Job</Link></span>
-          </div>
-
-          {/* Add Employee */}
-          <div className="flex items-center gap-2 bg-[#263238] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={plus} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/users">Add Employee</Link></span>
-
-          </div>
-          <div className="flex items-center gap-2 bg-[#ffc727] px-4 py-3 rounded-lg cursor-pointer">
-            <div className="justify-center items-center w-5 h-5">
-              <img src={skill} alt="briefcase" />
-            </div>
-            <span className="font-bold text-[14px] text-white"><Link to="/dashboard/road_to_content">Skills To Hire</Link></span>
-
-          </div>
-        </div>
-      </div>
+      <HeaderTwo />
       <div>
         <Typography variant="h4" sx={{ my: 2 }}>
           Add New Organization
@@ -108,15 +77,15 @@ const NewUsers = () => {
             permissions: [],
           }}
           validationSchema={Yup.object().shape({
-            userDesignation: Yup.string().required('User designation is required'),
-            name: Yup.string().required('Name is required'),
-            phoneNumber: Yup.string().required('Phone number is required'),
-            email: Yup.string().email('Email should be valid').required('Email is required'),
-            password: Yup.string().required('Password is required'),
-            // profilePicture: Yup.mixed().required('Profile picture is required'),
-            address: Yup.string(),
-            usersAllowed: Yup.string().required('Number of users allowed is required'),
-            permissions: Yup.array().required('Select at least one permission'),
+            // userDesignation: Yup.string().required('User designation is required'),
+            // name: Yup.string().required('Name is required'),
+            // phoneNumber: Yup.string().required('Phone number is required'),
+            // email: Yup.string().email('Email should be valid').required('Email is required'),
+            // password: Yup.string().required('Password is required'),
+            // // profilePicture: Yup.mixed().required('Profile picture is required'),
+            // address: Yup.string(),
+            // usersAllowed: Yup.string().required('Number of users allowed is required'),
+            // permissions: Yup.array().required('Select at least one permission'),
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
             try {
@@ -132,12 +101,12 @@ const NewUsers = () => {
                 permissions: values.permissions,
               };
               console.log(admin);
-              await createAdmin(admin);
-              console.log('marker');
-              resetForm();
-              setStatus({ success: true });
-              toast.success('Admin added.');
-              setSubmitting(false);
+              // await createAdmin(admin);
+              // console.log('marker');
+              // resetForm();
+              // setStatus({ success: true });
+              // toast.success('Admin added.');
+              // setSubmitting(false);
             } catch (err) {
               setStatus({ success: false });
               toast.error('ERROR: Cannot add admin.');
@@ -165,12 +134,13 @@ const NewUsers = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.userDesignation}
-                  className="w-full border border-gray-400 p-3 rounded bg-[#e9e9e9] focus:border-blue-500 focus:outline-none"
+                  className="block w-full appearance-none border border-gray-400 bg-[#e9e9e9] px-4 py-3 rounded text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
                   <option value="">Select User Designation</option>
                   <option value="organization">Organization</option>
                   <option value="institution">Institution</option>
                 </select>
+
 
                 {/* Error Message */}
                 {touched.userDesignation && errors.userDesignation && (
