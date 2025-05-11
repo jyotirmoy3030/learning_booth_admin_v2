@@ -81,6 +81,7 @@ function ProctoringView() {
                                     src={img}
                                     alt={`Gallery ${index}`}
                                     className="w-full h-40 object-cover"
+                                    style={{backgroundColor: "white"}}
                                 />
                             </div>
                         ))}
